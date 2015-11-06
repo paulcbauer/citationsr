@@ -1,0 +1,17 @@
+{
+    "contents" : "#' Store data on the study of interest in ris file, elements of which can be used later on.\n#'\n#' @param ... Specify elements such as title etc.\n#' @return Should save study information in a ris file.\n\n\n\nstudy_data <- function(...){\n  data.frame(...)\n}\n\n\n\n\n",
+    "created" : 1446767456468.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1747484907",
+    "id" : "ECE703C1",
+    "lastKnownWriteTime" : 1446685108,
+    "path" : "C:/Users/paul/Google Drive/Packages/citations/R/study_data.R",
+    "project_path" : "R/study_data.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

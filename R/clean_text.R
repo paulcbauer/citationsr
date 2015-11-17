@@ -36,11 +36,11 @@ clean_text <- function(){
       # var. -> VARIANCE
       # fig. -> FIGURE
       # 0.82 -> 0,82
-      x <- stringr::str_replace_all(x, "et al.", "AND OTHERS")
-      x <- stringr::str_replace_all(x, "e.g.", "FOR EXAMPLE")
-      x <- stringr::str_replace_all(x, "No.", "NUMBER")
-      x <- stringr::str_replace_all(x, "fig.", "FIGURE")
-      x <- stringr::str_replace_all(x, "obs.", "OBSERVATIONS")
+      x <- stringr::str_replace_all(x, "et al\\.", "AND OTHERS")
+      x <- stringr::str_replace_all(x, "e\\.g\\.", "FOR EXAMPLE")
+      x <- stringr::str_replace_all(x, "No\\.", "NUMBER")
+      x <- stringr::str_replace_all(x, "fig\\.", "FIGURE")
+      x <- stringr::str_replace_all(x, "obs\\.", "OBSERVATIONS")
       # Replace citation of interest with original name (NOT NECESSARY)
       # x <- stringr::str_replace_all(x, "Glaeser AND OTHERS", "Glaeser et al.")
 

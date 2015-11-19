@@ -1,0 +1,17 @@
+{
+    "contents" : "library(XML)\nlibrary(stringr)\nlibrary(fulltext)\n\n\n\n\n  setwd(\"C:\\\\Users\\\\paul\\\\Google Drive\\\\Research\\\\2016_Quality_of_citations\\\\Analysis\\\\data\")\n  library(citations)\n\n\n# SKIP THAT\n# Enter data for study\n  studies <- study_data(authors=\"Druckman, James N., Erik Peterson, and Rune Slothuus\",\n                           title = \"How elite partisan polarization affects public opinion formation\",\n                           year=\"2013\",\n                           journal=\"American Political Science Review\",\n                           volume=\"107\",\n                           issue=\"1\",\n                           pages=\"57-79\")\n\n\n\n\n\n\n# SKIP THAT\n# Count citations of study on wos\n  # See ?count_wos_citations for steps\n  count_wos_citations(wos.url = \"http://apps.webofknowledge.com/full_record.do?product=UA&search_mode=CitingArticles&qid=24&SID=T1K4ltqYAZBpobmxVZ5&page=1&doc=1\")\n\n# SKIP THAT\n# Scrape citations of study from pages\n  # BEWARE USE HTTP NOT HTTPS\n  get_wos_citations(wos.url = \"http://apps.webofknowledge.com/full_record.do?product=UA&search_mode=CitingArticles&qid=878&SID=S1AdAe6DeCTIvuSazDC&page=1&doc=1\",\n                  n.pages = 172,\n                  folder = \"Mueller 1987\")\n\n\n# SKIP THAT\n# Get fulltexts\n  # Generate ris files for import into paperpile - SOMEHOW list.files() does not work within function..\n    gen_ris()\n  # Steps within paperpile\n  # 1. Import single ris-files in paperpile (into one folder)\n  # 2. Scrape PDFs for the respective articles in Paperpile\n  # 3. Search for the respective files on the harddrive using the citations file\n  # Get PDFs from paperpile directory and save in working directory - maybe third argument working directory\n    fetch_paperpiledocs(paperpile.directory = \"C:\\\\Users\\\\paul\\\\Google Drive\\\\Paperpile\\\\\")\n\n  # Somefilenames contain problematic signs.. get rid of them\n    clean_filenames()\n\n### START HERE ####\n\n# Potentially use bulk rename too to get rid of ellipse = \"...\" in filenames\n\n# Extract texts\n  # Install xpdf into folder C:\\Program Files\\xpdf\n  extract_text()\n\n\n# Clean texts: generates new text files \".._cleaned.txt\"\n  clean_text()\n\n# Identify wether document containts study\n  # identify_study(study.title = \"How elite partisan polarization affects public opinion formation\")\n  # does only work for one folder/study so far... needs list of titles\n\n# Delete  reference section from text files that contain \"_cleaned.txt\": generates new text files \".._woref.txt\"\n  delete_reference_section()\n\n\n# Extract citation cases from files that end in _woref.txt\"\n  extract_citation_cases()\n\n# Clean citation cases\n  clean_citation_cases()\n\n\n\n\n\n",
+    "created" : 1447937600896.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1391775007",
+    "id" : "ABB791F3",
+    "lastKnownWriteTime" : 1447947476,
+    "path" : "C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/Analysis/example.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

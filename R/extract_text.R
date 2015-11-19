@@ -31,7 +31,6 @@ extract_text <- function() {
 
 
   ptm <- proc.time()
-
   for (i in 1:length(file.paths)){  #
     tryCatch(
       {
@@ -81,7 +80,7 @@ extract_text <- function() {
       })}
 
   time <- proc.time() - ptm
-  cat("\n\n For", folders[z], " text extraction too around ", as.numeric(time[3]), " second(s) this is around ", round(as.numeric(time[3])/60,2), " minutes.\n", sep = "")
+  cat("\n\n For ", folders[z], " text extraction too around ", as.numeric(time[3]), " second(s) this is around ", round(as.numeric(time[3])/60,2), " minutes.\n", sep = "")
 
   cat("\n\n For '", folders[z], "' ", length(dir(paste("./", folders[z], "/documents/error", sep=""))),
       " PDF files were problematic." , sep = "")

@@ -9,43 +9,48 @@ delete_reference_section <- function(){
   for(z in 1:length(folders)){
 
 
-  # Delete files with "cleaned" in name if there are any from before
-  file.names <- dir(paste("./", folders[z], "/documents/", sep = ""), pattern = "_woref.txt")
-  if(identical(file.names, character(0))==FALSE){
-    file.paths <- paste(paste("./", folders[z], "/documents/", sep = ""), file.names, sep="")
-    file.remove(file.paths)
-  }
+  # Delete files with "woref" in name if there are any from before
+    file.names <- dir(paste("./", folders[z], "/documents/", sep = ""), pattern = "_woref.txt")
+    if(identical(file.names, character(0))==FALSE){
+      file.paths <- paste(paste("./", folders[z], "/documents/", sep = ""), file.names, sep="")
+      file.remove(file.paths)
+    }
+
+
 
   # List file names
-  file.names <- dir(paste("./", folders[z], "/documents/", sep = ""), pattern = "cleaned.txt")
+    file.names <- dir(paste("./", folders[z], "/documents/", sep = ""), pattern = "cleaned.txt")
 
   # Generate individual paths to each file
-  file.paths <- paste(paste("./", folders[z], "/documents/", sep = ""), file.names, sep="")
+    file.paths <- paste(paste("./", folders[z], "/documents/", sep = ""), file.names, sep="")
 
-  # Load documents and search for full citation in them
-  list.extracted.titles <- NULL
-  for (i in 1:length(file.paths)){ # 4 DOES NOT WORK!
+
+  # Loop to generate txt files without reference section
+  for (i in 1:length(file.paths)){
+
     x <- readLines(file.paths[i])
 
     # Locate "References" section
-    references.location <- grep("References|REFERENCES", x, ignore.case = FALSE)
+      references.location <- grep("References|REFERENCES", x, ignore.case = FALSE)
+
+      tryCatch(
+        {
+          print("'References' only appears once. Everything fine with discarding the reference sections.")
+
+          # Save text file without references
+          fileConn<-file(paste("./", folders[z], "/documents/", substr(file.names[i], 1, nchar(file.names[i])-4), "_woref.txt", sep=""))
+          writeLines(x, fileConn)
+          close(fileConn)
+
+        },
+        error=function(cond) {
+          message(paste("\n PROBLEM! \n", file.paths[i]))
+        },
+        warning=function(cond) {
+          message(paste("\n WARNING! \n", file.paths[i]))
+        },
+        finally={}
+        )
 
 
-
-    if (length(references.location)==1){
-      print("'References' only appears once. Everything fine with discarding the reference sections.")
-    } else {
-      cat("\nScotty we have a problem with the references in the following study:\n\n", file.paths[i], sep="")
-
-      cat("\n\n", "We identified '", grep("References|REFERENCES", x, ignore.case = FALSE, value=T), "' was identified.\n", sep = "")
-
-    }
-    x <- x[1:references.location-1]
-
-    fileConn<-file(paste("./", folders[z], "/documents/", substr(file.names[i], 1, nchar(file.names[i])-4), "_woref.txt", sep=""))
-    writeLines(x, fileConn)
-    close(fileConn)
-
-  }
-  }
-}
+  }}}

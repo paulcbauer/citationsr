@@ -24,7 +24,6 @@ clean_text <- function(){
   file.paths <- paste(paste("./", folders[z], "/documents/", sep = ""), file.names, sep="")
 
 # Load texts, clean them and save them
-
   for (i in 1:length(file.paths)){
     x <- readLines(file.paths[i])
 

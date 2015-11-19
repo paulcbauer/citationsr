@@ -14,12 +14,18 @@ extract_citation_cases <- function(){
   # Generate individual paths to each file
   file.paths <- paste(paste("./", folders[z], "/documents/", sep = ""), file.names, sep="")
 
+  # Extract search term from folder name
+    authorname <- stringr::str_extract(folders[z], "[:alpha:]*")
+
+  # Generate extraction regexp
+    searchterm <- paste("\\.[^.]*", authorname, "[^.]*\\.", sep = "")
+
   # Load documents and search for full citation in them
   all.docs.cit.cases <- NULL
   for (i in 1:length(file.paths)){ # 4 DOES NOT WORK!
     x <- readLines(file.paths[i])
     x <- paste(x, collapse = " ")
-    cit.cases.doc.i <- stringr::str_extract_all(x, "\\.[^.]*Druckman[^.]*\\.")
+    cit.cases.doc.i <- stringr::str_extract_all(x, searchterm)
     all.docs.cit.cases[i] <- cit.cases.doc.i
   }
 

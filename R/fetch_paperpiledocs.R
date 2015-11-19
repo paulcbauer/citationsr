@@ -6,6 +6,16 @@
 
 fetch_paperpiledocs <- function(paperpile.directory) {
   folders <- list.files()
+  working.directory <- getwd()
+
+  # Create documents folder in respective study folder (or empty present one)
+  if(dir.exists(paste(folders[z], "/documents/", sep = ""))==TRUE){
+    unlink(paste(folders[z], "/documents", sep = ""), recursive = T)}
+
+  if(dir.exists(paste(folders[z], "/documents/", sep = ""))==FALSE){
+    dir.create(paste(folders[z], "/documents/", sep = ""))}
+
+
   for(z in 1:length(folders)){
 
   ptm <- proc.time()

@@ -1,0 +1,17 @@
+{
+    "contents" : "#' Generate .ris for all folders/studies in working directory and save in respective folders called ris.\n#'\n#' @return Returns a .ris file that can be imported into paperpile.\n\n\n\ngen_ris <- function(){\n  folders <- list.files()\n  for(z in 1:length(folders)){\n\n    citations <- read.table(paste(folders[z], \"/citations.csv\", sep=\"\"), header=TRUE, stringsAsFactors = F)\n\n    # Delete ris folder if there is one from previous runs\n    unlink(paste(folders[z], \"/ris/\", sep = \"\"), recursive = FALSE)\n\n    # Create ris folder in respective study folder\n    dir.create(paste(folders[z], \"/ris/\", sep = \"\"))\n\n    for (i in 1:nrow(citations)){\n      fileConn <- file(paste(folders[z], \"/ris/\", citations$identifier[i], \".ris\", sep=\"\"))\n      writeLines(c(\"TY  - JOUR\",\n                   paste(\"AU  - \", citations$author[i], sep=\"\"),\n                   paste(\"PY  - \", citations$year[i], sep=\"\"),\n                   paste(\"JO  - \", citations$journal[i], sep=\"\"),\n                   paste(\"DO  - \", citations$doi[i], sep=\"\"),\n                   paste(\"TI  - \", citations$title[i], sep=\"\")), fileConn)\n      close(fileConn)\n    }\n\n  }\n\n\n}\n\n\n\n\n",
+    "created" : 1447872128742.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2896905966",
+    "id" : "45D71A19",
+    "lastKnownWriteTime" : 1447872249,
+    "path" : "C:/Users/pbauer/Google Drive/Packages/citations/R/gen_ris.R",
+    "project_path" : "R/gen_ris.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

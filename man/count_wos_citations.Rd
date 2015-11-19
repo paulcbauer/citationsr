@@ -18,6 +18,7 @@ Count citations of study (or studies) in the web of knowledge.
 }
 \section{Steps to follow}{
 
+
 1. Search for study in WOS.
 
 2. Click on times cited for the particular study you are interested in.

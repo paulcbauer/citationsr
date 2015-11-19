@@ -19,7 +19,7 @@
 #   Test Package:              'Ctrl + Shift + T'
 
 # Url: "http://apps.webofknowledge.com/full_record.do?product=UA&search_mode=CitingArticles&qid=3&SID=Z23xuqBbwEKhrQTYEwM&page=1&doc=1"
-
+# URL <- "https://apps.webofknowledge.com/full_record.do?product=UA&search_mode=CitingArticles&qid=3&SID=S1AdAe6DeCTIvuSazDC&page=1&doc=1"
 
 get_wos_citations <- function(wos.url, n.pages, folder) {
     URL <- wos.url

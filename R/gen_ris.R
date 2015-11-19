@@ -10,10 +10,9 @@ gen_ris <- function(){
 
     citations <- read.table(paste(folders[z], "/citations.csv", sep=""), header=TRUE, stringsAsFactors = F)
 
-
-
-    # Create ris folder in respective study folder
-    dir.create(paste(folders[z], "/ris/", sep = ""))
+       # Create ris folder in respective study folder
+    if(dir.exists(paste(folders[z], "/ris/", sep = ""))==FALSE){
+    dir.create(paste(folders[z], "/ris/", sep = ""))}
 
     for (i in 1:nrow(citations)){
       fileConn <- file(paste(folders[z], "/ris/", citations$identifier[i], ".ris", sep=""))

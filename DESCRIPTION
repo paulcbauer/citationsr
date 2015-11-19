@@ -7,7 +7,7 @@ Author: Paul C. Bauer, Pablo Barberà, Simon Munzert
 Maintainer: Who to complain to <mail@paulcbauer.eu>
 Description: The package contains various functions that help to investigate the
     quality of citations.
-License: MIT
+License: GPL-2
 LazyData: TRUE
 Imports:
     XML,

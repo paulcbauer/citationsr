@@ -3,6 +3,7 @@
 #' @param wos.url See steps below to get the respective url.
 #' @return Returns the number of times a study has been cited in the web of knowledge.
 #' #' @section Steps to follow:
+#'
 #' 1. Search for study in WOS.
 #'
 #' 2. Click on times cited for the particular study you are interested in.

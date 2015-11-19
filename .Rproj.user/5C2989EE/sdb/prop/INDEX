@@ -1,4 +1,5 @@
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%20-%20example%20and%20unfinished%20functions%2Fexample.R="FAD30010"
+C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%20-%20unfinished%20functions%2Fextracts_from_old_code.R="59E7C7DB"
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%20package%20example%2Fexample.R="2F181470"
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%2F.gitattributes="9C8BBF01"
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%2F.gitignore="748A82F5"
@@ -10,6 +11,7 @@ C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%2FR%2Fcount_wos_cita
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%2FR%2Fdelete_reference_section.R="135D73ED"
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%2FR%2Fextract_citations_cases.R="92600C73"
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%2FR%2Fextract_text.R="6969E9D"
+C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%2FR%2Fextract_text_function_debugging.R="BE4329C3"
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%2FR%2Ffetch_paperpiledocs.R="7B5F0E22"
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%2FR%2Fgen_ris.R="B704A6B2"
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%2FR%2Fgen_ris_for_paperpile.R="F3445BE6"
@@ -26,3 +28,4 @@ C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations%2Ftests%2Ftestthat.R
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FPackages%2Fcitations.Rcheck%2Fcitations-Ex.R="DF3A51EE"
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FResearch%2F2015_Quality_of_citations%2FAnalysis%2Fcode_paul.R="F01B5DB9"
 C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FResearch%2F2015_Quality_of_citations%2FBACKUP%2Fbackup%20citations%2Fdocuments-export-2015-11-02%2FFuzzy%20matching.R="D230D9A7"
+C%3A%2FUsers%2Fpaul%2FGoogle%20Drive%2FResearch%2F2016_Quality_of_citations%2FAnalysis%2Fexample.R="39CDB8D2"

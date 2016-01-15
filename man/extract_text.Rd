@@ -4,10 +4,16 @@
 \alias{extract_text}
 \title{Convert PDFs in /documents/ into text files which are stored in same folder.}
 \usage{
-extract_text()
+extract_text(folder, number = NULL)
+}
+\arguments{
+\item{folder}{Name of folder within your working directory that contains the PDFs.}
+
+\item{number}{Number of documents you want to apply function to. Default is "all docs in folder".
+Looping over folder containing citing documents for different studies is possible.}
 }
 \value{
-Converts PDFs into text files that a stored in the "documents" folder.
+Converts PDFs into text files that a stored in the folder.
 }
 \description{
 Convert PDFs in /documents/ into text files which are stored in same folder.

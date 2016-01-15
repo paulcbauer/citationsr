@@ -1,38 +1,114 @@
 #' Extract citation cases from "cleaned_woref.txt" files.
 #'
-#' @return Returns and saves data on citation cases (citation_data.csv).
+#' @return Returns and saves data on citation cases (citation_data.csv) in the working directory.
+#' @param folder Name of folder within your working directory that contains the PDFs.
+#' Looping over folder containing citing documents for different studies is possible.
+#' @param authorname Enter the names of all authors separated by comma.
+#' @param studyyear Enter the year when the study was published.
 
 
-extract_citation_cases <- function(){
-  folders <- list.files()
-  for(z in 1:length(folders)){
+
+extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, number=NULL){
 
 
-  # Get file names
-  file.names <- dir(paste("./", folders[z], "/documents/", sep = ""), pattern = "cleaned_woref.txt")
+#############################################
+### FUNCTION TO GENERATE THE SEARCH TERMS ###
+#############################################
+    authorname <- unlist(stringr::str_split(authorname, ","))
+    authorname <- gsub(" ", "", authorname)
+    length.authorname <- length(authorname)
+    if(length.authorname==1){
+      searchterms <- paste(authorname[1], "(|\\'s|\\’s|\\’|\\')(|,)\\s{0,2}(|\\[|\\()" ,studyyear, "", sep="")
+    }
 
-  # Generate individual paths to each file
-  file.paths <- paste(paste("./", folders[z], "/documents/", sep = ""), file.names, sep="")
+    # stringr::str_extract("sdflkjds Beck & Katz, 1995 sljsdf", searchterms)
 
-  # Extract search term from folder name
-    authorname <- stringr::str_extract(folders[z], "[:alpha:]*")
+    if(length.authorname==2){
+      searchterms <- paste(authorname[1], " (\\&|and) ", authorname[2], "(|\\'s|\\’s|\\’|\\')(|,)\\s{0,2}(|\\[|\\()" ,studyyear, "(\\s{0,2}(:|,)(?# Komma oder Doppelpunkt)\\s{0,2}(PAGE|)(?# Page kommt vor oder nicht)(\\s{0,2}|)(?# nochmal space oder nicht)\\d*(?# zahl mit länge 0 oder mehr)(\\]|\\)|)(?# schliesst mit versch klammer oder nicht)|)(?# seitenzahlen ja,nein, falls nein einfach klammer matchen)(\\]|\\)|)", sep="")
+      # paste(authorname[1], " and ", authorname[2], sep=""), # Without year!
+    }
 
-  # Generate extraction regexp
-    searchterm <- paste("\\.[^.]*", authorname, "[^.]*\\.", sep = "")
+    if(length.authorname==3){
+      st3 <- c(paste(authorname[1], ", ", authorname[2], ", & ", authorname[3], " ", studyyear, sep=""),
+               paste(authorname[1], ", ", authorname[2], ", & ", authorname[3], ", ", studyyear, sep=""),
+               paste(authorname[1], ", ", authorname[2], ", and ", authorname[3], ", ", studyyear, sep=""),
+               paste(authorname[1], ", ", authorname[2], ", and ", authorname[3], " ", studyyear, sep=""),
+               paste(authorname[1], ", ", authorname[2], ", and ", authorname[3], " ", "\\(" ,studyyear, "\\)", sep=""),
+
+               paste(authorname[1], " AND OTHERS, ",studyyear, sep=""),
+               paste(authorname[1], " AND OTHERS ",studyyear, sep=""),
+               paste(authorname[1], " AND OTHERS (" ,studyyear, ")", sep=""),
+               paste(authorname[1], " AND OTHERS, (" ,studyyear, ")", sep="")
+      )
+      searchterms <- st3
+    }
+
+#############################################
+
+
+
+
+
+# Get file names
+  file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
+  file.paths <- paste(paste("./", folder, "/", sep = ""), file.names, sep="")
+  n.docs <- length(file.paths)
+
+  # Specify number of documents
+  if(!is.null(number)){n.docs <- number}
+
+
+
+
+# Regexp for search terms and dependency on scope
+    searchterms <- paste("\\.[^.]*", searchterms, "[^.]*\\.", sep = "")
+
+    if(!is.null(scope)){
+
+      searchterms <- paste(paste(rep("\\.[^.]*", scope), collapse=""),
+                           searchterms,
+                           paste(rep("[^.]*\\.", scope), collapse=""),
+                           sep = "")
+    }
+
+      #
+      # "\\. = Starts with a dot
+      # [^.] = not dot characters
+      # * = 0 or more
+      # \\." = Ends with a dot
+
+
+
 
   # Load documents and search for full citation in them
   all.docs.cit.cases <- NULL
-  for (i in 1:length(file.paths)){ # 4 DOES NOT WORK!
-    x <- readLines(file.paths[i])
-    x <- paste(x, collapse = " ")
-    cit.cases.doc.i <- stringr::str_extract_all(x, searchterm)
+  for (i in 1:n.docs){
+    con <- file(file.paths[i], encoding = "UTF-8")
+    x <- readLines(con)
+    close(con)
+
+
+    cit.cases.doc.i <- stringr::str_extract_all(x, paste(searchterms, collapse="|"))
+
+    # identify ". Beck and Katz 1995."
+    # cit.cases.doc.i[cit.cases.doc.i==". Beck and Katz 1995."]
+
+
+
     all.docs.cit.cases[i] <- cit.cases.doc.i
+
+    # Counter
+    if(stringr::str_detect(as.character(i), "[0-9]*0")){cat(i, ".. ", sep="")}
+
   }
+
+
+
 
   # Get fist estimate of number of citation cases
   total.citation.cases <- sum(sapply(all.docs.cit.cases, length))
 
-  cat("\n For ", folders[z], " we have identified ", total.citation.cases, " citation cases within ", length(file.paths), " documents.", sep="")
+  cat("\n For ", authorname, " we have identified ", total.citation.cases, " citation cases within ", n.docs, " documents.", sep="")
 
   # Generate dataframe with citation cases
   citation.data <- data.frame(document = 1:total.citation.cases, citation.case = 1:total.citation.cases)
@@ -40,14 +116,16 @@ extract_citation_cases <- function(){
   citation.data[,2] <- unlist(all.docs.cit.cases)
   # Change document names
   citation.data$document <- sub("\\s+$", "", stringr::str_extract(citation.data$document, "^[^-]+"))
-  # print(citation.data)
-  write.table(citation.data, file =  paste("./", folders[z], "/citation_cases.csv", sep = ""), sep=",")
-  cat("\n \nThey are printed and saved in the file named 'citation_cases.csv' in the respective folder.\n\n")
+
+  # Save citation cases in table (csv and html)
+  write.table(citation.data, file =  paste("./citation_cases_", folder, ".csv", sep = ""), sep=",")
+  print(xtable::xtable(citation.data),type='html',comment=FALSE, file=paste("./citation_cases_", folder, ".html", sep = ""))
+
+  cat("\n \nThey are printed and saved as files in the working directory: 'citation_cases_*.csv' and 'citation_cases_*.html'.\n\n")
+
+
+
+
+
+
   }
-}
-
-
-
-
-
-

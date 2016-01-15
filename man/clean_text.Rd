@@ -4,7 +4,10 @@
 \alias{clean_text}
 \title{Clean text files in /documents/ folder for subsequent analysis.}
 \usage{
-clean_text()
+clean_text(folder, number = NULL)
+}
+\arguments{
+\item{folder}{The folder in which the PDFs are located.}
 }
 \value{
 Converts PDFs to text and stores in documents folder.

@@ -4,10 +4,19 @@
 \alias{extract_citation_cases}
 \title{Extract citation cases from "cleaned_woref.txt" files.}
 \usage{
-extract_citation_cases()
+extract_citation_cases(folder, authorname, studyyear, scope = NULL,
+  number = NULL)
+}
+\arguments{
+\item{folder}{Name of folder within your working directory that contains the PDFs.
+Looping over folder containing citing documents for different studies is possible.}
+
+\item{authorname}{Enter the names of all authors separated by comma.}
+
+\item{studyyear}{Enter the year when the study was published.}
 }
 \value{
-Returns and saves data on citation cases (citation_data.csv).
+Returns and saves data on citation cases (citation_data.csv) in the working directory.
 }
 \description{
 Extract citation cases from "cleaned_woref.txt" files.

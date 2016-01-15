@@ -4,13 +4,16 @@
 \alias{identify_study}
 \title{Identifies whether single documents (text files) really cite (or just contain) study.}
 \usage{
-identify_study(study.title)
+identify_study(study.title, folder, number = NULL)
 }
 \arguments{
 \item{study.title}{Specify title of study.}
+
+\item{folder}{The folder in which the citing documents are located.}
 }
 \value{
-Returns a list of the extracted references/titles that correspond to the input title.
+Returns a both a .csv file as well as a .html file that contain a
+list with the titles that were extracted from all the citing documents.
 }
 \description{
 Identifies whether single documents (text files) really cite (or just contain) study.

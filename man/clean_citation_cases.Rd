@@ -4,7 +4,7 @@
 \alias{clean_citation_cases}
 \title{Takes the rather "roughly" identifed citation cases and cleans them.}
 \usage{
-clean_citation_cases(file)
+clean_citation_cases(file, studyyear)
 }
 \arguments{
 \item{file}{'citation_data.csv' that contains data on the citation cases.}

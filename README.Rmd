@@ -1,33 +1,27 @@
----
-title: "citations"
-output: html_document
----
-The R package 'citations' comprises functions that can be used to analyze the 'quality' of citations.
+# Citations
+The R package 'citations' comprises functions that can be used to analyze citations cases, i.e. citations within documents that cite a particular (or several) studies.
 
 The functions contained should help to 
 
-1. Save data on studies whose citations we want to investigate: `study_data()`
-2. Scrape a study's citations: `get_wos_citations()`
-3. Scrape the fulltext (PDFs) of those citations: `gen_ris()` and `fetch_paperpiledocs()`
-4. Extract text from those PDFs and save in text files: `extract_text()`
-5. Clean the extracted text documents: `clean_text()`
-6. Identify whether those documents really cite the study of interest: `identify_study_in_text()`
-7. Delete certain sections in texts: `delete_reference_section()`
+1. Extract text from those PDFs and save in text files: `extract_text()`
+2. Identify whether texts really cite the particular study of interest: `identify_study_in_text()`
+3. Delete certain sections in texts to facilitate citation case extraction: `delete_reference_section()` and `delete_running_heads()`
+5. Clean texts to facilitate citation case extraction: `clean_text()`
 8. Extract citations cases from these documents: `extract_citation_cases()`
-9. Clean the extracted citation cases: `clean_citation_cases()`
-10. Classify the citation cases: future...
+9. Analyze the extracted citation cases: to be continued...
 
 
-# Explanation
+# How to...
 
 ## Prerequesites
 
 * You need to install xpdf into the folder C:\Program Files\xpdf
 
-## Installing and loading the package
+## Install and loading the package
 
 ```{r, echo=T, eval=F}
-install.packages("")
+install.packages("devtools")
+devtools::install_github("paulbauer/citations")
 library(citations)
 ```
 

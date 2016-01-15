@@ -1,0 +1,222 @@
+---
+title: "Analysis of citations"
+author: "Pablo Barbera, Simon, Paul"
+date: "January 15, 2016"
+output:
+  html_document: default
+  pdf_document:
+    keep_tex: yes
+  word_document: default
+---
+
+This document illustrates different techniques of automated text analysis applied to the study of citation text.
+
+Note: some of the code here is based on [https://github.com/kbenoit/ITAUR](Ken Benoit's text analysis seminar).
+
+Setup:
+```{r}
+# Simon
+  # setwd("~/Dropbox/research/citations")
+  # setwd("~/Dropbox/Uni/Forschung/2015 Citations")
+
+# Pablo
+  # setwd("~/Dropbox/research/citations")
+
+# Paul
+  # setwd("")
+
+
+# install.packages("quanteda")
+# install.packages("stm")
+require(quanteda, quietly=TRUE, warn.conflicts = FALSE)
+require(stm, quietly=TRUE)
+require(ggplot2, quietly=TRUE)
+require(scales)
+require(dplyr)
+require(stringr)
+options(stringsAsFactors=F)
+```
+
+Reading the dataset
+```{r}
+tf <- read.csv('C:/Users/paul/Desktop/citationdata/citation_cases_Beck 1995.csv')
+tf$citation.case <- iconv(tf$citation.case, from='UTF-8', to='latin1', sub="")
+tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
+tf <- tf[!is.na(tf$year),] # deleting citations with empty years
+tf <- tf[!duplicated(tf$citation.case),] # deleting duplicates
+```
+
+Extracting author names (will be used as stopwords later) and year of each citation
+```{r}
+authors <- tokenize(toLower(tf$document), removePunct=TRUE, removeNumbers=TRUE)
+authors <- unique(unlist(authors))
+tf$year <- gsub('.*([0-9]{4}).*', tf$document, repl='\\1')
+```
+
+Cleaning the citation text
+```{r}
+# tokenizing
+tokens <- tokenize(toLower(tf$citation.case), removePunct=TRUE, removeNumbers=TRUE)
+# removing stopwords, author names, and other frequent words
+tokens <- removeFeatures(tokens, 
+	c(stopwords("english"), "other", "others", "see", "also", authors))
+# stemming?
+#tokens <- lapply(tokens, wordstem)
+# creating n-grams
+ngrams <- lapply(tokens, ngrams, 1:3)
+# putting it all back together...
+ngrams <- unlist(lapply(ngrams, paste, collapse=" "))
+# deleting empty citations...
+todelete <- which(ngrams=="")
+tf <- tf[-todelete,]
+tokens <- tokens[-todelete]
+ngrams <- ngrams[-todelete]
+```
+
+Constructing the document-feature matrix. (I add the title of the citing paper as the name of each document)
+```{r}
+cit <- corpus(ngrams)
+docnames(cit) <- paste0(1:nrow(tf), '_', tf$document)
+summary(cit)
+citmat <- dfm(cit)
+```
+
+Some preliminary analysis... what are the most frequent features?
+```{r}
+topfeatures(citmat, 30)
+plot(citmat, rot.per=0, scale=c(3.5, .3), max.words=50)
+```
+
+
+Now we move to run a topic model. The number of topics (K) is determined based on what value of K maximizes semantic coherence.
+
+```{r,  message=FALSE, warning=FALSE, results="hide", cache=TRUE}
+citstm <- convert(citmat, to="stm")
+K <- 3:8
+out <- prepDocuments(citstm$documents, citstm$vocab, 
+	tf[,c("year", "document", "citation.case")])
+manymodels <- manyTopics(out$documents, out$vocab, K=K, verbose=FALSE,
+	LDAbeta=FALSE, sigma.prior=1, seed=12345, runs=5)
+```
+```{r}
+# finding right number of topics
+chosen <- which.max(unlist(lapply(manymodels$semcoh, mean)))
+cat(K[chosen], 'number of topics is the best fit!')
+model <- manymodels$out[[chosen]]
+# topic proportions
+apply(model$theta, 2, mean)
+```
+
+To check the output of the model, we can look at the words more closely associated to each topic and the most representative documents for each topic
+```{r, tidy=TRUE}
+# output of model
+words <- labelTopics(model, n=20)
+(apply(words$lift, 1, paste, collapse=", "))
+# most representative documents for each topic
+findThoughts(model, out$meta$document)
+# now showing also the text of the documents
+findThoughts(model, paste0(out$meta$document, ': ', out$meta$citation.case), n=3)
+```
+
+Looking at topic usage over time...
+```{r}
+# topics over time
+topics <- data.frame(
+	prop = c(model$theta),
+	document = rep(1:nrow(out$meta), times=K[chosen]),
+	topic = rep(1:K[chosen], each=nrow(out$meta)),
+	year = rep(out$meta$year, times=K[chosen]))
+agg <- aggregate(topics$prop, 
+	by=list(topic=factor(topics$topic), year=topics$year),
+	FUN=mean)
+names(agg)[names(agg)=="x"] <- "prop"
+
+library(ggplot2)
+library(scales)
+p <- ggplot(agg, aes(x=year, y=prop, group=topic, fill=topic))
+pq <- p + geom_area(position="stack") + theme_minimal() +
+	theme(axis.ticks.y=element_blank(), axis.title=element_blank(),
+		axis.text.y=element_blank())
+pq
+
+p <- ggplot(agg, aes(x=year, y=prop, group=topic, color=topic))
+pq <- p + geom_line() + theme_minimal() +
+	theme(axis.title.x=element_blank()) +
+	scale_y_continuous("Average topic proportion", labels=percent)
+pq
+```
+
+
+Finally, we can do some basic sentiment analysis using the `qdap` package
+```{r}
+require(qdap, quietly = TRUE,  warn.conflicts = FALSE)
+text <- unlist(lapply(tokens, paste, collapse=" "))
+sentiment <- polarity(text, grouping.var=tf$document)
+sentiment$group <- sentiment$group[order(sentiment$group$ave.polarity),]
+sentiment
+```
+
+One way to validate the results is by checking the citations that are most negative and most positive
+```{r}
+# Most negative
+tf$citation.case[tf$document %in% head(sentiment$group$document, 3)]
+# Most positive
+tf$citation.case[tf$document %in% tail(sentiment$group$document, 3)]
+```
+
+We can also look at average sentiment over time
+```{r}
+sentiment <- polarity(text, grouping.var=tf$year)
+
+p <- ggplot(sentiment$group, aes(x=as.numeric(year), y=ave.polarity, group=1))
+pq <- p + geom_point() + geom_path() + theme_minimal() +
+	theme(axis.title.x=element_blank()) + 
+	geom_hline(yintercept=0, linetype=6) +
+	scale_y_continuous("Average sentiment of citation")
+pq
+```
+
+
+Now, we study whether the citation is exclusive (just the paper of interest cited in the fragment) or one among several citations. We approximate the number of citations by looking after years (19XX or 20XX) in the fragment. In documents that use author-year citations, this should be a good indicator for references in the text
+```{r}
+tf$citation_counts <- str_count(tf$citation.case, "\\b(19|20)[[:digit:]]{2}\\b")
+table(tf$citation_counts)
+```
+
+We can validate whether this procedure worked by looking at some of the cases
+```{r}
+tf$citation.case[tf$citation_counts == 7]
+tf$citation.case[tf$citation_counts == 6]
+tf$citation.case[tf$citation_counts == 2][1:10]
+```
+This looks good, although in case of very few hits (e.g., 2 hits), the original paper  take a more prominent place (which makes sense).
+
+We can look whether the exclusiveness in citation status has changed over time
+```{r}
+by_years <- group_by(tf, year)
+tf_group <- summarize(by_years, mean_citations = mean(citation_counts, na.rm = TRUE))
+p <- ggplot(tf_group, aes(x=as.numeric(year), y=mean_citations))
+p + geom_point() + geom_line() + theme_minimal() +
+	theme(axis.title.x=element_blank()) + 
+	scale_y_continuous("Average number of references in fragment")
+```
+
+Next, we look for various signal words...
+```{r}
+tf$signal_example <- str_detect(tf$citation.case, "([Ff]or example)|([Ff]or instance)|([Ee]\\.g\\.)")
+tf$signal_positive <- str_detect(tf$citation.case, "follow|recommend|validat|suggest|accordance|advice|demonstrate|confirm|support|in line with|based")
+```
+
+
+... and see whether the prevalence of such citations evolves over time
+```{r}
+by_years <- group_by(tf, year)
+tf_group <- summarize(by_years, mean_signal_example = mean(signal_example, na.rm = TRUE), mean_signal_positive = mean(signal_positive, na.rm = TRUE))
+p <- ggplot(tf_group, aes(x=as.numeric(year), y=mean_signal_positive))
+p + geom_point() + geom_line() + theme_minimal() +
+	theme(axis.title.x=element_blank()) + 
+	scale_y_continuous("Average number of citations with `positive' signal")
+```
+
+
+

@@ -25,7 +25,7 @@ devtools::install_github("paulbauer/citations")
 library(citations)
 ```
 
-Second, set the working directory to the folder that, in turn, folders (e.g. "Beck 1995") that contain the PDFs.
+Second, set the working directory to the folder that, in turn, contains the folders (e.g. "Beck 1995", "Tumasjan 2010") that contain the PDFs.
 ```{r, echo=T, eval=F}
 setwd("C:/Users/pbauer/Google Drive/Research/2016_Quality_of_citations/data")
 ```

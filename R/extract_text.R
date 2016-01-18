@@ -91,7 +91,7 @@ extract_text <- function(folder, number=NULL) {
   cat("\n", n.docs, " PDFs where just sequeezed to release their text in folder '", folder, "'!\n\n", sep = "")
 
   cat(length(dir(paste("./", folder, "/text extraction error", sep=""))),
-      " PDF files were problematic and copied to the 'text extraction error' folder." , sep = "")
+      " PDF file(s) were problematic and copied to the 'text extraction error' folder." , sep = "")
   }
 
 

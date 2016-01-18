@@ -180,12 +180,14 @@
   "Supplemental Material",
   "Downloaded by [EUI European University Institute] at 03:03 21 October 2015",
   "Supplemental data for this article can be accessed on the publisher’s Web site at: http://dx.",
-  "doi.org/10.1080/10584609.2013.879362")
-
-
-
-
-
+  "doi.org/10.1080/10584609.2013.879362",
+  "Comparative Political Studies",
+"Blackwell Publishing Ltd and the Department of Economics, University of Oxford 2011. Published by Blackwell Publishing Ltd, 9600 Garsington Road, Oxford OX4 2DQ, UK and 350 Main Street, Malden, MA 02148, USA.",
+"POLITICAL PARTISANSHIP AND WELFARE STATE REFORM",
+"CHRISTOPHERJ ANDERSONAND DANIELS WARD",
+"OXFORD REVIEW OF ECONOMIC POLICY, VOLUME 22, ",
+"© 2006 The Author(s) Journal compilation © 2006 (European Consortium for Political Research) 482 thilo bodenstein & gerald schneider",
+".com at European Univ Inst - Library on November 5, 2015 Certo, Semadeni / Strategy Research 467")
 
 
 

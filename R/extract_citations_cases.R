@@ -29,7 +29,7 @@ extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, nu
     }
 
     if(length.authorname==3){
-      st3 <- c(paste(authorname[1], ", ", authorname[2], ", & ", authorname[3], " ", studyyear, sep=""),
+      searchterms <- c(paste(authorname[1], ", ", authorname[2], ", & ", authorname[3], " ", studyyear, sep=""),
                paste(authorname[1], ", ", authorname[2], ", & ", authorname[3], ", ", studyyear, sep=""),
                paste(authorname[1], ", ", authorname[2], ", and ", authorname[3], ", ", studyyear, sep=""),
                paste(authorname[1], ", ", authorname[2], ", and ", authorname[3], " ", studyyear, sep=""),
@@ -40,7 +40,14 @@ extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, nu
                paste(authorname[1], " AND OTHERS (" ,studyyear, ")", sep=""),
                paste(authorname[1], " AND OTHERS, (" ,studyyear, ")", sep="")
       )
-      searchterms <- st3
+
+    }
+    if(length.authorname>=3){
+      searchterms <- c(
+        paste(authorname[1], " AND OTHERS", "(|,)\\s{0,2}(|\\[|\\()" ,studyyear, "(\\s{0,2}(:|,)(?# Komma oder Doppelpunkt)\\s{0,2}(PAGE|)(?# Page kommt vor oder nicht)(\\s{0,2}|)(?# nochmal space oder nicht)\\d*(?# zahl mit länge 0 oder mehr)(\\]|\\)|)(?# schliesst mit versch klammer oder nicht)|)(?# seitenzahlen ja,nein, falls nein einfach klammer matchen)(\\]|\\)|)", sep="")
+
+      )
+
     }
 
 #############################################
@@ -118,14 +125,9 @@ extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, nu
   citation.data$document <- sub("\\s+$", "", stringr::str_extract(citation.data$document, "^[^-]+"))
 
   # Save citation cases in table (csv and html)
-  write.table(citation.data, file =  paste("./citation_cases_", folder, ".csv", sep = ""), sep=",")
-  print(xtable::xtable(citation.data),type='html',comment=FALSE, file=paste("./citation_cases_", folder, ".html", sep = ""))
+  write.table(citation.data, file =  paste("./", folder, "_citation_cases.csv", sep = ""), sep=",")
+  print(xtable::xtable(citation.data),type='html',comment=FALSE, file=paste("./", folder, "_citation_cases.html", sep = ""))
 
-  cat("\n \nThey are printed and saved as files in the working directory: 'citation_cases_*.csv' and 'citation_cases_*.html'.\n\n")
-
-
-
-
-
+  cat("\n \nThey are printed and saved as files in the working directory: '*_citation_cases.csv' and '*_citation_cases.html'.\n\n")
 
   }

@@ -1,0 +1,512 @@
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+range.x <- range(x$x)
+breaks <- c(range.x[1]-0.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks=breaks, cex.main=1)
+x
+x
+x <- table(tf$citation_counts)
+x
+x <- as.numeric(table(tf$citation_counts))
+x
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+x
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+range.x <- range(x$x)
+breaks <- c(range.x[1]-0.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks=breaks, cex.main=1)
+range.x
+tf <- read.csv('C:/Users/paul/Desktop/citationdata/citation_cases_Beck 1995.csv')
+tf$citation.case <- iconv(tf$citation.case, from='UTF-8', to='latin1', sub="")
+tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
+tf <- tf[!is.na(tf$year),] # deleting citations with empty years
+tf <- tf[!duplicated(tf$citation.case),] # deleting duplicates
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+range.x <- range(x$x)
+breaks <- c(range.x[1]-0.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks=breaks, cex.main=1, ylim=c())
+axis(1,seq.x)
+windows()
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks=breaks, cex.main=1, ylim=c())
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+range.x <- range(x$x)
+breaks <- c(range.x[1]-0.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+windows()
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks=breaks, cex.main=1)
+axis(1,seq.x)
+x$x
+tf <- read.csv('C:/Users/paul/Desktop/citationdata/citation_cases_Beck 1995.csv')
+tf$citation.case <- iconv(tf$citation.case, from='UTF-8', to='latin1', sub="")
+tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
+tf <- tf[!is.na(tf$year),] # deleting citations with empty years
+tf <- tf[!duplicated(tf$citation.case),] # deleting duplicates
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+range.x <- range(x$x)
+breaks <- c(range.x[1]-0.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks=breaks, cex.main=1)
+axis(1,seq.x)
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks=breaks, cex.main=1, ylim=c(1,10))
+axis(1,seq.x)
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+x
+range.x <- range(x$x)
+breaks <- c(range.x[1]-0.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks=breaks, cex.main=1, ylim=c(1,10))
+x
+table(x)
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+table(x$x)
+range.x <- range(x$x)
+breaks <- c(range.x[1]-0.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+breaks <- c(range.x[1]-0.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks=breaks, cex.main=1, ylim=c(0,700))
+axis(1,seq.x)
+x$x
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks=breaks, cex.main=1, ylim=c(0,700))
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks=breaks, cex.main=1) # ylim=c(0,700)
+tf <- read.csv('C:/Users/paul/Desktop/citationdata/citation_cases_Beck 1995.csv')
+tf$citation.case <- iconv(tf$citation.case, from='UTF-8', to='latin1', sub="")
+tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
+tf <- tf[!is.na(tf$year),] # deleting citations with empty years
+tf <- tf[!duplicated(tf$citation.case),] # deleting duplicates
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+range.x <- range(x$x)
+breaks <- c(range.x[1]-0.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks=breaks, cex.main=1) # ylim=c(0,700)
+hist(x$x)
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", cex.main=1)
+axis(1,seq.x)
+breaks
+range.x
+breaks
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", cex.main=1, breaks=breaks)
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", cex.main=1)
+?hist
+table(x$x)
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+# table(x$x)
+range.x <- range(x$x)
+breaks <- c(range.x[1]-0.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", cex.main=1) # ylim=c(0,700) , breaks=breaks
+axis(1,seq.x)
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+# table(x$x)
+range.x <- range(x$x)
+breaks <- c(range.x[1]-0.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks = 19, cex.main=1) # ylim=c(0,700) , breaks=breaks
+axis(1,seq.x)
+breaks
+length(breaks)
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+# table(x$x)
+range.x <- range(x$x)
+breaks <- c(range.x[1]-1.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", , breaks=breaks, cex.main=1) # y
+axis(1,seq.x)
+table(x$x)
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+# table(x$x)
+range.x <- range(x$x)
+breaks <- c(range.x[1]-1.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+hist(x$x, xlab="Citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", , breaks=breaks, cex.main=1, ylab="Frequency = N documents") # ylim=c(0,700)
+axis(1,seq.x)
+tf$citation_counts <- str_count(tf$citation.case, "\\b(19|20)[[:digit:]]{2}\\b")
+table(tf$citation_counts)
+require(quanteda, quietly=TRUE, warn.conflicts = FALSE)
+require(stm, quietly=TRUE)
+require(ggplot2, quietly=TRUE)
+require(scales)
+require(dplyr)
+require(stringr)
+options(stringsAsFactors=F)
+tf$citation_counts <- str_count(tf$citation.case, "\\b(19|20)[[:digit:]]{2}\\b")
+table(tf$citation_counts)
+tf$citation_counts
+x <- tf$citation_counts
+range.x <- range(x)
+range.x
+table(x)
+c(range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+range.x <- range(x)
+breaks <- c(range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(seq(range.x[1], range.x[2], 1))
+hist(x, xlab=Citation counts within citation cases", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks = 24,  cex.main=1, ylab="Frequency = N citation cases")
+hist(x, xlab="Citation counts within citation cases", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks = 24,  cex.main=1, ylab="Frequency = N citation cases")
+axis(1,seq.x)
+seq.x <- c(seq(range.x[1], range.x[2], 1))
+hist(x, xlab="Citation counts within citation cases", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks = breaks,  cex.main=1, ylab="Frequency = N citation cases")
+axis(1,seq.x)
+# install.packages("quanteda")
+# install.packages("stm")
+# install.packages("qdap")
+require(quanteda, quietly=TRUE, warn.conflicts = FALSE)
+require(stm, quietly=TRUE)
+require(ggplot2, quietly=TRUE)
+require(scales)
+require(dplyr)
+require(stringr)
+options(stringsAsFactors=F)
+tf <- read.csv('C:/Users/paul/Desktop/citationdata/citation_cases_Beck 1995.csv')
+tf$citation.case <- iconv(tf$citation.case, from='UTF-8', to='latin1', sub="")
+tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
+tf <- tf[!is.na(tf$year),] # deleting citations with empty years
+tf <- tf[!duplicated(tf$citation.case),] # deleting duplicates
+tf$citation_counts <- str_count(tf$citation.case, "\\b(19|20)[[:digit:]]{2}\\b")
+table(tf$citation_counts)
+sum(table(tf$citation_counts))
+str_count(tf$citation.case, "\\b(19|20)[[:digit:]]{2}\\b")
+table(tf$citation_counts)
+tf$citation_counts <- str_count(tf$citation.case, "(19|20)[[:digit:]]{2}")
+table(tf$citation_counts)
+tf$citation_counts <- str_count(tf$citation.case, "(19|20)[0-9]{2}") # there were 23 0-cases so I took out b and
+table(tf$citation_counts)
+tf$citation_counts <- str_count(tf$citation.case, "(19|20)[0-9]{2}") # there were 23 0-cases so I took out \b but there are still 5..
+table(tf$citation_counts)
+tf$citation.case[tf$citation_counts == 7]
+tf$citation.case[tf$citation_counts == 6]
+tf$citation.case[tf$citation_counts == 2][1:10]
+x <- tf$citation_counts
+# table(x)
+range.x <- range(x)
+breaks <- c(range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(seq(range.x[1], range.x[2], 1))
+hist(x, xlab="N references within citation case", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks = breaks,  cex.main=1, ylab="Frequency = N citation cases")
+axis(1,seq.x)
+table(tf$citation_counts)
+table(tf$citation_counts)[2]
+sum(able(tf$citation_counts))
+sum(table(tf$citation_counts))
+length(tf$citation.case)
+tf$citation.case
+length(tf$citation.case[1])
+tf$citation.case[1]
+nchar(tf$citation.case)
+tf$nchar <- nchar(tf$citation.case)
+tf$nchar <- nchar(tf$citation.case)
+x <- tf$nchar
+range.x <- range(x)
+range.x <- range(x)
+seq.x <- c(seq(range.x[1], range.x[2], 1))
+hist(x, xlab="Characters per citation case", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks = breaks,  cex.main=1, ylab="Frequency = N citation cases")
+hist(x, xlab="Characters per citation case", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks = 20,  cex.main=1, ylab="Frequency = N citation cases")
+hist(x, xlab="Characters per citation case", main = "Citation cases: Beck & Katz 1995", breaks = 20,  cex.main=1, ylab="Frequency = N citation cases")
+gregexpr("\\W+", tf$citation.case)
+str_extract_all("\\W+", tf$citation.case)
+str_extract_all(tf$citation.case, "\\W+")
+sapply(str_extract_all(tf$citation.case, "\\W+"), length)
+nrow(tf)
+tf$citation.case[1268]
+sapply(str_extract_all(tf$citation.case, "\\W+"), length)
+par(mfrow=c(1,2))
+par(mfrow=c(1,2))
+x <- nchar(tf$citation.case)
+# table(x)
+hist(x, xlab="Characters per citation case", main = "Citation cases: Beck & Katz 1995", breaks = 20,  cex.main=1, ylab="Frequency = N citation cases")
+x <- sapply(str_extract_all(tf$citation.case, "\\W+"), length) # Very rough count of words
+hist(x, xlab="Characters per citation case", main = "Citation cases: Beck & Katz 1995", breaks = 20,  cex.main=1, ylab="Frequency = N citation cases")
+authors <- tokenize(toLower(tf$document), removePunct=TRUE, removeNumbers=TRUE)
+authors <- unique(unlist(authors))
+tf$year <- gsub('.*([0-9]{4}).*', tf$document, repl='\\1')
+# tokenizing
+tokens <- tokenize(toLower(tf$citation.case), removePunct=TRUE, removeNumbers=TRUE)
+# removing stopwords, author names, and other frequent words
+tokens <- removeFeatures(tokens,
+c(stopwords("english"), "other", "others", "see", "also", authors))
+# stemming?
+#tokens <- lapply(tokens, wordstem)
+# creating n-grams
+ngrams <- lapply(tokens, ngrams, 1:3)
+# putting it all back together...
+ngrams <- unlist(lapply(ngrams, paste, collapse=" "))
+# deleting empty citations...
+todelete <- which(ngrams=="")
+tf <- tf[-todelete,]
+tokens <- tokens[-todelete]
+ngrams <- ngrams[-todelete]
+cit <- corpus(ngrams)
+docnames(cit) <- paste0(1:nrow(tf), '_', tf$document)
+summary(cit)
+citmat <- dfm(cit)
+cit <- corpus(ngrams)
+docnames(cit) <- paste0(1:nrow(tf), '_', tf$document)
+summary(cit)
+citmat <- dfm(cit)
+topfeatures(citmat, 30)
+plot(citmat, rot.per=0, scale=c(3.5, .3), max.words=50)
+libary(knitr)
+library(knitr)
+View(tf)
+Pablo
+# setwd("~/Dropbox/research/citations")
+# Paul
+# setwd("")
+# install.packages("quanteda")
+# install.packages("stm")
+# install.packages("qdap")
+require(quanteda, quietly=TRUE, warn.conflicts = FALSE)
+require(stm, quietly=TRUE)
+require(ggplot2, quietly=TRUE)
+require(scales)
+require(dplyr)
+require(stringr)
+options(stringsAsFactors=F)
+tf <- read.csv('C:/Users/paul/Desktop/citationdata/citation_cases_Beck 1995.csv')
+tf$citation.case <- iconv(tf$citation.case, from='UTF-8', to='latin1', sub="")
+tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
+tf <- tf[!is.na(tf$year),] # deleting citations with empty years
+tf <- tf[!duplicated(tf$citation.case),] # deleting duplicates
+View(tf)
+fix(tf)
+tf[1:19,]
+fix(tf)
+tf[0:9,]
+rm(list=ls())
+# setwd("~/Dropbox/research/citations")
+# setwd("~/Dropbox/Uni/Forschung/2015 Citations")
+# Pablo
+# setwd("~/Dropbox/research/citations")
+# Paul
+# setwd("")
+# install.packages("quanteda")
+# install.packages("stm")
+# install.packages("qdap")
+require(quanteda, quietly=TRUE, warn.conflicts = FALSE)
+require(stm, quietly=TRUE)
+require(ggplot2, quietly=TRUE)
+require(scales)
+require(dplyr)
+require(stringr)
+require(knitr)
+options(stringsAsFactors=F)
+tf <- read.csv('C:/Users/paul/Desktop/citationdata/citation_cases_Beck 1995.csv')
+tf$citation.case <- iconv(tf$citation.case, from='UTF-8', to='latin1', sub="")
+tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
+tf <- tf[!is.na(tf$year),] # deleting citations with empty years
+tf <- tf[!duplicated(tf$citation.case),] # deleting duplicates
+authors <- tokenize(toLower(tf$document), removePunct=TRUE, removeNumbers=TRUE)
+authors <- unique(unlist(authors))
+tf$year <- gsub('.*([0-9]{4}).*', tf$document, repl='\\1')
+# tokenizing
+tokens <- tokenize(toLower(tf$citation.case), removePunct=TRUE, removeNumbers=TRUE)
+# removing stopwords, author names, and other frequent words
+tokens <- removeFeatures(tokens,
+c(stopwords("english"), "other", "others", "see", "also", authors))
+# stemming?
+#tokens <- lapply(tokens, wordstem)
+# creating n-grams
+ngrams <- lapply(tokens, ngrams, 1:3)
+# putting it all back together...
+ngrams <- unlist(lapply(ngrams, paste, collapse=" "))
+# deleting empty citations...
+todelete <- which(ngrams=="")
+tf <- tf[-todelete,]
+tokens <- tokens[-todelete]
+ngrams <- ngrams[-todelete]
+cit <- corpus(ngrams)
+docnames(cit) <- paste0(1:nrow(tf), '_', tf$document)
+# summary(cit)
+citmat <- dfm(cit)
+plot(citmat, rot.per=0, scale=c(3.5, .3), max.words=50)
+citstm <- convert(citmat, to="stm")
+K <- 3:8
+out <- prepDocuments(citstm$documents, citstm$vocab,
+tf[,c("year", "document", "citation.case")])
+manymodels <- manyTopics(out$documents, out$vocab, K=K, verbose=FALSE,
+LDAbeta=FALSE, sigma.prior=1, seed=12345, runs=1) # , runs=5
+```
+```{r, eval=F}
+# finding right number of topics
+chosen <- which.max(unlist(lapply(manymodels$semcoh, mean)))
+cat(K[chosen], 'number of topics is the best fit!')
+model <- manymodels$out[[chosen]]
+# topic proportions
+apply(model$theta, 2, mean)
+citstm <- convert(citmat, to="stm")
+K <- 3:8
+out <- prepDocuments(citstm$documents, citstm$vocab,
+tf[,c("year", "document", "citation.case")])
+manymodels <- manyTopics(out$documents, out$vocab, K=K, verbose=FALSE,
+LDAbeta=FALSE, sigma.prior=1, seed=12345, runs=2) # , runs=5
+# Simon
+# setwd("~/Dropbox/research/citations")
+# setwd("~/Dropbox/Uni/Forschung/2015 Citations")
+# Pablo
+# setwd("~/Dropbox/research/citations")
+# Paul
+# setwd("")
+# install.packages("quanteda")
+# install.packages("stm")
+# install.packages("qdap")
+require(quanteda, quietly=TRUE, warn.conflicts = FALSE)
+require(stm, quietly=TRUE)
+require(ggplot2, quietly=TRUE)
+require(scales)
+require(dplyr)
+require(stringr)
+require(knitr)
+options(stringsAsFactors=F)
+tf <- read.csv('C:/Users/paul/Desktop/citationdata/citation_cases_Beck 1995.csv')
+tf$citation.case <- iconv(tf$citation.case, from='UTF-8', to='latin1', sub="")
+tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
+tf <- tf[!is.na(tf$year),] # deleting citations with empty years
+tf <- tf[!duplicated(tf$citation.case),] # deleting duplicates
+kable(tf[0:9,], format = 'markdown')
+tf$num <- 1 # there must be another way...
+x <- aggregate(tf[,"num"], by=list(tf$document), FUN=sum)
+# table(x$x)
+range.x <- range(x$x)
+breaks <- c(range.x[1]-1.5, range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(0, seq(range.x[1], range.x[2], 1))
+hist(x$x, xlab="N citation cases per document", main = "Citation cases: Beck & Katz 1995", xaxt="n", , breaks=breaks, cex.main=1, ylab="Frequency = N documents") # ylim=c(0,700)
+axis(1,seq.x)
+tf$citation_counts <- str_count(tf$citation.case, "(19|20)[0-9]{2}") # there were 23 0-cases so I took out \b but there are still 5..
+# table(tf$citation_counts)
+tf$citation.case[tf$citation_counts == 7]
+tf$citation.case[tf$citation_counts == 6]
+tf$citation.case[tf$citation_counts == 2][1:10]
+x <- tf$citation_counts
+# table(x)
+range.x <- range(x)
+breaks <- c(range.x[1]:range.x[2]-0.5, range.x[2]+0.5)
+seq.x <- c(seq(range.x[1], range.x[2], 1))
+hist(x, xlab="N references within citation case", main = "Citation cases: Beck & Katz 1995", xaxt="n", breaks = breaks,  cex.main=1, ylab="Frequency = N citation cases")
+axis(1,seq.x)
+by_years <- group_by(tf, year)
+tf_group <- summarize(by_years, mean_citations = mean(citation_counts, na.rm = TRUE))
+p <- ggplot(tf_group, aes(x=as.numeric(year), y=mean_citations))
+p + geom_point() + geom_line() + theme_minimal() +
+theme(axis.title.x=element_blank()) +
+scale_y_continuous("Average number of references in citation case")
+par(mfrow=c(1,2))
+x <- nchar(tf$citation.case)
+# table(x)
+hist(x, xlab="Characters per citation case", main = "\n", breaks = 20,  cex.main=1, ylab="Frequency = N citation cases")
+x <- sapply(str_extract_all(tf$citation.case, "\\W+"), length) # Very rough count of words
+hist(x, xlab="Words per citation case", main = "\n", breaks = 20,  cex.main=1, ylab="Frequency = N citation cases")
+tf$signal_example <- str_detect(tf$citation.case, "([Ff]or example)|([Ff]or instance)|([Ee]\\.g\\.)")
+signal.words <- "follow|recommend|validat|suggest|accordance|advice|demonstrate|confirm|support|in line with|based"
+tf$signal_positive <- str_detect(tf$citation.case, signal.words)
+by_years <- group_by(tf, year)
+tf_group <- summarize(by_years, mean_signal_example = mean(signal_example, na.rm = TRUE), mean_signal_positive = mean(signal_positive, na.rm = TRUE))
+p <- ggplot(tf_group, aes(x=as.numeric(year), y=mean_signal_positive))
+p + geom_point() + geom_line() + theme_minimal() +
+theme(axis.title.x=element_blank()) +
+scale_y_continuous("Average number of citations with `positive' signal")
+authors <- tokenize(toLower(tf$document), removePunct=TRUE, removeNumbers=TRUE)
+authors <- unique(unlist(authors))
+tf$year <- gsub('.*([0-9]{4}).*', tf$document, repl='\\1')
+# tokenizing
+tokens <- tokenize(toLower(tf$citation.case), removePunct=TRUE, removeNumbers=TRUE)
+# removing stopwords, author names, and other frequent words
+tokens <- removeFeatures(tokens,
+c(stopwords("english"), "other", "others", "see", "also", authors))
+# stemming?
+#tokens <- lapply(tokens, wordstem)
+# creating n-grams
+ngrams <- lapply(tokens, ngrams, 1:3)
+# putting it all back together...
+ngrams <- unlist(lapply(ngrams, paste, collapse=" "))
+# deleting empty citations...
+todelete <- which(ngrams=="")
+tf <- tf[-todelete,]
+tokens <- tokens[-todelete]
+ngrams <- ngrams[-todelete]
+cit <- corpus(ngrams)
+docnames(cit) <- paste0(1:nrow(tf), '_', tf$document)
+# summary(cit)
+citmat <- dfm(cit)
+plot(citmat, rot.per=0, scale=c(3.5, .3), max.words=50)
+citstm <- convert(citmat, to="stm")
+K <- 3:8
+out <- prepDocuments(citstm$documents, citstm$vocab,
+tf[,c("year", "document", "citation.case")])
+manymodels <- manyTopics(out$documents, out$vocab, K=K, verbose=FALSE,
+LDAbeta=FALSE, sigma.prior=1, seed=12345, runs=2) # , runs=5
+setwd("~/Google Drive/Research/2016_Quality_of_citations")
+library(qdap)
+??polarity
+library(qdap)
+library("qdap"")
+library("qdap")
+library(citations)
+setwd("C:/Users/paul/Desktop/citationdata")
+extract_text(folder = "Beck 1995")
+getwd()
+delete_reference_section(folder = "Beck 1995 extracted texts")
+delete_running_heads(folder = "Beck 1995")
+clean_text(folder = "Beck 1995 extracted texts")
+delete_running_heads(folder = "Beck 1995 extracted texts")
+delete_reference_section(folder = "Beck 1995 extracted texts", number = 20)
+delete_running_heads(folder = "Beck 1995 extracted texts", number = 20)
+folder = "Beck 1995 extracted texts"
+file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
+file.paths <- paste(paste("./", folder, "/", sep = ""), file.names, sep="")
+n.docs <- length(file.paths)
+# Specify number of documents
+if(!is.null(number)){n.docs <- number}
+# Loop to omit running heads from text file
+deleted.runningheads <- data.frame(study= NA, running.head = NA)
+file.paths[6]
+i <- 6
+con <- file(file.paths[i], encoding = "UTF-8")
+x <- readLines(con)
+close(con)
+collect.deleted <- NULL
+pattern <- "Downloaded by|Downloaded from|All use subject to JSTOR Terms and Conditions|Downloaded from cps.sagepub.com at"
+locations <- grep(pattern, x, ignore.case = FALSE)
+locations
+pattern <- "Downloaded by|Downloaded from|All use subject to JSTOR Terms and Conditions|Downloaded from cps.sagepub.com at"
+locations <- grep(pattern, x, ignore.case = FALSE)
+locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
+if(length(locations.names)>=5){x <- x[-locations]
+#print(locations.names)
+} # delete, print lines
+collect.deleted <- c(collect.deleted, locations.names)
+collect.deleted
+library(citations)
+delete_running_heads(folder = "Beck 1995 extracted texts", number = 20)
+delete_reference_section(folder = "Beck 1995 extracted texts")
+delete_running_heads(folder = "Beck 1995 extracted texts")
+clean_text(folder = "Beck 1995 extracted texts")
+journals <- read.csv("./journals/new table.csv", sep=",")
+journals <- read.csv("./journals/new table.csv", sep=",", header=T)
+?read.csv
+journals <- read.csv("./journals/new table.csv", sep=",", header=T, row.names=F)
+journals <- read.csv("./journals/new table.csv", sep=",", header=T, row.names=NULL)
+fix(journals)
+journals <- read.csv("./journals/new table.csv", sep=";", header=T, row.names=NULL)
+fix(journals)
+journals <- read.csv("./journals/new table.csv", sep=";", header=T)
+fix(journals)
+extract_citation_cases(folder = "Beck 1995 extracted texts",
+authorname = "Beck, Katz",
+studyyear = "1995"
+) # scope = 2
+library(citations)
+library(citations)

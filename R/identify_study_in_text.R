@@ -45,11 +45,9 @@ identify_study <- function(study.title, folder, number=NULL){
 
    # Replace so that whitespace is omitted
   table <- cbind(stringr::str_extract(file.names, "[^-]*"), list.extracted.titles)
-  write.table(table, paste("./identify_citation_", folder, ".csv", sep = ""))
 
-
-
-  print(xtable::xtable(table),type='html',comment=FALSE, file=paste("./identify_citation_", folder, ".html", sep = ""))
+  # Print table
+    print(xtable::xtable(table),type='html',comment=FALSE, file=paste("./", folder, "_identified_citation.html", sep = ""))
 
   cat("\n Check whether citation were rightly identifed using file 'identify_citation.csv' 'identify_citation.html' in the working directory. \n\n")
 }

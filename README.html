@@ -63,41 +63,36 @@ img {
 
 <div id="citations" class="section level1">
 <h1>Citations</h1>
-<p>The R package ‘citations’ comprises functions that can be used to analyze the ‘quality’ of citations.</p>
+<p>The R package ‘citations’ comprises functions that can be used to analyze citations cases, i.e. citations within documents that cite a particular (or several) studies.</p>
 <p>The functions contained should help to</p>
 <ol style="list-style-type: decimal">
 <li>Extract text from those PDFs and save in text files: <code>extract_text()</code></li>
-<li>Identify whether texts really cite the study of interest: <code>identify_study_in_text()</code></li>
+<li>Identify whether texts really cite the particular study of interest: <code>identify_study_in_text()</code></li>
 <li>Delete certain sections in texts to facilitate citation case extraction: <code>delete_reference_section()</code> and <code>delete_running_heads()</code></li>
 <li>Clean texts to facilitate citation case extraction: <code>clean_text()</code></li>
 <li>Extract citations cases from these documents: <code>extract_citation_cases()</code></li>
 <li>Analyze the extracted citation cases: to be continued…</li>
 </ol>
 </div>
-<div id="explanation" class="section level1">
-<h1>Explanation</h1>
+<div id="how-to" class="section level1">
+<h1>How to…</h1>
 <div id="prerequesites" class="section level2">
 <h2>Prerequesites</h2>
 <ul>
 <li>You need to install xpdf into the folder C:Files</li>
 </ul>
 </div>
-<div id="install-and-loading-the-package" class="section level2">
-<h2>Install and loading the package</h2>
+<div id="first-steps" class="section level2">
+<h2>First steps</h2>
+<p>First install/load the package.</p>
 <pre class="r"><code>install.packages(&quot;devtools&quot;)
 devtools::install_github(&quot;paulbauer/citations&quot;)
 library(citations)</code></pre>
+<p>Second, set the working directory to the folder that, in turn, folders (e.g. “Beck 1995”) that contain the PDFs.</p>
+<pre class="r"><code>setwd(&quot;C:/Users/pbauer/Google Drive/Research/2016_Quality_of_citations/data&quot;)</code></pre>
 </div>
-<div id="set-working-directory-that-contains-folder-with-the-pdf-documents" class="section level2">
-<h2>Set working directory (that contains folder with the PDF documents)</h2>
-<pre class="r"><code>setwd(&quot;C:\\Users\\paul\\Desktop\\citationdata&quot;)</code></pre>
-</div>
-<div id="example-single-study" class="section level2">
-<h2>Example: Single study</h2>
-</div>
-</div>
-<div id="single-study-20-documents" class="section level1">
-<h1>SINGLE STUDY (20 documents)</h1>
+<div id="example-a-single-study-20-documents" class="section level2">
+<h2>Example: A single study (20 documents)</h2>
 <pre class="r"><code>extract_text(folder = &quot;Beck 1995&quot;, number = 20)
 identify_study(study.title = &quot;What to Do (and Not to Do) with Time-Series Cross-Section Data&quot;,
                  folder = &quot;Beck 1995&quot;#
@@ -110,8 +105,8 @@ extract_citation_cases(folder = &quot;Beck 1995&quot;,
                          studyyear = &quot;1995&quot;,
                          number = 20) # scope = 2</code></pre>
 </div>
-<div id="single-study-all-documents" class="section level1">
-<h1>SINGLE STUDY (ALL documents)</h1>
+<div id="example-a-single-study" class="section level2">
+<h2>Example: A single study</h2>
 <pre class="r"><code>extract_text(folder = &quot;Beck 1995&quot;)
 identify_study(study.title = &quot;What to Do (and Not to Do) with Time-Series Cross-Section Data&quot;,
                  folder = &quot;Beck 1995&quot;#
@@ -122,23 +117,10 @@ clean_text(folder = &quot;Beck 1995&quot;)
 extract_citation_cases(folder = &quot;Beck 1995&quot;,
                          authorname = &quot;Beck, Katz&quot;,
                          studyyear = &quot;1995&quot;
-                         ) # scope = 2
-
-
-  extract_text(folder = &quot;Ermisch 2009&quot;)
-  identify_study(study.title = &quot;What to Do (and Not to Do) with Time-Series Cross-Section Data&quot;,
-                 folder = &quot;Ermisch 2009&quot;#
-  )
-  delete_reference_section(folder = &quot;Ermisch 2009&quot;)
-  delete_running_heads(folder = &quot;Ermisch 2009&quot;)
-  clean_text(folder = &quot;Ermisch 2009&quot;)
-  extract_citation_cases(folder = &quot;Ermisch 2009&quot;,
-                         authorname = &quot;Ermisch, Gambetta, Laurie, Siedler, Uhrig&quot;,
-                         studyyear = &quot;2009&quot;
-  ) # scope = 2</code></pre>
+                         ) # scope = 2</code></pre>
 </div>
-<div id="several-studies" class="section level1">
-<h1>SEVERAL STUDIES</h1>
+<div id="example-several-studies" class="section level2">
+<h2>Example: Several studies</h2>
 <ul>
 <li>Info on studies should be saved in a table</li>
 <li>Then we can loop over the table content</li>
@@ -160,6 +142,7 @@ extract_citation_cases(folder = &quot;Beck 1995&quot;,
     extract_citation_cases(folder = folder, authorname = authorname, studyyear = studyyear)
 
   }</code></pre>
+</div>
 </div>
 
 

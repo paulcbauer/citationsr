@@ -17,26 +17,23 @@ The functions contained should help to
 
 * You need to install xpdf into the folder C:\Program Files\xpdf
 
-## Install and loading the package
-
+## First steps
+First install/load the package.
 ```{r, echo=T, eval=F}
 install.packages("devtools")
 devtools::install_github("paulbauer/citations")
 library(citations)
 ```
 
-
-
-## Set working directory (that contains folder with the PDF documents)
-
+Second, set the working directory to the folder that, in turn, folders (e.g. "Beck 1995") that contain the PDFs.
 ```{r, echo=T, eval=F}
-setwd("C:\\Users\\paul\\Desktop\\citationdata")
+setwd("C:/Users/pbauer/Google Drive/Research/2016_Quality_of_citations/data")
 ```
 
 
-## Example: Single study
 
-# SINGLE STUDY (20 documents)
+
+## Example: A single study (20 documents)
 ```{r, echo=T, eval=F}
 extract_text(folder = "Beck 1995", number = 20)
 identify_study(study.title = "What to Do (and Not to Do) with Time-Series Cross-Section Data",
@@ -52,7 +49,7 @@ extract_citation_cases(folder = "Beck 1995",
 ```
 
 
-# SINGLE STUDY (ALL documents)
+## Example: A single study
 ```{r, echo=T, eval=F}
 extract_text(folder = "Beck 1995")
 identify_study(study.title = "What to Do (and Not to Do) with Time-Series Cross-Section Data",
@@ -65,24 +62,10 @@ extract_citation_cases(folder = "Beck 1995",
                          authorname = "Beck, Katz",
                          studyyear = "1995"
                          ) # scope = 2
-
-
-  extract_text(folder = "Ermisch 2009")
-  identify_study(study.title = "What to Do (and Not to Do) with Time-Series Cross-Section Data",
-                 folder = "Ermisch 2009"#
-  )
-  delete_reference_section(folder = "Ermisch 2009")
-  delete_running_heads(folder = "Ermisch 2009")
-  clean_text(folder = "Ermisch 2009")
-  extract_citation_cases(folder = "Ermisch 2009",
-                         authorname = "Ermisch, Gambetta, Laurie, Siedler, Uhrig",
-                         studyyear = "2009"
-  ) # scope = 2
-
 ```
 
 
-# SEVERAL STUDIES
+## Example: Several studies
 * Info on studies should be saved in a  table
 * Then we can loop over the table content
 ```{r, echo=T, eval=F}

@@ -21,7 +21,7 @@ delete_reference_section <- function(folder, number=NULL){
 
 
     # Locate "References" section
-      references.location <- grep("References|REFERENCES", x, ignore.case = FALSE)
+      references.location <- grep("References|REFERENCES|Literatur|LITERATUR", x, ignore.case = FALSE)
 
       if(length(references.location)==1){
         cat("In document '", file.names[i], "' 'References' only appears once. (discarded).\n\n", sep="")

@@ -3,6 +3,7 @@ The R package 'citations' comprises functions that can be used to analyze citati
 
 The functions contained should help to 
 
+1. Identify the citing document and collect meta information: `identify_citing_document()`
 1. Extract text from those PDFs and save in text files: `extract_text()`
 2. Identify whether texts really cite the particular study of interest: `identify_study_in_text()`
 3. Delete certain sections in texts to facilitate citation case extraction: `delete_reference_section()` and `delete_running_heads()`
@@ -27,7 +28,7 @@ library(citations)
 
 Second, set the working directory to the folder that, in turn, contains the folders (e.g. "Beck 1995", "Tumasjan 2010") that contain the PDFs.
 ```{r, echo=T, eval=F}
-setwd("C:/Users/pbauer/Google Drive/Research/2016_Quality_of_citations/data")
+setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
 ```
 
 
@@ -35,6 +36,7 @@ setwd("C:/Users/pbauer/Google Drive/Research/2016_Quality_of_citations/data")
 
 ## Example: A single study (20 documents)
 ```{r, echo=T, eval=F}
+identify_citing_document(folder = "Beck 1995", number = 10)
 extract_text(folder = "Beck 1995", number = 20)
 identify_study(study.title = "What to Do (and Not to Do) with Time-Series Cross-Section Data",
                  folder = "Beck 1995"#
@@ -51,6 +53,7 @@ extract_citation_cases(folder = "Beck 1995",
 
 ## Example: A single study
 ```{r, echo=T, eval=F}
+identify_citing_document(folder = "Beck 1995")
 extract_text(folder = "Beck 1995")
 identify_study(study.title = "What to Do (and Not to Do) with Time-Series Cross-Section Data",
                  folder = "Beck 1995"#
@@ -68,6 +71,7 @@ extract_citation_cases(folder = "Beck 1995",
 ## Example: Several studies
 * Info on studies should be saved in a  table
 * Then we can loop over the table content
+
 ```{r, echo=T, eval=F}
 
 publicationdata <- read.table("publicationdata.txt", sep=";",

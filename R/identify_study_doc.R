@@ -1,25 +1,29 @@
 #' Identifies whether single documents (text files) really cite (or just contain) study.
 #'
-#' @param study.title Specify title of study.
-#' @param folder The folder in which the citing documents are located.
-#' @return Returns a both a .csv file as well as a .html file that contain a
-#' list with the titles that were extracted from all the citing documents.
+#' @param study.title Title of the study, e.g. "Measuring trust"
+#' @param folder Name of folder within working directory in which the citing documents (.txt files) are located, e.g. "Beck 1995".
+#' @param number Number of .txt files in folder the function should be applied to. Default is "all .txt files in folder".
+#' @return Returns a both a .csv and html files that contain a
+#' list with the titles that were extracted across the citing documents.
 
 
-identify_study <- function(study.title, folder, number=NULL){
+identify_study_doc <- function(study.title, folder, number=NULL){
 
 
-  # List file names
+# List file names in folder (ONLY .TXT FILES)
   file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
+
+# Generate file paths
   file.paths <- paste(paste("./", folder, "/", sep = ""), file.names, sep="")
 
+# Count number of files in folder
   n.docs <- length(file.paths)
 
-  # Specify number of documents
+# Specify number of documents to assess by setting n.docs
   if(!is.null(number)){n.docs <- number}
 
 
-  # Load documents and search for full citation in them
+# Loop over .txt files one by one (until document nr. "number" = n.docs)
   list.extracted.titles <- NULL
   for (i in 1:n.docs){
     con <- file(file.paths[i], encoding = "UTF-8")
@@ -27,7 +31,7 @@ identify_study <- function(study.title, folder, number=NULL){
     close(con)
     x <- paste(x, collapse = " ")
 
-    # aregexec()
+    # aregexec() - distance matching
     DISTANCE <- 20 # CHOOSE DISTANCE: Must be high enough!
     start <- aregexec(study.title, x, max.distance = DISTANCE)[[1]][1]
     length <- as.numeric(unlist(attributes(aregexec(study.title, x, max.distance = DISTANCE)[[1]]))[1])

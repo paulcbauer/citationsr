@@ -1,19 +1,19 @@
-#' Convert PDFs in /documents/ into text files which are stored in same folder.
+#' Converts and stores PDFs in folder as .txt files.
 #'
-#' @return Converts PDFs into text files that a stored in the folder.
-#' @param folder Name of folder within your working directory that contains the PDFs.
-#' @param number Number of documents you want to apply function to. Default is "all docs in folder".
-#' Looping over folder containing citing documents for different studies is possible.
+#' @return Converts and stores PDFs in folder as .txt files.
+#' @param folder Name of folder within working directory in which the citing documents (PDFs) are located, e.g. "Beck 1995".
+#' @param number Number of PDFs you want to apply the function to. Default is "all PDFs in folder".
+
 
 
 extract_text <- function(folder, number=NULL) {
 
 # Add xpdf to the environmental variable PATH
-  # Sys.getenv("PATH") # check path
+  # use 'Sys.getenv("PATH")' to check path
   Sys.setenv(PATH = paste(Sys.getenv("PATH"), ";C:\\Program Files\\xpdf\\bin32\\", sep="")) # LAPTOP
   Sys.setenv(PATH = paste(Sys.getenv("PATH"), ";C:\\Program Files\\xpdf\\bin64\\", sep=""))
 
-# Delete text files in folder if there are any
+# Identify and delete any .txt files present in folder
   file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
   if(identical(file.names, character(0))==FALSE){
     file.paths <- paste(paste("./", folder,"/", sep = ""), file.names, sep="")
@@ -22,31 +22,36 @@ extract_text <- function(folder, number=NULL) {
 
 
 
-# Extract PDF file names + path
+# Identify names of PDF files in folder + their path
   file.names <- dir(paste("./", folder, sep = ""), pattern = ".pdf")
   file.paths <- paste(paste("./", folder,"/", sep = ""), file.names, sep="")
+
+# Count number of files in folder
   n.docs <- length(file.paths)
 
-  # Specify number of documents
+# Specify number of documents to assess by setting n.docs
   if(!is.null(number)){n.docs <- number}
 
 
 
 
+    # Measure time
+      ptm <- proc.time()
 
-  ptm <- proc.time()
+# Loop over .pdf files one by one (until document nr. "number" = n.docs)
   for (i in 1:n.docs){  #
     tryCatch(
-      {
+      { # Good PDFs
 
         fulltext::ft_extract(file.paths[i], which = "xpdf")
         cat("\n Ok! ", file.paths[i], "\n", sep="")
 
       },
-      error=function(cond) {
+      error=function(cond)
+      { # Error PDFs (e.g. no text extraction)
+
+        # Give error message with path
         message(paste("\n PROBLEM! \n", file.paths[i]))
-        # message("\n Here's the original error message: \n")
-        # message(cond)
 
         # Create folder for bad PDFs (if not present)
         if(dir.exists(paste("./", folder, "/text extraction error/", sep = ""))==F){
@@ -58,13 +63,16 @@ extract_text <- function(folder, number=NULL) {
 
         # Delete bad PDFs from documents folder
         unlink(file.paths[i], force = T)
+
+        # Message
         message("\n\nPDF copied to 'text extraction error' folder.\n")
 
       },
-      warning=function(cond) {
+      warning=function(cond)
+      { # Warning PDFs
+
         message(paste("\n WARNING! \n", file.paths[i]))
-        # message("Here's the original warning message:")
-        # message(cond)
+
 
         # Create folder for bad PDFs (if not present)
         if(dir.exists(paste("./", folder, "/text extraction error/", sep = ""))==F){
@@ -73,25 +81,26 @@ extract_text <- function(folder, number=NULL) {
         # Copy bad PDFs to error folder
         file.copy(file.paths[i], paste("./", folder, "/text extraction error/", file.names[i], sep = ""), overwrite = TRUE, recursive = FALSE,
                   copy.mode = TRUE, copy.date = FALSE)
+
         # Delete bad PDFs from documents folder
         unlink(file.paths[i], force = T)
         message("\n\n PDF copied to 'text extraction error' folder.\n")
 
       },
-      finally={
-        # NOTE: Final message regardess of error or success
-        # message(paste("\n\n Finished!", file.paths[i]))
-      })}
+      finally={}
 
-  time <- proc.time() - ptm
+      )}
 
-  # Messages
-  cat("\n\n For the folder '", folder, "' text extraction too around ", as.numeric(time[3]), " second(s) this is around ", round(as.numeric(time[3])/60,2), " minutes.\n", sep = "")
+      # Measure time
+      time <- proc.time() - ptm
 
-  cat("\n", n.docs, " PDFs where just sequeezed to release their text in folder '", folder, "'!\n\n", sep = "")
+  # Messages for user
+    cat("\n\n For the folder '", folder, "' text extraction too around ", as.numeric(time[3]), " second(s) this is around ", round(as.numeric(time[3])/60,2), " minutes.\n", sep = "")
 
-  cat(length(dir(paste("./", folder, "/text extraction error", sep=""))),
-      " PDF file(s) were problematic and copied to the 'text extraction error' folder." , sep = "")
+    cat("\n", n.docs, " PDFs where just sequeezed to release their text in folder '", folder, "'!\n\n", sep = "")
+
+    cat(length(dir(paste("./", folder, "/text extraction error", sep=""))),
+        " PDF file(s) were problematic and copied to the 'text extraction error' folder." , sep = "")
   }
 
 

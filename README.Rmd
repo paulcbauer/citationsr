@@ -1,15 +1,15 @@
 # Citations
-The R package 'citations' comprises functions that can be used to analyze citations cases, i.e. citations within documents that cite a particular (or several) studies.
+The R package 'citations' comprises functions that can be used to analyze citation cases, i.e. citations within documents that cite a particular (or several) studies. These functions would normally be executed in a sequence.
 
-The functions contained should help to 
-
-1. Identify the citing document and collect meta information: `identify_citing_document()`
-1. Extract text from those PDFs and save in text files: `extract_text()`
-2. Identify whether texts really cite the particular study of interest: `identify_study_in_text()`
-3. Delete certain sections in texts to facilitate citation case extraction: `delete_reference_section()` and `delete_running_heads()`
-5. Clean texts to facilitate citation case extraction: `clean_text()`
-8. Extract citations cases from these documents: `extract_citation_cases()`
+1. `extract_text()`: Extract text from citing documents (PDFs) and saves text in text files with the same name. 
+1. `identify_citing_doct()`: Identifies citing documents (PDFs) either by finding a DOI and querying information using that DOI or by trying to extract title, journal, pages etc. from the PDF itself.
+2. `identify_study_doc()`: Runs through citing documents and identifes whether study of interest was really cited in there, i.e. whether it appears in the references. Produces a table with the extracted reference (if there has been) to the study.
+3. `delete_ref_section()` and `delete_running_heads()`: Clean up .txt files of citing documents (omitting/deleting reference section and running heads) to facilitate citation case extraction. 
+5. `clean_text()`: Clean .txt files (e.g. replace abbreviation) to facilitate citation case extraction.
+8. `extract_citation_cases()`: Extract citations cases from citing documents (.txt files). 
 9. Analyze the extracted citation cases: to be continued...
+
+* `clean_pdf_filenames` and `numeric_to_name` are unfinished functions. The former shall rename PDF files with problematic names. The latter shall convert citing documents from the numeric to the name citation system.
 
 
 # How to...
@@ -19,14 +19,14 @@ The functions contained should help to
 * You need to install xpdf into the folder C:\Program Files\xpdf
 
 ## First steps
-First install/load the package.
+Install/load the package.
 ```{r, echo=T, eval=F}
 install.packages("devtools")
 devtools::install_github("paulbauer/citations")
 library(citations)
 ```
 
-Second, set the working directory to the folder that, in turn, contains the folders (e.g. "Beck 1995", "Tumasjan 2010") that contain the PDFs.
+Set working directory to folder that, in turn, contains folders (e.g. "Beck 1995", "Tumasjan 2010") or just a single folder that contain(s) the citing documents (PDFs) for particular studies. Later on you specify the respective subfolders in the function.
 ```{r, echo=T, eval=F}
 setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
 ```
@@ -36,8 +36,8 @@ setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
 
 ## Example: A single study (20 documents)
 ```{r, echo=T, eval=F}
-identify_citing_document(folder = "Beck 1995", number = 10)
 extract_text(folder = "Beck 1995", number = 20)
+identify_citing_document(folder = "Beck 1995", number = 10)
 identify_study(study.title = "What to Do (and Not to Do) with Time-Series Cross-Section Data",
                  folder = "Beck 1995"#
                  ,  number = 20)

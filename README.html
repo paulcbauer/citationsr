@@ -63,16 +63,19 @@ img {
 
 <div id="citations" class="section level1">
 <h1>Citations</h1>
-<p>The R package ‘citations’ comprises functions that can be used to analyze citations cases, i.e. citations within documents that cite a particular (or several) studies.</p>
-<p>The functions contained should help to</p>
+<p>The R package ‘citations’ comprises functions that can be used to analyze citation cases, i.e. citations within documents that cite a particular (or several) studies. These functions would normally be executed in a sequence.</p>
 <ol style="list-style-type: decimal">
-<li>Extract text from those PDFs and save in text files: <code>extract_text()</code></li>
-<li>Identify whether texts really cite the particular study of interest: <code>identify_study_in_text()</code></li>
-<li>Delete certain sections in texts to facilitate citation case extraction: <code>delete_reference_section()</code> and <code>delete_running_heads()</code></li>
-<li>Clean texts to facilitate citation case extraction: <code>clean_text()</code></li>
-<li>Extract citations cases from these documents: <code>extract_citation_cases()</code></li>
+<li><code>extract_text()</code>: Extract text from citing documents (PDFs) and saves text in text files with the same name.</li>
+<li><code>identify_citing_doct()</code>: Identifies citing documents (PDFs) either by finding a DOI and querying information using that DOI or by trying to extract title, journal, pages etc. from the PDF itself.</li>
+<li><code>identify_study_doc()</code>: Runs through citing documents and identifes whether study of interest was really cited in there, i.e. whether it appears in the references. Produces a table with the extracted reference (if there has been) to the study.</li>
+<li><code>delete_ref_section()</code> and <code>delete_running_heads()</code>: Clean up .txt files of citing documents (omitting/deleting reference section and running heads) to facilitate citation case extraction.</li>
+<li><code>clean_text()</code>: Clean .txt files (e.g. replace abbreviation) to facilitate citation case extraction.</li>
+<li><code>extract_citation_cases()</code>: Extract citations cases from citing documents (.txt files).</li>
 <li>Analyze the extracted citation cases: to be continued…</li>
 </ol>
+<ul>
+<li><code>clean_pdf_filenames</code> and <code>numeric_to_name</code> are unfinished functions. The former shall rename PDF files with problematic names. The latter shall convert from the numeric to the name citation system.</li>
+</ul>
 </div>
 <div id="how-to" class="section level1">
 <h1>How to…</h1>
@@ -84,16 +87,17 @@ img {
 </div>
 <div id="first-steps" class="section level2">
 <h2>First steps</h2>
-<p>First install/load the package.</p>
+<p>Install/load the package.</p>
 <pre class="r"><code>install.packages(&quot;devtools&quot;)
 devtools::install_github(&quot;paulbauer/citations&quot;)
 library(citations)</code></pre>
-<p>Second, set the working directory to the folder that, in turn, folders (e.g. “Beck 1995”) that contain the PDFs.</p>
-<pre class="r"><code>setwd(&quot;C:/Users/pbauer/Google Drive/Research/2016_Quality_of_citations/data&quot;)</code></pre>
+<p>Set working directory to folder that, in turn, contains folders (e.g. “Beck 1995”, “Tumasjan 2010”) or just a single folder that contain(s) the citing documents (PDFs) for particular studies. Later on you specify the respective subfolders in the function.</p>
+<pre class="r"><code>setwd(&quot;C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data&quot;)</code></pre>
 </div>
 <div id="example-a-single-study-20-documents" class="section level2">
 <h2>Example: A single study (20 documents)</h2>
 <pre class="r"><code>extract_text(folder = &quot;Beck 1995&quot;, number = 20)
+identify_citing_document(folder = &quot;Beck 1995&quot;, number = 10)
 identify_study(study.title = &quot;What to Do (and Not to Do) with Time-Series Cross-Section Data&quot;,
                  folder = &quot;Beck 1995&quot;#
                  ,  number = 20)
@@ -107,7 +111,8 @@ extract_citation_cases(folder = &quot;Beck 1995&quot;,
 </div>
 <div id="example-a-single-study" class="section level2">
 <h2>Example: A single study</h2>
-<pre class="r"><code>extract_text(folder = &quot;Beck 1995&quot;)
+<pre class="r"><code>identify_citing_document(folder = &quot;Beck 1995&quot;)
+extract_text(folder = &quot;Beck 1995&quot;)
 identify_study(study.title = &quot;What to Do (and Not to Do) with Time-Series Cross-Section Data&quot;,
                  folder = &quot;Beck 1995&quot;#
                  )

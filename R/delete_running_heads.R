@@ -1,18 +1,25 @@
-#' Deletes the references section in "_cleaned.txt" files and generates "cleaned_woref.txt" files.
+#' Returns and saves text files without running heads.
 #'
-#' @return Uses file name to try to identify if there are any running heads that
-#' can be omitted from the document.
+#' @param folder Name of folder within working directory in which the citing documents (.txt files) are located, e.g. "Beck 1995".
+#' @param number Number of .txt files in folder the function should be applied to. Default is "all .txt files in folder".
+#' @return Returns and saves text files without running heads.
+
 
 delete_running_heads <- function(folder, number=NULL){
 
+# List file names in folder (ONLY .TXT FILES)
   file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
+
+# Generate file paths
   file.paths <- paste(paste("./", folder, "/", sep = ""), file.names, sep="")
+
+# Count number of files in folder
   n.docs <- length(file.paths)
 
-  # Specify number of documents
+# Specify number of documents to assess by setting n.docs
   if(!is.null(number)){n.docs <- number}
 
-  # Loop to omit running heads from text file
+# Loop over .txt files one by one (until document nr. "number" = n.docs)
   deleted.runningheads <- data.frame(study= NA, running.head = NA)
   for (i in 1:n.docs){# List file names
 
@@ -21,10 +28,11 @@ delete_running_heads <- function(folder, number=NULL){
     close(con)
 
 
-# IDENTIFY RUNNING TITLES AND THEIR POSITIONS: EXACT PATTERN
+  # Identify running titles
     # Short length is one characteristic
     # Repetition is one characteristic
 
+  # Store deleted running heads here for check later on
     collect.deleted <- NULL
 
 
@@ -84,7 +92,7 @@ delete_running_heads <- function(folder, number=NULL){
       collect.deleted <- c(collect.deleted, locations.names)
 
 
-    # MANUAL
+    # MANUAL PATTERNS IDENTIFIED IN CITATION CASE DATA
       pattern <- paste(
         # POLITICAL PARTISANSHIP AND WELFARE STATE REFORM
         "POLITICAL PARTISANSHIP AND WELFARE STATE REFORM",
@@ -109,7 +117,8 @@ delete_running_heads <- function(folder, number=NULL){
 
 
 
-    # TITLE: Regexp that matches title letters (big or small)
+    # TITLE
+      # Regexp that matches title letters (big or small)
       # REWORK THAT!
       pattern <- stringr::str_extract(file.names[i], "-\\s.*\\ - ")
       pattern <- stringr::str_replace_all(pattern, "-", "")
@@ -124,7 +133,7 @@ delete_running_heads <- function(folder, number=NULL){
       collect.deleted <- c(collect.deleted, locations.names)
       }
 
-    # Volume or Number
+    # VOLUME, NUMBER, ISSUE
       pattern <- "Volume\\s[0-9]{1,4}|Number\\s[0-9]{1,4}" # 4 enough?
       # |Number|VOLUME|NUMBER
       locations <- grep(pattern, x, ignore.case = FALSE)
@@ -135,7 +144,7 @@ delete_running_heads <- function(folder, number=NULL){
       collect.deleted <- c(collect.deleted, locations.names)
 
 
-    # Dates
+    # DATES
       pattern <- "(January|February|March|April|May|June|July|August|September|October|November|December)\\s[0-9][0-9][0-9][0-9]\\s/\\s[0-9][0-9][0-9]"
       locations <- grep(pattern, x, ignore.case = FALSE)
       locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
@@ -177,9 +186,7 @@ delete_running_heads <- function(folder, number=NULL){
 
   }
 
-
+  # Save deleted running heads in table for checking
   write.table(collect.deleted, file=paste("./", folder, "_deleted_running_headers.html", sep = ""))
   print(xtable::xtable(deleted.runningheads),type='html',comment=FALSE, file=paste("./", folder, "_deleted_running_headers.html", sep = ""))
-
-
   }

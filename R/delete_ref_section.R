@@ -1,18 +1,24 @@
-#' Deletes the references section in "_cleaned.txt" files and generates "cleaned_woref.txt" files.
+#' Returns and saves text files without the references section.
 #'
-#' @return Returns and saves text files that do not contain a reference section anymore.
+#' @param folder Name of folder within working directory in which the citing documents (.txt files) are located, e.g. "Beck 1995".
+#' @param number Number of .txt files in folder the function should be applied to. Default is "all .txt files in folder".
+#' @return Returns and saves text files without the references section.
 
-delete_reference_section <- function(folder, number=NULL){
+delete_ref_section <- function(folder, number=NULL){
 
-  # List file names
+# List file names in folder (ONLY .TXT FILES)
     file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
+
+# Generate file paths
     file.paths <- paste(paste("./", folder, "/", sep = ""), file.names, sep="")
+
+# Count number of files in folder
     n.docs <- length(file.paths)
 
-    # Specify number of documents
+# Specify number of documents to assess by setting n.docs
     if(!is.null(number)){n.docs <- number}
 
-  # Loop to generate txt files without reference section
+# Loop over .txt files one by one (until document nr. "number" = n.docs)
   for (i in 1:n.docs){
 
     con <- file(file.paths[i], encoding = "UTF-8")

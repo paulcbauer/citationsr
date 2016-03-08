@@ -1,0 +1,46 @@
+---
+title: "Working with the citations package"
+author: "Paul Bauer, Pablo Barberá, Simon Munzert"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Working with the citations package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+## Retrieving meta data from parsed journal articles
+
+By "quality of citations", we mean that citing a reference has more value than just being a numeric event; the context of a citation matters as well. We can have multiple perspectives on this context--e.g., by looking at the semantic context within the text, or a higher-level context, which is particular features of the document a reference was cited in. To get to grips with the latter, we provide the `get_metadata_doc()` function, a tool that enables you to identify various features of parsed journal articles.
+
+
+## Fundamental logic of `get_metadata_doc()`
+
+Working with `get_metadata_doc()` is very simple. It takes a full text journal article as input, which has to be transformed into `txt` format with the package's own `extract_text()` function or other tools (e.g., Jeroen Ooms' [`pdftools` package](https://cran.r-project.org/web/packages/pdftools/index.html)). 
+
+The function imports parts of the txt file. By default, the first 2,000 lines are imported, but you can change that using the `lines.import` parameter. This is basically a question of computational speed and the most important information to extract meta data tends to be written on the first few pages. After some cleaning work, the function looks for a DOI (digital object identifier) that is linked to the paper. If successful, it uses the identifier to run a query to the [Crossref API](http://search.crossref.org/help/api) using the `rcrossref` package. If no DOI is found, it nevertheless runs a query but uses the first 20 lines of the document as input for the query string. If successful, the API returns a lot of information on the article, which is stored in a data.frame object. Optionally, you can also download the article reference in bibtex format using `bibtex = TRUE`. 
+
+Once the function has identified the corresponding journal, it also taps a journal rankings data base from [SJR (SCImago Journal & Country Rank)](http://www.scimagojr.com/journalrank.php), matches it with the journal and appends information on various journal-level citation statistics.
+
+Finally, you can decide which variables to store in the output data.frame. An overview of all available variables can be found in the documentation; see `?get_metadata_doc`.
+
+
+## Example
+
+### Parsing one document
+
+```r
+files <- list.files("docs1", pattern = "txt$", full.names = TRUE)
+get_metadata_doc(files[1])
+head(foo)
+```
+
+### Parsing many documents
+
+```c
+foo <- adply(files[1:20], .margins = 1, .fun = get_metadata_doc, .progress = "text")
+head(foo)
+```
+

@@ -112,7 +112,7 @@ extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, nu
 
 
 
-# Get fist estimate of number of citation cases
+# Get first estimate of number of citation cases
   total.citation.cases <- sum(sapply(all.docs.cit.cases, length))
 
 # Message to user
@@ -122,11 +122,13 @@ extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, nu
   citation.data <- data.frame(document = 1:total.citation.cases, citation.case = 1:total.citation.cases)
 
 # Take names from citing document file names
-  citation.data[,1] <- rep(file.names, sapply(all.docs.cit.cases, length))
+  citation.data[,1] <- rep(file.names, sapply(all.docs.cit.cases[1:length(file.names)], length))
+  # does it work with filenames here?
   citation.data[,2] <- unlist(all.docs.cit.cases)
 
 # Change document names in citation cases data frame
-  citation.data$document <- sub("\\s+$", "", stringr::str_extract(citation.data$document, "^[^-]+"))
+  citation.data$document <- sub("\\s-$", "", stringr::str_extract(citation.data$document, "^.*-.*\\s-"))
+
 
 # Save citation cases in table (csv and html)
   write.table(citation.data, file =  paste("./", folder, "_citation_cases.csv", sep = ""), sep=",")

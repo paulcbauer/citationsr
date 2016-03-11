@@ -7,6 +7,10 @@
 
 delete_running_heads <- function(folder, number=NULL){
 
+# Get medadatafile for folder/study
+  load(paste("./", folder, "_metadata.RData", sep="")) # load RData file
+  metadata <- foo
+
 # List file names in folder (ONLY .TXT FILES)
   file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
 
@@ -28,6 +32,10 @@ delete_running_heads <- function(folder, number=NULL){
     close(con)
 
 
+  # Delete empty lines in text files
+    x <- x[nzchar(x)]
+
+
   # Identify running titles
     # Short length is one characteristic
     # Repetition is one characteristic
@@ -38,12 +46,13 @@ delete_running_heads <- function(folder, number=NULL){
 
   # DOWNLOADED FROM, BY ETC.
     pattern <- "Downloaded by|Downloaded from|All use subject to JSTOR Terms and Conditions"
-    locations <- grep(pattern, x, ignore.case = FALSE)
-    locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
-    if(length(locations.names)>=5){x <- x[-locations]
-                                    #print(locations.names)
-                                    } # delete, print lines
+    locations <- grep(pattern, x, ignore.case = TRUE)
+    if(length(locations)!=0){
+    locations.names <- grep(pattern, x, ignore.case = TRUE, value = T)
+    if(length(locations.names)>=5){x <- x[-locations]}
     collect.deleted <- c(collect.deleted, locations.names)
+    }
+
 
   # COPYRIGHT MESSAGES
     pattern <- paste("All use subject to JSTOR Terms and Conditions",
@@ -54,78 +63,114 @@ delete_running_heads <- function(folder, number=NULL){
                     # Blackwell Publishing Ltd
                     "Blackwell Publishing Ltd"
                     , sep="|")
-
     locations <- grep(pattern, x, ignore.case = FALSE)
+    if(length(locations)!=0){
+    locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
+    if(length(locations.names)>=5){x <- x[-locations]}
+    collect.deleted <- c(collect.deleted, locations.names)
+    }
+
+
+
+  # PUBLISHER
+    pattern <- metadata$publisher[i]
+    locations <- grep(pattern, x, ignore.case = TRUE)
+    if(length(locations)!=0){
+    locations.names <- grep(pattern, x, ignore.case = TRUE, value = T)
+    if(length(locations.names)>=5){x <- x[-locations]}
+    collect.deleted <- c(collect.deleted, locations.names)
+    }
+
+
+  # JOURNAL
+    pattern <- metadata$journal[i]
+    locations <- grep(pattern, x, ignore.case = TRUE)
+    if(length(locations)!=0){
+    locations.names <- grep(pattern, x, ignore.case = TRUE, value = T)
+    if(length(locations.names)>=5){x <- x[-locations]}
+    collect.deleted <- c(collect.deleted, locations.names)
+    }
+
+  # TITLE
+    title.match <- metadata$title[i]
+    title.match <- stringr::str_extract(title.match, "^\\s*[:word:]*\\s[:word:]*\\s[:word:]*\\s[:word:]*")
+    pattern <- title.match
+    locations <- grep(pattern, x, ignore.case = FALSE)
+    if(length(locations)!=0){
+    locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
+    if(length(locations.names)>=5){x <- x[-locations]}
+    collect.deleted <- c(collect.deleted, locations.names)
+    }
+
+  # AUTHORS
+    # authors.match <- metadata$author[i]
+    # authors.match <- authors.match[[1]]$family[1]
+    # pattern <-
+    # locations <- grep(pattern, x, ignore.case = FALSE)
+    # locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
+    # if(length(locations.names)>=5){x <- x[-locations]}
+    # collect.deleted <- c(collect.deleted, locations.names)
+
+
+  # PAGES
+    pages.match <- metadata$page[i]
+    pattern <- pages.match
+    locations <- grep(pattern, x, ignore.case = FALSE)
+    if(length(locations)!=0){
+    locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
+    if(length(locations.names)>=5){x <- x[-locations]}
+    collect.deleted <- c(collect.deleted, locations.names)
+    }
+
+
+
+
+  # VOLUME, ISSUE, NUMBER
+    if(!is.na(metadata$volume[i])){volume.match <- paste("Volume\\s", metadata$volume[i], sep="")}
+    if(!is.na(metadata$issue[i])){volume.match <- paste(volume.match, paste("Issue\\s", metadata$issue[i], sep=""), sep="|")}
+    pattern <- volume.match
+    locations <- grep(pattern, x, ignore.case = FALSE)
+    if(length(locations)!=0){
     locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
     if(length(locations.names)>=5){x <- x[-locations]
     #print(locations.names)
     } # delete, print lines
     collect.deleted <- c(collect.deleted, locations.names)
+    }
 
 
-
-
-
-
-
-  # JOURNAL
-    # MUST BE WITH JOURNAL NAMES
-    pattern <- paste(
-      # Energy Policy 69 (2014) 374–38
-      "\\w\\s\\w\\s{0,2}[0-9]*\\s{0,2}(\\(|)[0-9]{4}(\\)|)\\s{0,2}[0-9]{0,4}(-|)[0-9]{0,4}",
-      # POLITICAL STUDIES: 2015, 63(S1)
-      "\\w\\s\\w[:punct:]{0,1}.*[0-9]{1,4},.*[0-9][0-9]\\(S[0-9]*\\)",
-      # Public Choice (2007) 133: 321–341
-      "\\w.\\w..\\d{1,4}.\\d{1,3}[:punct:].[0-9]{0,4}(-|)[0-9]{0,4}",
-      # Comparative Political Studies
-      "Comparative Political Studies",
-      # American Journal of Political Science, Vol. 55, No. 2, April 2011, Pp. 370–382
-      "\\w.\\w.\\w.\\w, Vol\\. [0-9][0-9], No\\..[0-9],.*Pp\\. [0-9]{0,4}(-|)[0-9]{0,4}",
-      # West European Politics
-      "West European Politics"
-      , sep="|")
-      locations <- grep(pattern, x, ignore.case = FALSE)
-      locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
-      if(length(locations.names)>=5){x <- x[-locations]
+  # MANUAL PATTERNS IDENTIFIED IN CITATION CASE DATA
+      # pattern <- paste(
+      # "POLITICAL PARTISANSHIP AND WELFARE STATE REFORM",
+      #  "CHRISTOPHERJ ANDERSONAND DANIELS WARD",
+      #  "CHHIBBER & MURALI: DUVERGERIAN DYNAMICS",
+      #  "KYRIACOU",
+      #   "at European Univ Inst - Library",
+      #   "IMPACT OF PENSION PRIVATIZATION ON FOREIGN DIRECT INVESTMENT",
+      #   "CRENSHAW",
+      #   "DISARMING FEARS OF DIVERSITY",
+      #   "THAMES",
+      #   "MODEL SPECIFICATION, DATA AND OPERATIONALIZATIONS"
+      #   , sep="|")
+      # locations <- grep(pattern, x, ignore.case = FALSE)
+      # locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
+      # if(length(locations.names)>=5){x <- x[-locations]
       #print(locations.names)
-      } # delete, print lines
-      collect.deleted <- c(collect.deleted, locations.names)
+      # } # delete, print lines
+      #   collect.deleted <- c(collect.deleted, locations.names)
 
 
-    # MANUAL PATTERNS IDENTIFIED IN CITATION CASE DATA
-      pattern <- paste(
-        # POLITICAL PARTISANSHIP AND WELFARE STATE REFORM
-        "POLITICAL PARTISANSHIP AND WELFARE STATE REFORM",
-        #CHRISTOPHERJ ANDERSONAND DANIELS WARD
-        "CHRISTOPHERJ ANDERSONAND DANIELS WARD",
-        # CHHIBBER & MURALI: DUVERGERIAN DYNAMICS
-        "CHHIBBER & MURALI: DUVERGERIAN DYNAMICS",
-        "KYRIACOU",
-        "at European Univ Inst - Library",
-        "IMPACT OF PENSION PRIVATIZATION ON FOREIGN DIRECT INVESTMENT",
-        "CRENSHAW",
-        "DISARMING FEARS OF DIVERSITY",
-        "THAMES",
-        "MODEL SPECIFICATION, DATA AND OPERATIONALIZATIONS"
-        , sep="|")
+
+
+
+
+
+
+    # DATES
+      pattern <- "(January|February|March|April|May|June|July|August|September|October|November|December)\\s[0-9][0-9][0-9][0-9]\\s/\\s[0-9][0-9][0-9]"
+      # substr(metadata$date1[i], 1,4)
       locations <- grep(pattern, x, ignore.case = FALSE)
-      locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
-      if(length(locations.names)>=5){x <- x[-locations]
-      #print(locations.names)
-      } # delete, print lines
-      collect.deleted <- c(collect.deleted, locations.names)
-
-
-
-    # TITLE
-      # Regexp that matches title letters (big or small)
-      # REWORK THAT!
-      pattern <- stringr::str_extract(file.names[i], "-\\s.*\\ - ")
-      pattern <- stringr::str_replace_all(pattern, "-", "")
-      pattern <- stringr::str_replace(pattern, "^\\s{1,4}", "")
-      pattern <- stringr::str_replace(pattern, "\\s{1,4}$", "")
-      if(!is.na(pattern)){
-      locations <- grep(pattern, x, ignore.case = FALSE)
+      if(length(locations)!=0){
       locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
       if(length(locations.names)>=5){x <- x[-locations]
       #print(locations.names)
@@ -133,40 +178,10 @@ delete_running_heads <- function(folder, number=NULL){
       collect.deleted <- c(collect.deleted, locations.names)
       }
 
-    # VOLUME, NUMBER, ISSUE
-      pattern <- "Volume\\s[0-9]{1,4}|Number\\s[0-9]{1,4}" # 4 enough?
-      # |Number|VOLUME|NUMBER
-      locations <- grep(pattern, x, ignore.case = FALSE)
-      locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
-      if(length(locations.names)>=5){x <- x[-locations]
-      #print(locations.names)
-      } # delete, print lines
-      collect.deleted <- c(collect.deleted, locations.names)
 
-
-    # DATES
-      pattern <- "(January|February|March|April|May|June|July|August|September|October|November|December)\\s[0-9][0-9][0-9][0-9]\\s/\\s[0-9][0-9][0-9]"
-      locations <- grep(pattern, x, ignore.case = FALSE)
-      locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
-      if(length(locations.names)>=5){x <- x[-locations]
-      #print(locations.names)
-      } # delete, print lines
-      collect.deleted <- c(collect.deleted, locations.names)
-
-
-    # AUTHOR: so wie oben
-      # HAS TO BE ONLY AUTHOR NAMES IN LINE!
-      # pattern <- stringr::str_extract(file.names[i], "^[:alpha:]+")
-      pattern <- "Martin Bisgaard"
-      locations <- grep(pattern, x, ignore.case = TRUE)
-      locations.names <- grep(pattern, x, ignore.case = FALSE, value = T)
-      if(length(locations.names)>=5){x <- x[-locations]
-      #print(locations.names)
-      } # delete, print lines
-      collect.deleted <- c(collect.deleted, locations.names)
-
+    # Make table of collected running heads
       if(length(collect.deleted)!=0){ # only if running heeads were identified
-        name <- stringr::str_extract(file.names[i], "^[:alpha:]+\\s[0-9]{4}|^[:alpha:]+\\set\\sal.\\s[0-9]{4}|^[:alpha:]+\\sand\\s[:alpha:]+\\s[0-9]{4}")
+        name <- paste(metadata$author[i][[1]]$family[1], metadata$doc_year[1], sep=" ")
         running.heads <- cbind(name, collect.deleted) # problem if collect.deleted is empty
         running.heads <- data.frame(running.heads)
         names(running.heads) <- c("study","running.head")

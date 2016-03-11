@@ -59,6 +59,16 @@ clean_text <- function(folder, number=NULL){
       x <- stringr::str_replace_all(x, "U\\.S\\.", "UNITED STATES")
       x <- stringr::str_replace_all(x, "U\\.S\\.", "UNITED STATES")
 
+      # Replace footnotes
+      detected <- unlist(stringr::str_extract_all(x, paste("[a-z)0-9\\]]\\.", paste("(", paste(seq(1,40), collapse="|"), ")", sep=""),"\\s[A-Z]", sep="")))
+      detected <- stringr::str_replace_all(detected, "\\)", "\\\\)")
+      if(length(detected)>0){
+        for(z in 1:length(detected)){
+          x <- stringr::str_replace_all(x, detected[z], stringr::str_replace_all(detected[z], "\\.", "\\.FOOTNOTE"))
+        }
+      }
+
+
 
       # REPLACE DOTS IN DECIMAL NUMBER WITH ","
       detected <- unlist(stringr::str_extract_all(x, "[0-9]{1,10}\\.[0-9]{1,10}"))
@@ -76,7 +86,7 @@ clean_text <- function(folder, number=NULL){
 
 
     # Replaces dots in names in text
-      x <- stringr::str_replace_all(x, "G. Bingham Powell and Guy Whitten", "Bingham Powell and Whitten")
+      # x <- stringr::str_replace_all(x, "G. Bingham Powell and Guy Whitten", "Bingham Powell and Whitten")
 
 
       # Get rid of em-dashes - QUESTION WHICH COMPUTER YOU USE

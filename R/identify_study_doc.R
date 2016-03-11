@@ -31,16 +31,24 @@ identify_study_doc <- function(study.title, folder, number=NULL){
     close(con)
     x <- paste(x, collapse = " ")
 
-    # aregexec() - distance matching
-    DISTANCE <- 20 # CHOOSE DISTANCE: Must be high enough!
-    start <- aregexec(study.title, x, max.distance = DISTANCE)[[1]][1]
-    length <- as.numeric(unlist(attributes(aregexec(study.title, x, max.distance = DISTANCE)[[1]]))[1])
-    # REPAIR: WHAT TO WITH SEVERAL MATCHES
-    end <- start + length - 1
-    start <- start - 70
-    end <- end + 60
-    extracted.title <- substr(x, start, end)
-    list.extracted.titles[[i]] <- extracted.title
+    # Distance matching - aregexec()
+      DISTANCE <- 20 # CHOOSE DISTANCE: Must be high enough!
+      start <- aregexec(study.title, x, max.distance = DISTANCE)[[1]][1]
+      length <- as.numeric(unlist(attributes(aregexec(study.title, x, max.distance = DISTANCE)[[1]]))[1])
+      # REPAIR: WHAT TO WITH SEVERAL MATCHES
+      end <- start + length - 1
+      start <- start - 70
+      end <- end + 60
+      extracted.title <- substr(x, start, end)
+
+    # Exact matching
+      # title.match <- study.title
+      # extracted.titles <- stringr::str_extract_all(x, title.match)
+      # extracted.title <- extracted.titles[1]
+      # CONTINUE HERE
+
+    # List of extracted titles
+      list.extracted.titles[[i]] <- extracted.title
 
     # Counter
     if(stringr::str_detect(as.character(i), "[0-9]*0")){cat(i, ".. ", sep="")}

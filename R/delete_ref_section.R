@@ -52,20 +52,6 @@ delete_ref_section <- function(folder, number=NULL){
 
 
 
-
-          # Save text file without references
-
-
-        # },
-          # error=function(cond) {
-          # message(paste("\n PROBLEM! \n", file.paths[i]))
-          # },
-          #  warning=function(cond) {
-          # message(paste("\n WARNING! \n", file.paths[i]))
-          # },
-          # finally={}
-          # )
-
       # Counter
       if(stringr::str_detect(as.character(i), "[0-9]*0")){cat(i, ".. ", sep="")}
 

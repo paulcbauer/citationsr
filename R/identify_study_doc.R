@@ -9,6 +9,8 @@
 
 identify_study_doc <- function(study.title, folder, number=NULL){
 
+  require(stringr)
+  require(xtable)
 
 # List file names in folder (ONLY .TXT FILES)
   file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
@@ -59,7 +61,7 @@ identify_study_doc <- function(study.title, folder, number=NULL){
   table <- cbind(stringr::str_extract(file.names, "[^-]*"), list.extracted.titles)
 
   # Print table
-    print(xtable::xtable(table),type='html',comment=FALSE, file=paste("./", folder, "_identified_citation.html", sep = ""))
+    print(xtable(table),type='html',comment=FALSE, file=paste("./", folder, "_identified_citation.html", sep = ""))
 
   cat("\n Check whether citation were rightly identifed using file 'identify_citation.csv' 'identify_citation.html' in the working directory. \n\n")
 }

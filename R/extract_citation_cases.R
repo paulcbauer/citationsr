@@ -9,6 +9,8 @@
 
 extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, number=NULL){
 
+    require(stringr)
+
 
 #####################################################################
 ### Generate search terms depending on number of authors and year ###
@@ -60,7 +62,7 @@ extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, nu
 
 
 # List file names in folder (ONLY .TXT FILES)
-  file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
+  file.names <- dir(paste("./", folder, sep = ""), pattern = "processed.txt")
 
 # Generate file paths
   file.paths <- paste(paste("./", folder, "/", sep = ""), file.names, sep="")

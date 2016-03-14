@@ -7,6 +7,8 @@
 
 clean_citation_cases <- function(file, studyyear){
 
+  require(stringr)
+
   # Import citation.cases file
   citation.data <- read.table(paste("./", folder, "/", file, sep = ""), sep=",", stringsAsFactors = F)
 

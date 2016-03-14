@@ -40,11 +40,11 @@ rename_docs <- function(folder){
 
   # New title variable
     metadata$new.doc_name.txt <- paste(metadata$author2, metadata$year, metadata$title2, sep = " - ") %>%
-                                 str_replace_all("[?:]", " ") %>%
+                                 stringr::str_replace_all("[?:]", " ") %>%
                                  paste(".txt", sep = "")
 
     metadata$new.doc_name.pdf <- paste(metadata$author2, metadata$year, metadata$title2, sep = " - ") %>%
-                                 str_replace_all("[?:]", " ") %>%
+                                 stringr::str_replace_all("[?:]", " ") %>%
                                  paste(".pdf", sep = "")
 
 
@@ -53,7 +53,7 @@ rename_docs <- function(folder){
     file.rename(from = file.path(paste("./", folder, sep = ""), metadata$doc_name), to = file.path(paste("./", folder, sep = ""), metadata$new.doc_name.txt))
 
   # Rename .pdf files
-    metadata$doc_name_pdf <- metadata$doc_name %>% str_replace_all(".txt", ".pdf")
+    metadata$doc_name_pdf <- metadata$doc_name %>% stringr::str_replace_all(".txt", ".pdf")
     file.rename(from = file.path(paste("./", folder, sep = ""), metadata$doc_name_pdf), to = file.path(paste("./", folder, sep = ""), metadata$new.doc_name.pdf))
 
 }

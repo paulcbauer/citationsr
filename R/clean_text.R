@@ -8,10 +8,11 @@
 clean_text <- function(folder, number=NULL){
 
 
+  require(stringr)
 
 
-# List file names in folder (ONLY .TXT FILES)
-  file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
+# List file names in folder (ONLY "*processed.txt" FILES)
+  file.names <- dir(paste("./", folder, sep = ""), pattern = "processed.txt")
 
 # Generate file paths
   file.paths <- paste(paste("./", folder, "/", sep = ""), file.names, sep="")
@@ -36,6 +37,8 @@ clean_text <- function(folder, number=NULL){
     # Replace dots in abbreviations
       x <- stringr::str_replace_all(x, "et al\\.", "AND OTHERS")
       x <- stringr::str_replace_all(x, "e\\.g\\.", "FOR EXAMPLE")
+      x <- stringr::str_replace_all(x, "etc\\.", "ET CETERA")
+      x <- stringr::str_replace_all(x, "cf\\.", "COMPARE")
       x <- stringr::str_replace_all(x, "No\\.", "NUMBER")
       x <- stringr::str_replace_all(x, "NO\\.", "NUMBER")
       x <- stringr::str_replace_all(x, "fig\\.", "FIGURE")
@@ -58,6 +61,9 @@ clean_text <- function(folder, number=NULL){
       x <- stringr::str_replace_all(x, "Jr\\.", "JUNIOR")
       x <- stringr::str_replace_all(x, "U\\.S\\.", "UNITED STATES")
       x <- stringr::str_replace_all(x, "U\\.S\\.", "UNITED STATES")
+      x <- stringr::str_replace_all(x, "E\\.q\\.", "EQUATION")
+      x <- stringr::str_replace_all(x, "chs.\\.", "CHAPTERS")
+
 
       # Replace footnotes
       detected <- unlist(stringr::str_extract_all(x, paste("[a-z)0-9\\]]\\.", paste("(", paste(seq(1,40), collapse="|"), ")", sep=""),"\\s[A-Z]", sep="")))

@@ -8,6 +8,8 @@
 
 extract_text <- function(folder, number=NULL) {
 
+  require(fulltext)
+
 # Add xpdf to the environmental variable PATH
   # use 'Sys.getenv("PATH")' to check path
   Sys.setenv(PATH = paste(Sys.getenv("PATH"), ";C:\\Program Files\\xpdf\\bin32\\", sep="")) # LAPTOP

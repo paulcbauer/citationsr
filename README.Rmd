@@ -1,2 +1,2 @@
 # Citations
-The R package 'citations' comprises functions that can be used to analyze citation cases, i.e. citations within documents that cite a particular (or several) studies. These functions would normally be executed in a sequence.
+The R package 'citations' comprises functions that can be used to analyze citation cases, i.e. citations within documents that cite a particular (or several) studies.

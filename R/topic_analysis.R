@@ -26,10 +26,16 @@ topic_analysis <- function(file, article, output, K=3:8, runs=2, max.em.its=10, 
   require(quanteda)
   require(stm)
 
+  # precleaning file
+  text <- scan(file, what="character", sep="\n")
+  text <- gsub('\\\\"', "''", text)
+  text <- paste0(text, collapse="\n")
+  tmp <- tempfile()
+  writeLines(text, con=tmp)
+
   # reading file and cleaning data
-  tf <- read.csv(file, stringsAsFactors=F)
-  # cleaning encoding and extracting year
-  tf$citation.case <- iconv(tf$citation.case, from='UTF-8', to='latin1', sub="")
+  tf <- read.csv(tmp, stringsAsFactors=F, row.names=NULL, fileEncoding="latin1")
+  # extracting year
   tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
   message("Warning: ", sum(is.na(tf$year)), " citation cases with missing year will be excluded from analysis.")
   tf <- tf[!is.na(tf$year),] # deleting citations with empty years

@@ -19,10 +19,16 @@ analyze_citations <- function(file, article, output){
   require(scales)
   require(quanteda)
 
+  # precleaning file
+  text <- scan(file, what="character", sep="\n")
+  text <- gsub('\\\\"', "''", text)
+  text <- paste0(text, collapse="\n")
+  tmp <- tempfile()
+  writeLines(text, con=tmp)
+
   # reading file and cleaning data
-  tf <- read.csv(file, stringsAsFactors=F)
-  # cleaning encoding and extracting year
-  tf$citation.case <- iconv(tf$citation.case, from='UTF-8', to='latin1', sub="")
+  tf <- read.csv(tmp, stringsAsFactors=F, row.names=NULL, fileEncoding="latin1")
+  # extracting year
   tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
   message("Warning: ", sum(is.na(tf$year)), " citation cases with missing year will be excluded from analysis.")
   tf <- tf[!is.na(tf$year),] # deleting citations with empty years
@@ -129,7 +135,7 @@ analyze_citations <- function(file, article, output){
   pq <- p + geom_point() + geom_line() + theme_minimal() +
     theme(axis.title.x=element_blank()) + 
     scale_y_continuous("Average sentiment in citations")
-  f6 <- paste0(output, '/06-co-citations-over-time.pdf')
+  f6 <- paste0(output, '/06-sentiment-over-time.pdf')
   ggsave(pq, file=f6, height=4, width=6)
   message("File generated: ", f6) 
 

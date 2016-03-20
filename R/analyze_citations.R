@@ -1,4 +1,4 @@
-#' Generates figure with summary of analysis of citation cases
+#' Generates figures with summary of analysis of citation cases
 #'
 #' @param file 'citation_data.csv' that contains data on the citation cases.
 #' @param article Name of cited article; e.g. Fearon (2003)

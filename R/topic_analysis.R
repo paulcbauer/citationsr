@@ -69,9 +69,11 @@ topic_analysis <- function(file, article, output, K=3:8, runs=2, max.em.its=10, 
 
   # removing documents with length 0
   todelete <- which(unlist(lapply(citstm$documents, length))==0)
-  message(length(todelete), " documents with no words were also excluded from the analysis.")
-  tf <- tf[-todelete,]
-  citstm$documents <- citstm$documents[-todelete]
+  if (length(todelete)>0){
+    message(length(todelete), " documents with no words were also excluded from the analysis.")
+    tf <- tf[-todelete,]
+    citstm$documents <- citstm$documents[-todelete]    
+  }
 
   # preprocessing
   out <- prepDocuments(citstm$documents, citstm$vocab, 

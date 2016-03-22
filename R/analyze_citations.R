@@ -28,14 +28,17 @@ analyze_citations <- function(file, article, output){
 
   # reading file and cleaning data
   tf <- read.csv(tmp, stringsAsFactors=F, row.names=NULL, fileEncoding="latin1")
-  # extracting year
+  # extracting year, deleting citations with empty years
   tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
   message("Warning: ", sum(is.na(tf$year)), " citation cases with missing year will be excluded from analysis.")
-  tf <- tf[!is.na(tf$year),] # deleting citations with empty years
+  todelete <- which(is.na(tf$year))
   message("Warning: ", sum(duplicated(tf$citation.case)), " duplicated citation cases will be excluded from analysis.")
-  tf <- tf[!duplicated(tf$citation.case),] # deleting duplicates
+  todelete <- c(todelete, which(duplicated(tf$citation.case)))
   message("Warning: ", sum(nchar(tf$citation.case)>1000), " citation cases longer than 1000 characters will be excluded from analysis.")
-  tf <- tf[nchar(tf$citation.case)<=1000,] # deleting duplicates
+  todelete <- unique(c(todelete, which(nchar(tf$citation.case)>1000)))
+  # exporting
+  write.csv(tf[todelete,], file=paste0(output, '/parsing-errors.csv'), row.names=FALSE)
+  tf <- tf[-todelete,] 
   message("A total of ", nrow(tf), " citation cases will be included in the analysis.")
 
   # generating histogram with times cited within document
@@ -74,7 +77,8 @@ analyze_citations <- function(file, article, output){
   p <- ggplot(tf_group, aes(x=as.numeric(year), y=x))
   pq <- p + geom_point() + geom_line() + theme_minimal() +
     theme(axis.title.x=element_blank()) + 
-    scale_y_continuous("Average number of references in citation case")
+    scale_y_continuous("Average number of references in citation case") +
+    ggtitle(paste0("Citation cases: ", article))
   f3 <- paste0(output, '/03-co-citations-over-time.pdf')
   ggsave(pq, file=f3, height=4, width=6)
   message("File generated: ", f3)
@@ -88,7 +92,7 @@ analyze_citations <- function(file, article, output){
   pq <- p + geom_point() + geom_line() + theme_minimal() +
     theme(axis.title.x=element_blank()) + 
     scale_y_continuous("Proportion of citations with `positive' signal",
-      label=percent)
+      label=percent) + ggtitle(paste0("Citation cases: ", article))
   f4 <- paste0(output, '/04-citations-with-positive-signal.pdf')
   ggsave(pq, file=f4, height=4, width=6)
   message("File generated: ", f4)
@@ -134,7 +138,8 @@ analyze_citations <- function(file, article, output){
   p <- ggplot(tf_group, aes(x=as.numeric(year), y=x))
   pq <- p + geom_point() + geom_line() + theme_minimal() +
     theme(axis.title.x=element_blank()) + 
-    scale_y_continuous("Average sentiment in citations")
+    scale_y_continuous("Average sentiment in citations") + 
+    ggtitle(paste0("Citation cases: ", article))
   f6 <- paste0(output, '/06-sentiment-over-time.pdf')
   ggsave(pq, file=f6, height=4, width=6)
   message("File generated: ", f6) 

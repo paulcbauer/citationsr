@@ -41,6 +41,7 @@ clean_text <- function(folder, number=NULL){
       x <- stringr::str_replace_all(x, "cf\\.", "COMPARE")
       x <- stringr::str_replace_all(x, "No\\.", "NUMBER")
       x <- stringr::str_replace_all(x, "NO\\.", "NUMBER")
+      x <- stringr::str_replace_all(x, " N\\. ", " NUMBER ")
       x <- stringr::str_replace_all(x, "fig\\.", "FIGURE")
       x <- stringr::str_replace_all(x, "obs\\.", "OBSERVATIONS")
       x <- stringr::str_replace_all(x, "var\\. ", "VARIANCE")
@@ -63,10 +64,30 @@ clean_text <- function(folder, number=NULL){
       x <- stringr::str_replace_all(x, "U\\.S\\.", "UNITED STATES")
       x <- stringr::str_replace_all(x, "E\\.q\\.", "EQUATION")
       x <- stringr::str_replace_all(x, "Eq\\.", "EQUATION")
-      x <- stringr::str_replace_all(x, "chs\\.", "CHAPTERS")
+      x <- stringr::str_replace_all(x, " chs\\.", " CHAPTERS")
+      x <- stringr::str_replace_all(x, "CHs\\.", "CHAPTERS")
+      x <- stringr::str_replace_all(x, "Ch\\.", "CHAPTER")
+      x <- stringr::str_replace_all(x, "CH\\.", "CHAPTER")
+      x <- stringr::str_replace_all(x, " I\\.", " ROMAN-ONE")
+      x <- stringr::str_replace_all(x, " II\\.", " ROMAN-TWO")
+      x <- stringr::str_replace_all(x, " III\\.", " ROMAN-THREE")
+      x <- stringr::str_replace_all(x, " IV\\.", " ROMAN-FOUR")
+      x <- stringr::str_replace_all(x, " V\\.", " ROMAN-FIVE")
+      x <- stringr::str_replace_all(x, " VI\\.", " ROMAN-SIX")
+      x <- stringr::str_replace_all(x, " VII\\.", " ROMAN-SEVEN")
+
+      # x <- "lksdjfl! sdflkj. sdfsdf? lskdjfldj. sldjdsl"
+
+      # Other endings of sentences
+      x <- stringr::str_replace_all(x, "\\?", "\\.\\?")
+      x <- stringr::str_replace_all(x, "!", "\\.!")
 
       # Quotation marks
       x <- stringr::str_replace_all(x, '\\\\"', "''")
+
+      # Countries
+      x <- stringr::str_replace_all(x, "Dem\\. Rep\\. Congo", "Democratic Republic of Congo")
+
 
 
 

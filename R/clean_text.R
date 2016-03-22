@@ -62,7 +62,12 @@ clean_text <- function(folder, number=NULL){
       x <- stringr::str_replace_all(x, "U\\.S\\.", "UNITED STATES")
       x <- stringr::str_replace_all(x, "U\\.S\\.", "UNITED STATES")
       x <- stringr::str_replace_all(x, "E\\.q\\.", "EQUATION")
+      x <- stringr::str_replace_all(x, "Eq\\.", "EQUATION")
       x <- stringr::str_replace_all(x, "chs.\\.", "CHAPTERS")
+
+      # Quotation marks
+      x <- stringr::str_replace_all(x, '\\\\"', "''")
+
 
 
       # Replace footnotes

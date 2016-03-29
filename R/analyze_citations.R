@@ -18,6 +18,7 @@ analyze_citations <- function(file, article, output){
   require(ggplot2)
   require(scales)
   require(quanteda)
+  require(stringr)
 
   # precleaning file
   text <- scan(file, what="character", sep="\n")
@@ -49,9 +50,9 @@ analyze_citations <- function(file, article, output){
   f1 <- paste0(output, '/01-times-cited-within-document.pdf')
   pdf(f1, height=4, width=6)
   par (mar=c(3,3,2,1), mgp=c(2,.7,0), tck=-.025)
-  hist(x, xlab="N citation cases per document",
+  hist(x, xlab="Citation cases (per document)",
     main = paste0("Citation cases: ", article), xaxt="n",
-    breaks=breaks, cex.main=1, ylab="Frequency = N documents")
+    breaks=breaks, cex.main=1, ylab="Citing documents (frequency)")
   axis(1,seq.x)
   dev.off()
   message("File generated: ", f1)
@@ -66,8 +67,8 @@ analyze_citations <- function(file, article, output){
   f2 <- paste0(output, '/02-co-citations-in-citation-case.pdf')
   pdf(f2, height=4, width=6)
   par (mar=c(3,3,2,1), mgp=c(2,.7,0), tck=-.025)
-  hist(x, xlab="N references within citation case",
-    main = paste0("Citation cases: ", article), xaxt="n", breaks = breaks,  cex.main=1, ylab="Frequency = N citation cases")
+  hist(x, xlab="Number of references (per citation case)",
+    main = paste0("Citation cases: ", article), xaxt="n", breaks = breaks,  cex.main=1, ylab="Citation cases (frequency)")
   axis(1,seq.x)
   dev.off()
   message("File generated: ", f2)
@@ -83,6 +84,10 @@ analyze_citations <- function(file, article, output){
   ggsave(pq, file=f3, height=4, width=6)
   message("File generated: ", f3)
 
+
+
+
+
   # figure with positive signals
   signal.words <- paste0("follow|recommend|validate|suggest|accordance|advice|demonstrate",
     "|confirm|support|in line with|based")
@@ -91,7 +96,7 @@ analyze_citations <- function(file, article, output){
   p <- ggplot(tf_group, aes(x=as.numeric(year), y=x))
   pq <- p + geom_point() + geom_line() + theme_minimal() +
     theme(axis.title.x=element_blank()) +
-    scale_y_continuous("Proportion of citations with `positive' signal",
+    scale_y_continuous("Proportion of citation cases with `positive' signal",
       label=percent) + ggtitle(paste0("Citation cases: ", article))
   f4 <- paste0(output, '/04-citations-with-positive-signal.pdf')
   ggsave(pq, file=f4, height=4, width=6)
@@ -149,6 +154,26 @@ analyze_citations <- function(file, article, output){
   ggsave(pq, file=f6, height=4, width=6)
   message("File generated: ", f6)
 
+  # PAUL: figure with length of citation cases
+  f7 <- paste0(output, '/07-length-of-citation-case-words.pdf')
+  pdf(f7, height=4, width=6)
+  x <- sapply(stringr::str_extract_all(tf$citation.case, "\\W+"), length) # Very rough count of words
+  hist(x, xlab="Words (per citation case)", breaks = 20,  cex.main=1,
+       ylab="Citation cases (frequency)",
+       main = paste0("Citation cases: ", article))
+  dev.off()
+  message("File generated: ", f7)
+
+
+  # PAUL: figure with length of citation cases
+  f8 <- paste0(output, '/08-length-of-citation-case-characters.pdf')
+  pdf(f8, height=4, width=6)
+  x <- nchar(tf$citation.case)
+  hist(x, xlab="Characters per citation case", breaks = 20,  cex.main=1,
+       ylab="Citation cases (frequency)",
+       main = paste0("Citation cases: ", article))
+  dev.off()
+  message("File generated: ", f8)
 
 }
 

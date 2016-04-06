@@ -3,7 +3,14 @@
 #' @param folder Name of folder within working directory in which the citing documents (.txt files) are located, e.g. "Beck 1995".
 #' @param number Number of .txt files in folder the function should be applied to. Default is "all .txt files in folder".
 #' @return Returns and saves text files that have been cleaned (e.g. abbreviations replaced)
-
+#'
+#'
+#' @examples
+#' \dontrun{
+#'  setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
+#'  folder <- "Acemoglu 2001"
+#'  clean_text(folder)
+#' }
 
 clean_text <- function(folder, number=NULL){
 

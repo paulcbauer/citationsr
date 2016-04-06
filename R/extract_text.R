@@ -3,7 +3,14 @@
 #' @return Converts and stores PDFs in folder as .txt files.
 #' @param folder Name of folder within working directory in which the citing documents (PDFs) are located, e.g. "Beck 1995".
 #' @param number Number of PDFs you want to apply the function to. Default is "all PDFs in folder".
-
+#'
+#'
+#' @examples
+#' \dontrun{
+#'  setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
+#'  folder <- "Acemoglu 2001"
+#'  extract_text(folder)
+#' }
 
 
 extract_text <- function(folder, number=NULL) {

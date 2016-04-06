@@ -5,7 +5,15 @@
 #' @param number Number of .txt files in folder the function should be applied to. Default is "all .txt files in folder".
 #' @return Returns a both a .csv and html files that contain a
 #' list with the titles that were extracted across the citing documents.
-
+#'
+#'
+#' @examples
+#' \dontrun{
+#'  setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
+#'  folder <- "Acemoglu 2001"
+#'  study.title <- "The colonial origins of comparative development: An empirical investigation"
+#'  identify_study_doc(study.title, folder)
+#' }
 
 identify_study_doc <- function(study.title, folder, number=NULL){
 

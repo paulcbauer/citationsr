@@ -4,10 +4,21 @@
 #' @param folder Name of folder within working directory in which the citing documents (.txt files) are located, e.g. "Beck 1995".
 #' @param authorname Enter the names of all authors separated by comma.
 #' @param studyyear Enter the year when the study was published.
-#' @param scope Number of sentences before/after citation case sentence to extract.
+#' @param scope Enter number of sentences before/after citation case sentence to extract.
+#' @param clean If TRUE (default) it cleanes some stuff before the citation case
+#'
+#'
+#' @examples
+#' \dontrun{
+#'  setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
+#'  folder <- "Acemoglu 2001"
+#'  study.title <- "The colonial origins of comparative development: An empirical investigation"
+#'  authorname <- "Acemoglu, Johnson, Robinson"
+#'  studyyear <- 2001
+#'  extract_citation_cases(folder, authorname, studyyear, clean = TRUE) #
+#' }
 
-
-extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, number=NULL){
+extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, number=NULL, clean=NULL){
 
     require(stringr)
 
@@ -131,6 +142,11 @@ extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, nu
 # Change document names in citation cases data frame
   citation.data$document <- sub("\\s-$", "", stringr::str_extract(citation.data$document, "^.*-.*\\s-"))
 
+# Clean citation cases
+  if(!is.null(clean)){
+  citation.data$citation.case <- stringr::str_replace_all(citation.data$citation.case, "^\\.FOOTNOTE[0-9]{1,3}\\s", "^\\.\\s")
+  citation.data$citation.case <- stringr::str_replace_all(citation.data$citation.case, "^\\.\\s|^\\.\\?\\s|^\\.!\\s|^\\.\\s?[0-9]{1,3}\\s?", "")
+  }
 
 # Save citation cases in table (csv and html)
   write.table(citation.data, file =  paste("./", folder, "_citation_cases.csv", sep = ""), sep=",")

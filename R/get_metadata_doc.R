@@ -6,6 +6,20 @@
 #' @param rcrossref Use rcrossref function to identify article meta data via CrossRef API? Default is TRUE. Currently, no useful other ways of identifying metadata are implemented.
 #' @param bibtex Should reference be exported as bibtex? Works only with rcrossref = TRUE. Default is FALSE.
 #' @param vars Which variables should be returned? Specify as character vectors. By default, all available variables are returned.
+#'
+#'
+#' @examples
+#' \dontrun{
+#'  setwd("C:/Users/pbauer/Downloads")
+#'  folder <- "docs"
+#'  files <- list.files(folder, pattern = "txt$", full.names = T)
+#'  foo <- plyr::adply(files[1:length(files)], .margins = 1, .fun = get_metadata_doc, .progress = "text")
+#'  # Replace NULL values in metadata tables
+#'  for(z in 1:nrow(foo)){for(y in 1:length(foo)){if(is.null(foo[z,y][[1]])){foo[z,y][[1]] <- NA}}}
+#'  # save metadatatables in data folder
+#'  save(foo, file = paste("./", folder, "_metadata.RData", sep=""))
+#' }
+
 
 get_metadata_doc <- function(filename, encoding = "UTF-8", lines.import = 2000, rcrossref = TRUE, bibtex = FALSE, vars = NULL){
 

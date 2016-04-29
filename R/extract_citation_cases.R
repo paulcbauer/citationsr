@@ -149,8 +149,8 @@ extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, nu
   }
 
 # Save citation cases in table (csv and html)
-  write.table(citation.data, file =  paste("./", folder, "_citation_cases.csv", sep = ""), sep=",")
-  print(xtable::xtable(citation.data),type='html',comment=FALSE, file=paste("./", folder, "_citation_cases.html", sep = ""))
+  write.table(citation.data, file =  paste("./", paste(authorname, collapse=""), "_", studyyear, "_citation_cases.csv", sep = ""), sep=",")
+  print(xtable::xtable(citation.data),type='html',comment=FALSE, file=paste("./", paste(authorname, collapse=""), "_", studyyear, "_citation_cases.html", sep = ""))
 
 # Message to user
   cat("\n \nThey are printed and saved as files in the working directory: '*_citation_cases.csv' and '*_citation_cases.html'.\n\n")

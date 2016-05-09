@@ -10,14 +10,43 @@
 #'
 
 #' @description Takes a single txt file as input. To operate on a vector of txt files, use get_metadata_doc().
+#'
+#' @examples
+#' \dontrun{
+#'  setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
+#'  folder <- "docs"
+#'  number <- 20 # or do not specify
+#'  get_metadata_doc_nv(folder)
+#' }
 
-get_metadata_doc_nv <- function(filename, encoding = "UTF-8", lines.import = 2000, rcrossref = TRUE, bibtex = FALSE, vars = NULL){
+
+get_metadata_doc_nv <- function(folder, number=NULL, encoding = "UTF-8", lines.import = 2000, rcrossref = TRUE, bibtex = FALSE, vars = NULL){
 
   # load packages
   require(magrittr)
   require(stringr)
   require(dplyr)
 
+  # Identify names of PDF files in folder + their path
+  file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
+  file.paths <- paste(paste("./", folder,"/", sep = ""), file.names, sep="")
+
+  # Count number of files in folder
+  n.docs <- length(file.paths)
+
+  # Specify number of documents to assess by setting n.docs
+  if(!is.null(number)){n.docs <- number}
+  if(number>length(file.paths)){n.docs <- length(file.paths)} # if not enough files
+
+
+  # Measure time
+  ptm <- proc.time()
+
+  # Loop over .pdf files one by one (until document nr. "number" = n.docs)
+  metadata <- NULL
+  for (i in 1:n.docs){  #
+
+  filename <- file.paths[i]
   # open file
   con <- file(filename, encoding = encoding)
 
@@ -125,6 +154,8 @@ get_metadata_doc_nv <- function(filename, encoding = "UTF-8", lines.import = 200
   journal_matched <- c(match(meta_dat$ISSN[1], journals_df$journal_issn), match(meta_dat$ISSN2[1], journals_df$journal_issn), match(meta_dat$journal[1], journals_df$journal_title)) %>% na.omit %>% extract(1)
   meta_dat <- merge(meta_dat[1,], journals_df[journal_matched,], all = TRUE)
 
+
+
   # finalize data frame
 
   if (is.null(vars)) {
@@ -133,8 +164,71 @@ get_metadata_doc_nv <- function(filename, encoding = "UTF-8", lines.import = 200
     meta_dat <- meta_dat[,vars]
   }
 
-  # return data frame
-    return(meta_dat)
+  metadata <- rbind(metadata, meta_dat)
+
+
+
+
+  # RENAME FILE
+
+      newname <- metadata
+      # New Author variable
+      authors <- list(NULL)
+      for(i in 1:nrow(newname)){
+        test <- as.logical(!is.na(newname$author[[i]][1]))
+        if(test){authors[[i]] <- newname$author[[i]]$family[1]}
+
+        test2 <- as.logical(is.na(newname$author[[i]][1]))
+        if(test2){authors[[i]] <- NA}
+      }
+      # paste(newname$author[[i]]$family, collapse=",")
+      for(i in 1:length(authors)){
+        if(is.null(authors[[i]])){authors[[i]] <- NA}
+      }
+      newname$author2 <- unlist(authors)
+
+
+      # New titel variable
+      newname$title2 <- stringr::str_replace(substr(newname$title, 1,50), "^\\s", "")
+      newname$title2 <- stringr::str_replace(substr(newname$title2, 1,50), "[:\\*]", "")
+      newname$title2 <- stringr::str_replace(substr(newname$title2, 1,50), "\\s{0,3}$", "")
+      newname$title2 <- stringr::str_replace(substr(newname$title2, 1,50), "/", "_")
+
+      # New year variableww
+      newname$year <- substr(newname$date1, 1,4)
+
+
+      # New title variable
+      newname$new.doc_name.txt <- paste(newname$author2, newname$year, newname$title2, sep = " - ") %>%
+        stringr::str_replace_all("[?:]", " ") %>%
+        paste(".txt", sep = "")
+
+      newname$new.doc_name.pdf <- paste(newname$author2, newname$year, newname$title2, sep = " - ") %>%
+        stringr::str_replace_all("[?:]", " ") %>%
+        paste(".pdf", sep = "")
+
+
+
+      # Rename .txt files
+      file.rename(from = file.path(paste("./", folder, sep = ""), newname$doc_name), to = file.path(paste("./", folder, sep = ""), newname$new.doc_name.txt))
+
+      # Rename .pdf files
+      newname$doc_name_pdf <- newname$doc_name %>% stringr::str_replace_all(".txt", ".pdf")
+      file.rename(from = file.path(paste("./", folder, sep = ""), newname$doc_name_pdf), to = file.path(paste("./", folder, sep = ""), newname$new.doc_name.pdf))
+
+
+
+  }
+
+  # Measure time
+  time <- proc.time() - ptm
+
+  save(metadata, file = "./metadata.RData")
+
+
+  cat("\n\n It took around '", as.numeric(time[3]), "' second(s) (", round(as.numeric(time[3])/60,2), " minutes) to extract metadata/rename ", n.docs, " files in the folder '", folder, "'.\n", sep = "")
+round(as.numeric(time[3])/60,2)
+
 }
 
 

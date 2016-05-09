@@ -21,8 +21,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 
 # Get medadatafile for folder/study
-  load(paste("./", folder, "_metadata.RData", sep="")) # load RData file
-  metadata <- foo
+  load("./metadata.RData") # load RData file
 
 # Identify and delete any "processed.txt" files present in folder
   file.names <- dir(paste("./", folder, sep = ""), pattern = "processed.txt")
@@ -43,6 +42,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 # Specify number of documents to assess by setting n.docs
     if(!is.null(number)){n.docs <- number}
+    if(number>length(file.paths)){n.docs <- length(file.paths)} # if not enough files
 
 # Create empty data frame to collect potential deleted running heads
     deleted.runningheads <- data.frame(study= NA, running.head = NA, loop.i = NA)
@@ -346,6 +346,9 @@ delete_refs_n_heads <- function(folder, number=NULL){
   }
 
     # Save deleted running heads in table for checking
-    print(xtable::xtable(deleted.runningheads),type='html',comment=FALSE, file=paste("./", folder, "_deleted_running_headers.html", sep = ""))
+    print(xtable::xtable(deleted.runningheads),type='html',comment=FALSE, file="./deleted_running_headers.html")
+
+    # Message to user
+    cat("\n\n", n.docs, " texts/documents have been stripped of references/running heads in folder '", folder ,"' !\n\n", sep = "")
 
     }

@@ -128,9 +128,6 @@ extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, nu
 # Get first estimate of number of citation cases
   total.citation.cases <- sum(sapply(all.docs.cit.cases, length))
 
-# Message to user
-  cat("\n For ", authorname, " we have identified ", total.citation.cases, " citation cases within ", n.docs, " documents.", sep="")
-
 # Generate dataframe with citation cases
   citation.data <- data.frame(document = 1:total.citation.cases, citation.case = 1:total.citation.cases)
 
@@ -152,7 +149,7 @@ extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, nu
   write.table(citation.data, file =  paste("./", paste(authorname, collapse=""), "_", studyyear, "_citation_cases.csv", sep = ""), sep=",")
   print(xtable::xtable(citation.data),type='html',comment=FALSE, file=paste("./", paste(authorname, collapse=""), "_", studyyear, "_citation_cases.html", sep = ""))
 
-# Message to user
-  cat("\n \nThey are printed and saved as files in the working directory: '*_citation_cases.csv' and '*_citation_cases.html'.\n\n")
+  # Message to user
+  cat("\n\n For ", authorname, " we have identified ", total.citation.cases, " citation cases within ", n.docs, " documents. They are printed and saved as files in the working directory: '*_citation_cases.csv' and '*_citation_cases.html'.\n\n", sep="")
 
   }

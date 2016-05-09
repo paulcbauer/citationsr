@@ -29,6 +29,7 @@ clean_text <- function(folder, number=NULL){
 
 # Specify number of documents to assess by setting n.docs
   if(!is.null(number)){n.docs <- number}
+  if(number>length(file.paths)){n.docs <- length(file.paths)} # if not enough files
 
 
 # Loop over .txt files one by one (until document nr. "number" = n.docs)
@@ -145,7 +146,7 @@ clean_text <- function(folder, number=NULL){
     }
 
 # Message to user
-    cat("\n\n", n.docs, " texts/documents have been cleaned in folder '", folder ,"' and are now reeeeaaadddyyy to be analyzed!\n\n", sep = "")
+    cat("\n\n", n.docs, " texts/documents have been cleaned in folder '", folder ,"' !\n\n", sep = "")
 
 }
 

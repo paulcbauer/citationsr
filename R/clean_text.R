@@ -29,7 +29,7 @@ clean_text <- function(folder, number=NULL){
 
 # Specify number of documents to assess by setting n.docs
   if(!is.null(number)){n.docs <- number}
-  if(number>length(file.paths)){n.docs <- length(file.paths)} # if not enough files
+  if(!is.null(number)&&number>length(file.paths)){n.docs <- length(file.paths)} # if not enough files
 
 
 # Loop over .txt files one by one (until document nr. "number" = n.docs)

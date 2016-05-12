@@ -42,7 +42,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 # Specify number of documents to assess by setting n.docs
     if(!is.null(number)){n.docs <- number}
-    if(number>length(file.paths)){n.docs <- length(file.paths)} # if not enough files
+    if(!is.null(number)&&number>length(file.paths)){n.docs <- length(file.paths)} # if not enough files
 
 # Create empty data frame to collect potential deleted running heads
     deleted.runningheads <- data.frame(study= NA, running.head = NA, loop.i = NA)

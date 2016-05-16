@@ -47,8 +47,13 @@ delete_refs_n_heads <- function(folder, number=NULL){
 # Create empty data frame to collect potential deleted running heads
     deleted.runningheads <- data.frame(study= NA, running.head = NA, loop.i = NA)
 
+
+
+
 # Loop over .txt files one by one (until document nr. "number" = n.docs)
   for (i in 1:n.docs){
+
+    print(i)
 
     con <- file(file.paths[i], encoding = "UTF-8")
     x <- readLines(con, warn = F)
@@ -105,7 +110,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 
     # DOWNLOADED FROM, BY ETC.
-      print("downloaded from")
+      # print("downloaded from")
       locations <- NULL
       pattern <- "Downloaded by|Downloaded from|All use subject to JSTOR Terms and Conditions"
       locations <- grep(pattern, x, ignore.case = TRUE)
@@ -117,7 +122,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 
     # COPYRIGHT MESSAGES
-      print("copyright")
+      # print("copyright")
       locations <- NULL
       pattern <- paste("All use subject to JSTOR Terms and Conditions",
                        "\\s[0-9]{4}\\sThe\\sAuthors",
@@ -136,7 +141,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 
     # PUBLISHER
-      print("publisher")
+      # print("publisher")
       locations <- NULL
       if(nchar(metadata$publisher[i])>=5){
         pattern <- metadata$publisher[i]
@@ -152,7 +157,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 
     # JOURNAL
-      print("journal")
+      # print("journal")
       locations <- NULL
       if(nchar(metadata$journal[i])>=5){
         pattern <- metadata$journal[i]
@@ -168,7 +173,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 
     # TITLE
-      print("title")
+      # print("title")
       locations <- NULL
       if(nchar(metadata$title[i])>=5){
         pattern <- stringr::str_extract(metadata$title[i], "^\\s*[:word:]*\\s*[:word:]*[-]*[:word:]*\\s*[:word:]*[-]*[:word:]*\\s*[:word:]*[-]*[:word:]*\\s*[:word:]*[-]*[:word:]*\\s*[:word:]*[-]*[:word:]*")
@@ -186,7 +191,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 
     # PAGES
-      print("pages")
+      # print("pages")
       locations <- NULL
       if(nchar(metadata$page[i])>=3){
       pattern <- metadata$page[i]
@@ -204,7 +209,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
         # for(i in 1:579){print(stringr::str_detect(metadata$page[i], ".*-.*"))}
 
       # IDENTIFY SINGLE PAGES - BEWARE ALSO MATCHES TABLE VALUES..
-      print("single pages")
+      # print("single pages")
       if(!is.na(metadata$page[i])){
         locations <- NULL
         pages <- metadata$page[i]
@@ -235,7 +240,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 
     # VOLUME, ISSUE, NUMBER
-    print("volume")
+    # print("volume")
     if(!is.na(metadata$volume[i])){
       if(!is.na(metadata$volume[i])){volume.match <- paste("Volume\\s", metadata$volume[i], sep="")}
       if(!is.na(metadata$issue[i])){volume.match <- paste(volume.match, paste("Issue\\s", metadata$issue[i], sep=""), sep="|")}
@@ -260,7 +265,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 
     # DATES
-    print("dates")
+    # print("dates")
     pattern <- "(January|February|March|April|May|June|July|August|September|October|November|December)\\s[0-9][0-9][0-9][0-9]\\s/\\s[0-9][0-9][0-9]"
     # substr(metadata$date1[i], 1,4)
     locations <- grep(pattern, x, ignore.case = FALSE)
@@ -276,10 +281,12 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 
     # AUTHORSNAMES - takes only first one
-      print("authors")
+      # print("authors")
       locations <- NULL
+      if(is.null(unlist(metadata$author[i]))){metadata$author[i] <- NA}
+
       if(!is.na(metadata$author[i])){
-      # print(metadata$author[i][[1]]$family); print(i)
+      print(metadata$author[i][[1]]$family); print(i)
       if(nchar(metadata$author[i][[1]]$family)>=3){
         pattern <- paste(metadata$author[i][[1]]$family, collapse="|")
         locations <- grep(pattern, x, ignore.case = TRUE)
@@ -312,7 +319,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 ##############################
 ### DELETE SECTION HEADERS ###
 ##############################
-      print("section headers")
+      # print("section headers")
       locations <- NULL
       pattern <- paste("^CONCLUSION$",
                        "^Conclusion$",
@@ -330,7 +337,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
       }
 
 
-      print(i)
+      # print(i)
 
     # Save text
     fileConn<-file(sub(".txt", "_processed.txt", file.paths[i]))
@@ -340,8 +347,8 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 
 
-      # Counter
-      if(stringr::str_detect(as.character(i), "[0-9]*0")){cat(i, ".. \n\n", sep="")}
+    # counter
+    #if(stringr::str_detect(as.character(i), "^.*0$")){cat(i, ".. ", sep="")}
 
   }
 

@@ -45,12 +45,9 @@ get_metadata_doc_nv <- function(folder, number=NULL, encoding = "UTF-8", lines.i
 
   # Loop over .pdf files one by one (until document nr. "number" = n.docs)
   metadata <- NULL
-  z <- 0
   for (i in 1:n.docs){  #
 
-  # filename <- file.paths["./docs/NA - NA - Autocratic Institutions and Civil Conflict Contagi.txt"]
-  z <- z + 1
-  print(z)
+
 
   filename <- file.paths[i]
   print(filename)
@@ -182,36 +179,48 @@ get_metadata_doc_nv <- function(folder, number=NULL, encoding = "UTF-8", lines.i
       # New Author variable
       if(!is.null(unlist(meta_dat$author))){
       authors <- list(NULL)
-      for(i in 1:nrow(meta_dat)){
-        test <- as.logical(!is.na(meta_dat$author[[i]][1]))
-        if(test){authors[[i]] <- meta_dat$author[[i]]$family[1]}
+      for(y in 1:nrow(meta_dat)){
+        test <- as.logical(!is.na(meta_dat$author[[y]][1]))
+        if(test){authors[[y]] <- meta_dat$author[[y]]$family[1]}
 
-        test2 <- as.logical(is.na(meta_dat$author[[i]][1]))
-        if(test2){authors[[i]] <- NA}
+        test2 <- as.logical(is.na(meta_dat$author[[y]][1]))
+        if(test2){authors[[y]] <- NA}
       }
       # paste(meta_dat$author[[i]]$family, collapse=",")
-      for(i in 1:length(authors)){
-        if(is.null(authors[[i]])){authors[[i]] <- NA}
+      for(yy in 1:length(authors)){
+        if(is.null(authors[[yy]])){authors[[yy]] <- NA}
       }
+
       meta_dat$author2 <- unlist(authors)
+      meta_dat$author2 <- iconv(meta_dat$author2, "UTF-8", "ASCII", sub="")
+      meta_dat$author2 <- stringr::str_replace(substr(meta_dat$author2, 1,50), '\\*', '')
+      meta_dat$author2 <- stringr::str_replace(substr(meta_dat$author2, 1,50), ' $', '')
       }else{meta_dat$author2 <- "noauthor"}
 
       # New titel variable
       meta_dat$title2 <- stringr::str_replace(substr(meta_dat$title, 1,50), "^\\s", "")
-      meta_dat$title2 <- stringr::str_replace(substr(meta_dat$title2, 1,50), "[:\\*]", "")
+      meta_dat$title2 <- iconv(meta_dat$title2, "UTF-8", "ASCII", sub="") # CHECK
+      meta_dat$title2 <- stringr::str_replace(substr(meta_dat$title2, 1,50), "[:\\*?]", "")
       meta_dat$title2 <- stringr::str_replace(substr(meta_dat$title2, 1,50), "\\s{0,3}$", "")
       meta_dat$title2 <- stringr::str_replace(substr(meta_dat$title2, 1,50), "/", "_")
+      meta_dat$title2 <- stringr::str_replace(substr(meta_dat$title2, 1,50), '"', '')
+      meta_dat$title2 <- stringr::str_replace(substr(meta_dat$title2, 1,50), "'", '')
+      meta_dat$title2 <- stringr::str_replace(substr(meta_dat$title2, 1,50), '\"', '')
+
+
+
+
 
       # New year variableww
       meta_dat$year <- substr(meta_dat$date1, 1,4)
 
 
       # New title variable
-      meta_dat$new.doc_name.txt <- paste(meta_dat$author2, meta_dat$year, meta_dat$title2, sep = " - ") %>%
+      meta_dat$new.doc_name.txt <- paste(paste0(i, "-doc"), meta_dat$author2, meta_dat$year, meta_dat$title2, sep = " - ") %>%
         stringr::str_replace_all("[?:]", " ") %>%
         paste(".txt", sep = "")
 
-      meta_dat$new.doc_name.pdf <- paste(meta_dat$author2, meta_dat$year, meta_dat$title2, sep = " - ") %>%
+      meta_dat$new.doc_name.pdf <- paste(paste0(i, "-doc"), meta_dat$author2, meta_dat$year, meta_dat$title2, sep = " - ") %>%
         stringr::str_replace_all("[?:]", " ") %>%
         paste(".pdf", sep = "")
 
@@ -224,7 +233,8 @@ get_metadata_doc_nv <- function(folder, number=NULL, encoding = "UTF-8", lines.i
       meta_dat$doc_name_pdf <- meta_dat$doc_name %>% stringr::str_replace_all(".txt", ".pdf")
       file.rename(from = file.path(paste("./", folder, sep = ""), meta_dat$doc_name_pdf), to = file.path(paste("./", folder, sep = ""), meta_dat$new.doc_name.pdf))
 
-
+      # counter
+      if(stringr::str_detect(as.character(i), "^.*0$")){cat(i, ".. ", sep="")}
 
   }
 

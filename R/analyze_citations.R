@@ -19,6 +19,7 @@ analyze_citations <- function(file, article, output){
   require(scales)
   require(quanteda)
   require(stringr)
+  require(qdapDictionaries)
 
   # precleaning file
   text <- scan(file, what="character", sep="\n")
@@ -30,7 +31,7 @@ analyze_citations <- function(file, article, output){
   # reading file and cleaning data
   tf <- read.csv(tmp, stringsAsFactors=F, row.names=NULL) # paul: , fileEncoding="latin1"
   # extracting year, deleting citations with empty years
-  tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
+  tf$year <- as.numeric(gsub('.*([0-9]{4})$', tf$document, repl='\\1'))
   message("Warning: ", sum(is.na(tf$year)), " citation cases with missing year will be excluded from analysis.")
   todelete <- which(is.na(tf$year))
   message("Warning: ", sum(duplicated(tf$citation.case)), " duplicated citation cases will be excluded from analysis.")
@@ -40,8 +41,10 @@ analyze_citations <- function(file, article, output){
   # exporting
   write.csv(tf[todelete,], file=paste0(output, '/parsing-errors.csv'), row.names=FALSE)
   tf <- tf[-todelete,]
-  message("A total of ", nrow(tf), " citation cases will be included in the analysis.")
+  tf <- transform(tf, doc_id=match(document, unique(document))) # generate document number
+  message("A total of ", max(tf$doc_id), " documents and ", nrow(tf), " citation cases will be included in the analysis.")
 
+  
   # generating histogram with times cited within document
   x <- table(tf$document)
   range.x <- range(x)

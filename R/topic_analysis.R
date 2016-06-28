@@ -13,9 +13,10 @@
 #'
 #' @examples 
 #' \dontrun{
-#'  file <- "~/Google Drive/2016_Quality_of_citations/data/Fearon 2003_citation_cases.csv"
-#'  article <- "Fearon and Laitin (2003)"
-#'  output <- "fearon_2003"
+#'  setwd("C:/Users/Paul/GDrive/Research/2016_06_Quality_of_citations")
+#'  file <- "data/AcemogluJohnsonRobinson_2001_citation_cases.csv"
+#'  article <- "Acemoglu, Johnson & Robinson (2001)"
+#'  output <- "output/acemoglu_2001"
 #'  topic_analysis(file, article, output)
 #' } 
 
@@ -34,7 +35,7 @@ topic_analysis <- function(file, article, output, K=3:8, runs=2, max.em.its=10, 
   writeLines(text, con=tmp)
 
   # reading file and cleaning data
-  tf <- read.csv(tmp, stringsAsFactors=F, row.names=NULL, fileEncoding="latin1")
+  tf <- read.csv(tmp, stringsAsFactors=F, row.names=NULL)
   # extracting year
   tf$year <- as.numeric(gsub('.*([0-9]{4}).*', tf$document, repl='\\1'))
   message("Warning: ", sum(is.na(tf$year)), " citation cases with missing year will be excluded from analysis.")

@@ -11,7 +11,7 @@
 #' @examples
 #' \dontrun{
 #'  setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
-#'  folder <- "Acemoglu 2001"
+#'  folder <- "docs"
 #'  study.title <- "The colonial origins of comparative development: An empirical investigation"
 #'  authorname <- "Acemoglu, Johnson, Robinson"
 #'  studyyear <- 2001
@@ -117,8 +117,8 @@ extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, nu
     # Write them to list
     all.docs.cit.cases[i] <- cit.cases.doc.i
 
-    # Counter
-    if(stringr::str_detect(as.character(i), "[0-9]*0")){cat(i, ".. ", sep="")}
+    # counter
+    if(stringr::str_detect(as.character(i), "^.*0$")){cat(i, ".. ", sep="")}
 
   }
 

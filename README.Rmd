@@ -1,4 +1,13 @@
 # citationsr
 The R package 'citationsr' shall comprise functions that can be used to extract and analyze citation cases, i.e. citations within documents that cite a single or several studies.
 
-Steps...
+
+## Install
+```r
+install.packages("devtools")
+library(devtools)
+install_github("paulcbauer/citationsr")
+```
+
+## How it works
+Please read the vignette!

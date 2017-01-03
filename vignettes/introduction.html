@@ -73,30 +73,41 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h4 class="date"><em>2017-01-03</em></h4>
 
 
+<div id="TOC">
+<ul>
+<li><a href="#retrieving-meta-data-from-parsed-journal-articles"><span class="toc-section-number">1</span> Retrieving meta data from parsed journal articles</a></li>
+<li><a href="#fundamental-logic-of-get_metadata_doc"><span class="toc-section-number">2</span> Fundamental logic of <code>get_metadata_doc()</code></a><ul>
+<li><a href="#example"><span class="toc-section-number">2.1</span> Example</a><ul>
+<li><a href="#parsing-one-document"><span class="toc-section-number">2.1.1</span> Parsing one document</a></li>
+<li><a href="#parsing-many-documents"><span class="toc-section-number">2.1.2</span> Parsing many documents</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
 
-<div id="retrieving-meta-data-from-parsed-journal-articles" class="section level2">
-<h2>Retrieving meta data from parsed journal articles</h2>
+<div id="retrieving-meta-data-from-parsed-journal-articles" class="section level1">
+<h1><span class="header-section-number">1</span> Retrieving meta data from parsed journal articles</h1>
 <p>By “quality of citations”, we mean that citing a reference has more value than just being a numeric event; the context of a citation matters as well. We can have multiple perspectives on this context–e.g., by looking at the semantic context within the text, or a higher-level context, which is particular features of the document a reference was cited in. To get to grips with the latter, we provide the <code>get_metadata_doc()</code> function, a tool that enables you to identify various features of parsed journal articles.</p>
 </div>
-<div id="fundamental-logic-of-get_metadata_doc" class="section level2">
-<h2>Fundamental logic of <code>get_metadata_doc()</code></h2>
+<div id="fundamental-logic-of-get_metadata_doc" class="section level1">
+<h1><span class="header-section-number">2</span> Fundamental logic of <code>get_metadata_doc()</code></h1>
 <p>Working with <code>get_metadata_doc()</code> is very simple. It takes a full text journal article as input, which has to be transformed into <code>txt</code> format with the package’s own <code>extract_text()</code> function or other tools (e.g., Jeroen Ooms’ <a href="https://cran.r-project.org/web/packages/pdftools/index.html"><code>pdftools</code> package</a>).</p>
 <p>The function imports parts of the txt file. By default, the first 2,000 lines are imported, but you can change that using the <code>lines.import</code> parameter. This is basically a question of computational speed and the most important information to extract meta data tends to be written on the first few pages. After some cleaning work, the function looks for a DOI (digital object identifier) that is linked to the paper. If successful, it uses the identifier to run a query to the <a href="http://search.crossref.org/help/api">Crossref API</a> using the <code>rcrossref</code> package. If no DOI is found, it nevertheless runs a query but uses the first 20 lines of the document as input for the query string. If successful, the API returns a lot of information on the article, which is stored in a data.frame object. Optionally, you can also download the article reference in bibtex format using <code>bibtex = TRUE</code>.</p>
 <p>Once the function has identified the corresponding journal, it also taps a journal rankings data base from <a href="http://www.scimagojr.com/journalrank.php">SJR (SCImago Journal &amp; Country Rank)</a>, matches it with the journal and appends information on various journal-level citation statistics.</p>
 <p>Finally, you can decide which variables to store in the output data.frame. An overview of all available variables can be found in the documentation; see <code>?get_metadata_doc</code>.</p>
-</div>
 <div id="example" class="section level2">
-<h2>Example</h2>
+<h2><span class="header-section-number">2.1</span> Example</h2>
 <div id="parsing-one-document" class="section level3">
-<h3>Parsing one document</h3>
+<h3><span class="header-section-number">2.1.1</span> Parsing one document</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">files &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="st">&quot;docs1&quot;</span>, <span class="dt">pattern =</span> <span class="st">&quot;txt$&quot;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)
 <span class="kw">get_metadata_doc</span>(files[<span class="dv">1</span>])
 <span class="kw">head</span>(foo)</code></pre></div>
 </div>
 <div id="parsing-many-documents" class="section level3">
-<h3>Parsing many documents</h3>
+<h3><span class="header-section-number">2.1.2</span> Parsing many documents</h3>
 <div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c">foo &lt;- adply(files[<span class="dv">1</span>:<span class="dv">20</span>], .margins = <span class="dv">1</span>, .fun = get_metadata_doc, .progress = <span class="st">&quot;text&quot;</span>)
 head(foo)</code></pre></div>
+</div>
 </div>
 </div>
 

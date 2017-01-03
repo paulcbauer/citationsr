@@ -2,7 +2,10 @@
 title: "Working with the citationsr package"
 author: "Paul Bauer, Pablo Barberá, Simon Munzert"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
 vignette: >
   %\VignetteIndexEntry{Working with the citations package}
   %\VignetteEngine{knitr::rmarkdown}
@@ -11,12 +14,12 @@ vignette: >
 
 
 
-## Retrieving meta data from parsed journal articles
+# Retrieving meta data from parsed journal articles
 
 By "quality of citations", we mean that citing a reference has more value than just being a numeric event; the context of a citation matters as well. We can have multiple perspectives on this context--e.g., by looking at the semantic context within the text, or a higher-level context, which is particular features of the document a reference was cited in. To get to grips with the latter, we provide the `get_metadata_doc()` function, a tool that enables you to identify various features of parsed journal articles.
 
 
-## Fundamental logic of `get_metadata_doc()`
+# Fundamental logic of `get_metadata_doc()`
 
 Working with `get_metadata_doc()` is very simple. It takes a full text journal article as input, which has to be transformed into `txt` format with the package's own `extract_text()` function or other tools (e.g., Jeroen Ooms' [`pdftools` package](https://cran.r-project.org/web/packages/pdftools/index.html)). 
 

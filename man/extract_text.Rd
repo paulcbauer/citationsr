@@ -17,4 +17,11 @@ Converts and stores PDFs in folder as .txt files.
 \description{
 Converts and stores PDFs in folder as .txt files.
 }
+\examples{
+\dontrun{
+ setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
+ folder <- "Acemoglu 2001"
+ extract_text(folder)
+}
+}
 

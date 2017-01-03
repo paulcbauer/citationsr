@@ -5,7 +5,7 @@
 \title{Extract citation cases.}
 \usage{
 extract_citation_cases(folder, authorname, studyyear, scope = NULL,
-  number = NULL)
+  number = NULL, clean = NULL)
 }
 \arguments{
 \item{folder}{Name of folder within working directory in which the citing documents (.txt files) are located, e.g. "Beck 1995".}
@@ -14,12 +14,24 @@ extract_citation_cases(folder, authorname, studyyear, scope = NULL,
 
 \item{studyyear}{Enter the year when the study was published.}
 
-\item{scope}{Number of sentences before/after citation case sentence to extract.}
+\item{scope}{Enter number of sentences before/after citation case sentence to extract.}
+
+\item{clean}{If TRUE (default) it cleanes some stuff before the citation case}
 }
 \value{
 Returns and saves data (.csv and .html) containing citation cases in current working directory.
 }
 \description{
 Extract citation cases.
+}
+\examples{
+\dontrun{
+ setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
+ folder <- "docs"
+ study.title <- "The colonial origins of comparative development: An empirical investigation"
+ authorname <- "Acemoglu, Johnson, Robinson"
+ studyyear <- 2001
+ extract_citation_cases(folder, authorname, studyyear, clean = TRUE) #
+}
 }
 

@@ -30,9 +30,10 @@ Conducts topic analysis of citations of a given article
 }
 \examples{
 \dontrun{
- file <- "~/Google Drive/2016_Quality_of_citations/data/Fearon 2003_citation_cases.csv"
- article <- "Fearon and Laitin (2003)"
- output <- "fearon_2003"
+ setwd("C:/Users/Paul/GDrive/Research/2016_06_Quality_of_citations")
+ file <- "data/AcemogluJohnsonRobinson_2001_citation_cases.csv"
+ article <- "Acemoglu, Johnson & Robinson (2001)"
+ output <- "output/acemoglu_2001"
  topic_analysis(file, article, output)
 } 
 }

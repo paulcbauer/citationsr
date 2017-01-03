@@ -17,4 +17,11 @@ Returns and saves text files that have been cleaned (e.g. abbreviations replaced
 \description{
 Clean text files to facilitate citation case extraction.
 }
+\examples{
+\dontrun{
+ setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
+ folder <- "Acemoglu 2001"
+ clean_text(folder)
+}
+}
 

@@ -1,1 +1,7 @@
 exportPattern("^[[:alpha:]]+")
+  importFrom("grDevices", "dev.off", "pdf")
+  importFrom("graphics", "axis", "hist", "layout", "par", "plot",
+             "plot.new", "title")
+  importFrom("stats", "aggregate", "na.omit")
+  importFrom("utils", "aregexec", "page", "read.csv", "read.table",
+             "tail", "write.csv", "write.table")

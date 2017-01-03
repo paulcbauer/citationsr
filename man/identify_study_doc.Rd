@@ -20,4 +20,12 @@ list with the titles that were extracted across the citing documents.
 \description{
 Identifies whether single documents (text files) really cite (or just contain) study.
 }
+\examples{
+\dontrun{
+ setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
+ folder <- "Acemoglu 2001"
+ study.title <- "The colonial origins of comparative development: An empirical investigation"
+ identify_study_doc(study.title, folder)
+}
+}
 

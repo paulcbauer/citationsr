@@ -17,4 +17,11 @@ Returns and saves text files without the references section.
 \description{
 Returns and saves text files without the references section.
 }
+\examples{
+\dontrun{
+ setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
+ folder <- "Acemoglu 2001"
+ delete_refs_n_heads(folder, number = 100)
+}
+}
 

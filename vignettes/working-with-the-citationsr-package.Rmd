@@ -1,5 +1,5 @@
 ---
-title: "Working with the citations package"
+title: "Working with the citationsr package"
 author: "Paul Bauer, Pablo Barberá, Simon Munzert"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette

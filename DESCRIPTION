@@ -1,4 +1,4 @@
-Package: citations
+Package: citationsr
 Type: Package
 Title: A package to analyze citations
 Version: 0.1

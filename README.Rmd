@@ -9,5 +9,9 @@ library(devtools)
 install_github("paulcbauer/citationsr")
 ```
 
-## How it works
-Please read the vignette!
+## Working with the citationsr package
+Please read the [introductory vignette here](http://htmlpreview.github.io/?https://github.com/paulcbauer/citationsr/blob/master/vignettes/introduction.html) or use the following link:  https://github.com/paulcbauer/citationsr/blob/master/vignettes/introduction.html!
+
+## Flaws...
+* Extracting citation cases when the references/identifier are located in footnotes does not work
+* Extracting citations cases for a numeric citation system does not work (bascially that would require going into the references to identify reference belonging to a certain number)

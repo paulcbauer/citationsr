@@ -21,6 +21,7 @@
 extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, number=NULL, clean=NULL){
 
     require(stringr)
+    require(readr)
 
 
 #####################################################################
@@ -146,7 +147,7 @@ extract_citation_cases <- function(folder, authorname, studyyear, scope=NULL, nu
   }
 
 # Save citation cases in table (csv and html)
-  write.table(citation.data, file =  paste("./", paste(authorname, collapse=""), "_", studyyear, "_citation_cases.csv", sep = ""), sep=",")
+  write_csv(citation.data, file =  paste("./", paste(authorname, collapse=""), "_", studyyear, "_citation_cases.csv", sep = ""), sep=",")
   print(xtable::xtable(citation.data),type='html',comment=FALSE, file=paste("./", paste(authorname, collapse=""), "_", studyyear, "_citation_cases.html", sep = ""))
 
   # Message to user

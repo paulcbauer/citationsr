@@ -12,6 +12,34 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+# Introduction
+The package should help in various situations. For instance, you might be interested in the impact of a particular study. But not simply the quantitative impact ("times cited") but you want to know what people are actually writing about that study. This could even be your own study if you wanna know for what reasons people cite you... to be continued..
+
+# Basic Steps
+Below the steps you would normally pursue when analyzing a study's citations. We provide functions that facilitate parts of these steps. These functions should be executed in the order below.
+
+1. **Collect citation information, i.e. which works cite your study(ies) of interest (called citing documents)**
+    + Somehow get your hands on the citation data (DOIs) of the papers citing your study of interest..
+2. **Collect the full text of citing documents and store all of them in a folder**
+    + Use Paperpile or the fulltext package.
+3. **Convert citing documents into raw text**
+    1. Rename `*.pdf` files in folder to `doc*.pdf`.
+    2. Use `extract_text()` to generate `doc*.txt` files from pdf files.
+4. **Collect metadata on citing documents and rename files**
+    + Use `get_meta_data_doc_nv()` to identify `doc*.txt` (using DOIs or titles in them) and then rename those txt files with the information you identified. The idea is that you might have a bunch of raw text files without any additional information on them.
+5. **Cleaning before citation case extraction**
+    + Use `delete_refs_n_heads()` and `clean_text()` to clean the text files, e.g. delete running titles etc. This is necessary because citation cases may run across pages.
+5. **Re-check whether the study/ies was/were really cited in those documents**
+    + Use `identify_study_doc()` to do that. But this step is not essential.
+6. **Extract citation cases from citing documents**
+    + Use `extract_citation_cases()` to extract the citation cases. The results data is stored as `.csv` file in the directory where you store your data in a `docs` folder.
+    + Eventually use `clean_citation_cases()` if necessary.
+7. **Analyze quality of citation cases (impact)**
+    + Use `analyze_citations()` to analyze the `.csv` files that contain the citation cases.
+    + Use `topic_analysis()` to do the topic analysis on those `.csv` files.
+
+
+To be continued...
 
 
 # Retrieving meta data from parsed journal articles
@@ -19,7 +47,7 @@ vignette: >
 By "quality of citations", we mean that citing a reference has more value than just being a numeric event; the context of a citation matters as well. We can have multiple perspectives on this context--e.g., by looking at the semantic context within the text, or a higher-level context, which is particular features of the document a reference was cited in. To get to grips with the latter, we provide the `get_metadata_doc()` function, a tool that enables you to identify various features of parsed journal articles.
 
 
-# Fundamental logic of `get_metadata_doc()`
+## Fundamental logic of `get_metadata_doc()`
 
 Working with `get_metadata_doc()` is very simple. It takes a full text journal article as input, which has to be transformed into `txt` format with the package's own `extract_text()` function or other tools (e.g., Jeroen Ooms' [`pdftools` package](https://cran.r-project.org/web/packages/pdftools/index.html)). 
 
@@ -35,15 +63,10 @@ Finally, you can decide which variables to store in the output data.frame. An ov
 ### Parsing one document
 
 ```r
-files <- list.files("docs1", pattern = "txt$", full.names = TRUE)
-get_metadata_doc(files[1])
-head(foo)
+setwd("C:\\Users\\Paul\\GDrive\\1-Research\\2017_Quality_of_citations\\data")
+
+### Set folder ###
+folder <- "docs"
+setnumber <- 200
+get_metadata_doc_nv(folder, number = setnumber)
 ```
-
-### Parsing many documents
-
-```c
-foo <- adply(files[1:20], .margins = 1, .fun = get_metadata_doc, .progress = "text")
-head(foo)
-```
-

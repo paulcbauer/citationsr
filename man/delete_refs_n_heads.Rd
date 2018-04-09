@@ -4,7 +4,8 @@
 \alias{delete_refs_n_heads}
 \title{Returns and saves text files without the references section.}
 \usage{
-delete_refs_n_heads(folder, number = NULL)
+delete_refs_n_heads(metadata = NULL, folder, number = NULL,
+  encoding = "ASCII")
 }
 \arguments{
 \item{folder}{Name of folder within working directory in which the citing documents (.txt files) are located, e.g. "Beck 1995".}
@@ -24,4 +25,3 @@ Returns and saves text files without the references section.
  delete_refs_n_heads(folder, number = 100)
 }
 }
-

@@ -6,33 +6,42 @@
 #' @param rcrossref Use rcrossref function to identify article meta data via CrossRef API? Default is TRUE. Currently, no useful other ways of identifying metadata are implemented.
 #' @param bibtex Should reference be exported as bibtex? Works only with rcrossref = TRUE. Default is FALSE.
 #' @param vars Which variables should be returned? Specify as character vectors. By default, all available variables are returned.
-#'
+#' @param rename.files Rename the text files with information found online. Default = FALSE.
 #'
 
 #' @description Takes a single txt file as input. To operate on a vector of txt files, use get_metadata_doc().
 #'
 #' @examples
 #' \dontrun{
-#'  setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
-#'  folder <- "docs"
+#'  setwd("C:/data")
 #'  number <- 20 # or do not specify
 #'  get_metadata_doc_nv(folder)
 #'  ...set also other arguments in the funcion....
 #' }
 
 
-get_metadata_doc_nv <- function(folder, number=NULL, encoding = "UTF-8", lines.import = 2000, rcrossref = TRUE, bibtex = FALSE, vars = NULL){
+get_metadata <- function(from,
+                                number= NULL,
+                                encoding = "ASCII",
+                                lines.import = 200,
+                                rcrossref = TRUE,
+                                bibtex = FALSE,
+                                vars = NULL,
+                                file = NULL,
+                                rename.file = FALSE,
+                                start = NULL,
+                                end = NULL){
 
   # load packages
   require(magrittr)
   require(stringr)
   require(dplyr)
 
-  # Identify names of PDF files in folder + their path
-  file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
-  file.paths <- paste(paste("./", folder,"/", sep = ""), file.names, sep="")
+  # Identify names of txt files in from + their path
+  file.names <- dir(paste(from, "/", sep=""), pattern = ".txt")
+  file.paths <- paste(paste(from, "/", sep=""), file.names, sep="")
 
-  # Count number of files in folder
+  # Count number of files in from
   n.docs <- length(file.paths)
 
   # Specify number of documents to assess by setting n.docs
@@ -43,9 +52,12 @@ get_metadata_doc_nv <- function(folder, number=NULL, encoding = "UTF-8", lines.i
   # Measure time
   ptm <- proc.time()
 
+  if(!is.null(start)){start <- start}else{start <- 1}
+  if(!is.null(end)){end <- end}else{end <- n.docs}
+
   # Loop over .pdf files one by one (until document nr. "number" = n.docs)
   metadata <- NULL
-  for (i in 1:n.docs){  #
+  for (i in start:end){  #
 
 
 
@@ -77,11 +89,12 @@ get_metadata_doc_nv <- function(folder, number=NULL, encoding = "UTF-8", lines.i
   doi <- stringr::str_extract(x, '\\b(10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?!["&\'])\\S)+)\\b') # taken from http://stackoverflow.com/questions/27910/finding-a-doi-in-a-document-or-page
   doi <- doi[!is.na(doi)]
 
+
   # check if DOI contains non-ASCII characters
   check_nonascii <- tools::showNonASCII(doi)
   doi_nonascii <- ifelse(length(check_nonascii) > 0, TRUE, FALSE)
 
-  # if no DOI available, try fetch it from CrossRef via information from first 20 lines
+  # if no DOI available, try fetch DOI from CrossRef via information from first 20 lines
   # detect frequent lines (headers?)
   if(length(doi)==0){
     # significant_lines <- sort(table(x), decreasing = TRUE)[1:3] # header approach
@@ -104,10 +117,13 @@ get_metadata_doc_nv <- function(folder, number=NULL, encoding = "UTF-8", lines.i
       crossref_bibtex <- rcrossref::cr_cn(dois = doi, format = "bibtex", style = "apa")
       write(crossref_bibtex, paste0(filename, ".bib"))
     }
-    crossref_df <- try(rcrossref::cr_works(dois = doi) %>% .$data %>% dplyr::select(matches("^author$|^title$|^container.title$|^volume$|^issue$|^created$|^issued$|^page$|^publisher$|^subject$|^type$|^URL$|^DOI$|^ISSN$|^reference.count$|^score$|^source$")))
-      if (class(crossref_df) != "try-error") {   # error handling if call caused an error
-        meta_dat <- crossref_df
-    }
+
+    crossref_df <- rcrossref::cr_works(dois = doi)
+    if(!is.null(crossref_df$data)){
+      meta_dat <- crossref_df %>% .$data %>% dplyr::select(matches("^author$|^title$|^container.title$|^volume$|^issue$|^created$|^issued$|^page$|^publisher$|^subject$|^type$|^URL$|^DOI$|^ISSN$|^reference.count$|^score$|^source$"))
+
+    }else{cat(paste("No crossref information for DOI: ", doi, sep=""))}
+
     meta_source <- "CrossRef"
     }
   }
@@ -155,15 +171,15 @@ get_metadata_doc_nv <- function(folder, number=NULL, encoding = "UTF-8", lines.i
   # add journal information from scimagojr
   meta_dat$ISSN2 <- meta_dat$ISSN %>% str_replace(".+,", "") %>% str_replace_all("-", "") %>% as.numeric() %>% as.character()
   meta_dat$ISSN <- meta_dat$ISSN %>% str_replace_all("-", "") %>% str_replace_all(".+,", "") %>% as.numeric() %>% as.character()
-  journal_matched <- c(match(meta_dat$ISSN[1], journals_df$journal_issn), match(meta_dat$ISSN2[1], journals_df$journal_issn), match(meta_dat$journal[1], journals_df$journal_title)) %>% na.omit %>% extract(1)
-  meta_dat <- merge(meta_dat[1,], journals_df[journal_matched,], all = TRUE)
+  #journal_matched <- c(match(meta_dat$ISSN[1], journals_df$journal_issn), match(meta_dat$ISSN2[1], journals_df$journal_issn), match(meta_dat$journal[1], journals_df$journal_title)) %>% na.omit %>% extract(1)
+  #meta_dat <- merge(meta_dat[1,], journals_df[journal_matched,], all = TRUE)
 
 
 
   # finalize data frame
 
   if (is.null(vars)) {
-    meta_dat <- dplyr::select(meta_dat, doc_year, doc_author, doc_name, doc_size, author, date1, date2, title, journal, volume, issue, page, publisher, subject, type, URL, DOI, ISSN, ISSN2, reference.count, source, doi_guess, journal_sjr, journal_hindex, journal_cites_doc, journal_ref_doc, journal_country)
+    meta_dat <- dplyr::select(meta_dat, doc_year, doc_author, doc_name, doc_size, author, date1, date2, title, journal, volume, issue, page, publisher, subject, type, URL, DOI, ISSN, ISSN2, reference.count, source, doi_guess)
   } else {
     meta_dat <- meta_dat[,vars]
   }
@@ -175,7 +191,7 @@ get_metadata_doc_nv <- function(folder, number=NULL, encoding = "UTF-8", lines.i
 
   # RENAME FILE
 
-
+  if(rename.file==TRUE){
       # New Author variable
       if(!is.null(unlist(meta_dat$author))){
       authors <- list(NULL)
@@ -227,24 +243,28 @@ get_metadata_doc_nv <- function(folder, number=NULL, encoding = "UTF-8", lines.i
 
 
       # Rename .txt files
-      file.rename(from = file.path(paste("./", folder, sep = ""), meta_dat$doc_name), to = file.path(paste("./", folder, sep = ""), meta_dat$new.doc_name.txt))
+      file.rename(from = file.path(from, meta_dat$doc_name), to = file.path(from, meta_dat$new.doc_name.txt))
 
-      # Rename .pdf files
+      # Rename .pdf files - if there are in the folder
       meta_dat$doc_name_pdf <- meta_dat$doc_name %>% stringr::str_replace_all(".txt", ".pdf")
-      file.rename(from = file.path(paste("./", folder, sep = ""), meta_dat$doc_name_pdf), to = file.path(paste("./", folder, sep = ""), meta_dat$new.doc_name.pdf))
+      file.rename(from = file.path(from, meta_dat$doc_name_pdf), to = file.path(from, meta_dat$new.doc_name.pdf))
+
+      } # IF rename.file
+
 
       # counter
       if(stringr::str_detect(as.character(i), "^.*0$")){cat(i, ".. ", sep="")}
+
+  save(metadata, file = file)
 
   }
 
   # Measure time
   time <- proc.time() - ptm
+  save(metadata, file = file)
+  metadata
 
-  save(metadata, file = "./metadata.RData")
-
-
-  cat("\n\n It took around '", as.numeric(time[3]), "' second(s) (", round(as.numeric(time[3])/60,2), " minutes) to extract metadata/rename ", n.docs, " files in the folder '", folder, "'.\n", sep = "")
+  cat("\n\n It took around '", as.numeric(time[3]), "' second(s) (", round(as.numeric(time[3])/60,2), " minutes) to extract metadata/rename ", n.docs, " files in the folder '", from, "'.\n", sep = "")
 round(as.numeric(time[3])/60,2)
 
 }

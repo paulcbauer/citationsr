@@ -35,6 +35,5 @@ Conducts topic analysis of citations of a given article
  article <- "Acemoglu, Johnson & Robinson (2001)"
  output <- "output/acemoglu_2001"
  topic_analysis(file, article, output)
-} 
 }
-
+}

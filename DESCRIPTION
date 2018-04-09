@@ -2,17 +2,13 @@ Package: citationsr
 Type: Package
 Title: A package to analyze citations
 Version: 0.1
-Date: 2015-11-03
+Date: 2015-12-07
 Author: Paul C. Bauer, Pablo Barberà, Simon Munzert
 Maintainer: Who to complain to <mail@paulcbauer.eu>
 Description: The package contains various functions that help to investigate the
     quality of citations.
-License: GPL-2
+License: CC BY-NC-SA 4.0
+Encoding: UTF-8
 LazyData: TRUE
-Imports:
-    XML,
-    stringr,
-    fulltext
-Suggests:
-    testthat
-RoxygenNote: 5.0.1
+Depends: XML, stringr, fulltext, R (>= 2.10)
+RoxygenNote: 6.0.1

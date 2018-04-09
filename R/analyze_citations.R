@@ -30,9 +30,9 @@ analyze_citations <- function(file, article, output){
   # writeLines(text, con=tmp)
 
   # reading file and cleaning data
-  tf <- read_csv(tmp) # paul: , fileEncoding="latin1"
+  tf <- read_csv(file) # , fileEncoding = encoding
   # extracting year, deleting citations with empty years
-  tf$year <- as.numeric(gsub('.*([0-9]{4})$', tf$document, repl='\\1'))
+  tf$year <- as.numeric(str_extract(tf$document, '\\s([1-2]{1}[0-9]{3})'))
   message("Warning: ", sum(is.na(tf$year)), " citation cases with missing year will be excluded from analysis.")
   todelete <- which(is.na(tf$year))
   message("Warning: ", sum(duplicated(tf$citation.case)), " duplicated citation cases will be excluded from analysis.")
@@ -107,17 +107,17 @@ analyze_citations <- function(file, article, output){
   message("File generated: ", f4)
 
   # text cleaning
-  authors <- tokenize(toLower(c(tf$document, article)), removePunct=T, removeNumbers=T)
+  authors <- tokens(char_tolower(c(tf$document, article)), remove_punct=T, remove_numbers=T)
   authors <- unique(unlist(authors))
   # tokenizing
-  tokens <- tokenize(toLower(tf$citation.case), removePunct=T, removeNumbers=T)
+  tokens <- tokens(char_tolower(tf$citation.case), remove_punct=T, remove_numbers=T)
   # removing stopwords, author names, and other frequent words
-  tokens <- removeFeatures(tokens,
-    c(stopwords("english"), "other", "others", "see", "also", "u", authors))
+  tokens <- tokens_remove(tokens,
+    patter = c(stopwords("english"), "other", "others", "see", "also", "u", authors))
   # stemming?
   #tokens <- lapply(tokens, wordstem)
   # creating n-grams
-  ngrams <- lapply(tokens, ngrams, 1:3)
+  ngrams <- tokens_ngrams(tokens, n = 1) # lapply(tokens, ngrams, 1:3)
   # putting it all back together...
   ngrams <- unlist(lapply(ngrams, paste, collapse=" "))
   # constructing the DFM
@@ -128,14 +128,14 @@ analyze_citations <- function(file, article, output){
 
   # word cloud
   f5 <- paste0(output, '/05-citations-word-cloud.pdf')
-  pdf(f5, height=4, width=4)
+  pdf(f5, height=5, width=5)
   # paul - START
   layout(matrix(c(1, 2), nrow=2), heights=c(1, 4))
   par(mar=rep(0, 4))
   plot.new()
   text(x=0.5, y=0.5, paste0("Citation cases: ", article))
   # paul - END
-  plot(citmat, rot.per=0, scale=c(3, .3), max.words=80)
+  textplot_wordcloud(citmat, rot.per=0, scale=c(4, .4), max.words=80)
   dev.off()
   message("File generated: ", f5)
 

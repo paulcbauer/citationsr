@@ -4,11 +4,13 @@
 \alias{extract_citation_cases}
 \title{Extract citation cases.}
 \usage{
-extract_citation_cases(folder, authorname, studyyear, scope = NULL,
-  number = NULL, clean = NULL)
+extract_citation_cases(from, to, authorname, studyyear, scope = NULL,
+  number = NULL, clean = NULL, encoding = "ASCII")
 }
 \arguments{
-\item{folder}{Name of folder within working directory in which the citing documents (.txt files) are located, e.g. "Beck 1995".}
+\item{from}{Name of folder within working directory in which the citing documents (.txt files) are located, e.g. "Beck 1995".}
+
+\item{to}{Folder in which citation case data is stored.}
 
 \item{authorname}{Enter the names of all authors separated by comma.}
 
@@ -34,4 +36,3 @@ Extract citation cases.
  extract_citation_cases(folder, authorname, studyyear, clean = TRUE) #
 }
 }
-

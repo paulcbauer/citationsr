@@ -11,14 +11,14 @@
 #' @param seed seed for random number generator in STM.
 #'
 #'
-#' @examples 
+#' @examples
 #' \dontrun{
 #'  setwd("C:/Users/Paul/GDrive/Research/2016_06_Quality_of_citations")
 #'  file <- "data/AcemogluJohnsonRobinson_2001_citation_cases.csv"
 #'  article <- "Acemoglu, Johnson & Robinson (2001)"
 #'  output <- "output/acemoglu_2001"
 #'  topic_analysis(file, article, output)
-#' } 
+#' }
 
 topic_analysis <- function(file, article, output, K=3:8, runs=2, max.em.its=10, net.max.em.its=2, seed=777){
 
@@ -47,17 +47,17 @@ topic_analysis <- function(file, article, output, K=3:8, runs=2, max.em.its=10, 
   message("A total of ", nrow(tf), " citation cases will be included in the analysis.")
 
    # text cleaning
-  authors <- tokenize(toLower(c(tf$document, article)), removePunct=T, removeNumbers=T)
+  authors <- tokens(char_tolower(c(tf$document, article)), remove_punct=T, remove_numbers=T)
   authors <- unique(unlist(authors))
   # tokenizing
-  tokens <- tokenize(toLower(tf$citation.case), removePunct=T, removeNumbers=T)
+  tokens <- tokens(char_tolower(tf$citation.case), remove_punct=T, remove_numbers=T)
   # removing stopwords, author names, and other frequent words
-  tokens <- removeFeatures(tokens, 
-    c(stopwords("english"), "other", "others", "see", "also", "u", authors))
+  tokens <- tokens_remove(tokens,
+                          patter = c(stopwords("english"), "other", "others", "see", "also", "u", authors))
   # stemming?
   #tokens <- lapply(tokens, wordstem)
   # creating n-grams
-  ngrams <- lapply(tokens, ngrams, 1:3)
+  ngrams <- tokens_ngrams(tokens, n = 1)
   # putting it all back together...
   ngrams <- unlist(lapply(ngrams, paste, collapse=" "))
   # constructing the DFM
@@ -73,17 +73,17 @@ topic_analysis <- function(file, article, output, K=3:8, runs=2, max.em.its=10, 
   if (length(todelete)>0){
     message(length(todelete), " documents with no words were also excluded from the analysis.")
     tf <- tf[-todelete,]
-    citstm$documents <- citstm$documents[-todelete]    
+    citstm$documents <- citstm$documents[-todelete]
   }
 
   # preprocessing
-  out <- prepDocuments(citstm$documents, citstm$vocab, 
+  out <- prepDocuments(citstm$documents, citstm$vocab,
 		tf[,c("year", "document", "citation.case")])
 
   # running topic model
   if (length(K)>1){
 		manymodels <- manyTopics(out$documents, out$vocab, K=K, verbose=F,
-			LDAbeta=F, sigma.prior=0.5, seed=seed, runs=runs, max.em.its=max.em.its, net.max.em.its=net.max.em.its) 
+			LDAbeta=F, sigma.prior=0.5, seed=seed, runs=runs, max.em.its=max.em.its, net.max.em.its=net.max.em.its)
 		# finding right number of topics
 		chosen <- which.max(unlist(lapply(manymodels$semcoh, mean)))
 		model <- manymodels$out[[chosen]]
@@ -123,7 +123,7 @@ topic_analysis <- function(file, article, output, K=3:8, runs=2, max.em.its=10, 
 		document = rep(1:nrow(out$meta), times=K[chosen]),
 		topic = rep(1:K[chosen], each=nrow(out$meta)),
 		year = rep(out$meta$year, times=K[chosen]))
-	agg <- aggregate(topics$prop, 
+	agg <- aggregate(topics$prop,
 		by=list(topic=factor(topics$topic), year=topics$year),
 		FUN=mean)
 	names(agg)[names(agg)=="x"] <- "prop"
@@ -134,7 +134,7 @@ topic_analysis <- function(file, article, output, K=3:8, runs=2, max.em.its=10, 
 		scale_y_continuous("Average topic proportion", labels=percent)
   	fplot <- paste0(output, '/topic-proportions.pdf')
   	ggsave(pq, file=fplot, height=4, width=6)
-  	message("File generated: ", fplot) 
+  	message("File generated: ", fplot)
 
 
 

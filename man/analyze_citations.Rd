@@ -24,4 +24,3 @@ Generates figures with summary of analysis of citation cases
  analyze_citations(file, article, output)
 }
 }
-

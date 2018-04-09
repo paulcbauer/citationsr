@@ -4,7 +4,7 @@
 \alias{clean_text}
 \title{Clean text files to facilitate citation case extraction.}
 \usage{
-clean_text(folder, number = NULL)
+clean_text(folder, number = NULL, encoding = "ASCII")
 }
 \arguments{
 \item{folder}{Name of folder within working directory in which the citing documents (.txt files) are located, e.g. "Beck 1995".}
@@ -24,4 +24,3 @@ Clean text files to facilitate citation case extraction.
  clean_text(folder)
 }
 }
-

@@ -12,17 +12,17 @@
 #'  clean_text(folder)
 #' }
 
-clean_text <- function(folder, number=NULL){
+clean_text <- function(folder, number=NULL, encoding = "ASCII"){
 
 
   require(stringr)
 
 
 # List file names in folder (ONLY "*processed.txt" FILES)
-  file.names <- dir(paste("./", folder, sep = ""), pattern = "processed.txt")
+  file.names <- dir(paste(folder, sep = ""), pattern = "processed.txt")
 
 # Generate file paths
-  file.paths <- paste(paste("./", folder, "/", sep = ""), file.names, sep="")
+  file.paths <- paste(paste(folder, "/", sep = ""), file.names, sep="")
 
 # Count number of files in folder
   n.docs <- length(file.paths)
@@ -34,7 +34,7 @@ clean_text <- function(folder, number=NULL){
 
 # Loop over .txt files one by one (until document nr. "number" = n.docs)
   for (i in 1:n.docs){
-    con <- file(file.paths[i], encoding = "UTF-8") #
+    con <- file(file.paths[i], encoding = encoding) #
     x <- readLines(con)
     close(con)
     x <- paste(x, collapse = " ")
@@ -146,7 +146,7 @@ clean_text <- function(folder, number=NULL){
     }
 
 # Message to user
-    cat("\n\n", n.docs, " texts/documents have been cleaned in folder '", folder ,"' !\n\n", sep = "")
+    cat("\n\n", i, " *.txt documents were processed in folder '", folder ,"' !\n\n", sep = "")
 
 }
 

@@ -13,29 +13,24 @@
 #' }
 
 
-delete_refs_n_heads <- function(folder, number=NULL){
+delete_refs_n_heads <- function(metadata = NULL, folder, number=NULL, encoding = "ASCII"){
 
     require(stringr)
     require(xtable)
     require(dplyr)
 
 
-# Get medadatafile for folder/study
-  load("./metadata.RData") # load RData file
 
-# Identify and delete any "processed.txt" files present in folder
-  file.names <- dir(paste("./", folder, sep = ""), pattern = "processed.txt")
-  if(identical(file.names, character(0))==FALSE){
-    file.paths <- paste(paste("./", folder,"/", sep = ""), file.names, sep="")
-    file.remove(file.paths)
+# DEL "processed.txt" files ####
+  old.files <- dir(folder, pattern = "processed.txt", full.names = TRUE)
+  if(length(old.files)!=0){
+  file.remove(old.files)
   }
 
 
-# List file names in folder (ONLY .TXT FILES)
-    file.names <- dir(paste("./", folder, sep = ""), pattern = ".txt")
-
-# Generate file paths
-    file.paths <- paste(paste("./", folder, "/", sep = ""), file.names, sep="")
+# Generate file names ####
+  file.names <- dir(folder, pattern = ".txt")
+  file.paths <- dir(folder, pattern = ".txt", full.names = TRUE)
 
 # Count number of files in folder
     n.docs <- length(file.paths)
@@ -55,7 +50,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
     print(i)
 
-    con <- file(file.paths[i], encoding = "UTF-8")
+    con <- file(file.paths[i], encoding = encoding)
     x <- readLines(con, warn = F)
     close(con)
 
@@ -69,10 +64,8 @@ delete_refs_n_heads <- function(folder, number=NULL){
     # print(x[stringr::str_detect(x, "^\f")])
     x <- stringr::str_replace_all(x, "^\f", "")
 
-################################
-### DELETE REFERENCE SECTION ###
-################################
 
+### DELETE REFERENCE SECTION ####
     # Locate "References" section
       references.location <- grep("^References$|^REFERENCES$|^Literatur$|^LITERATUR$|^References and Notes$", x, ignore.case = FALSE)
 
@@ -97,9 +90,9 @@ delete_refs_n_heads <- function(folder, number=NULL){
 
 
 
-############################
-### DELETE RUNNING HEADS ###
-############################
+
+# DELETE RUNNING HEADS ####
+
 
     # Identify running titles
     # Short length is one characteristic
@@ -138,12 +131,14 @@ delete_refs_n_heads <- function(folder, number=NULL){
         collect.deleted <- c(collect.deleted, paste("(IDENTFIER COPYRIGHT) ", locations.names, sep=""))
       }
 
+# METADATA ####
 
+      if(!is.null(metadata)){
 
     # PUBLISHER
       # print("publisher")
       locations <- NULL
-      if(nchar(metadata$publisher[i])>=5){
+      if(nchar(metadata$publisher[i])>=5&!is.na(nchar(metadata$publisher[i]))){ # nchar  is problematic..
         pattern <- metadata$publisher[i]
         locations <- grep(pattern, x, ignore.case = TRUE)
         locations.names <- grep(pattern, x, ignore.case = TRUE, value = T)
@@ -159,7 +154,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
     # JOURNAL
       # print("journal")
       locations <- NULL
-      if(nchar(metadata$journal[i])>=5){
+      if(nchar(metadata$journal[i])>=5&!is.na(nchar(metadata$journal[i]))){
         pattern <- metadata$journal[i]
         locations <- grep(pattern, x, ignore.case = TRUE)
         locations.names <- grep(pattern, x, ignore.case = TRUE, value = T)
@@ -175,7 +170,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
     # TITLE
       # print("title")
       locations <- NULL
-      if(nchar(metadata$title[i])>=5){
+      if(nchar(metadata$title[i])>=5&!is.na(nchar(metadata$title[i]))){
         pattern <- stringr::str_extract(metadata$title[i], "^\\s*[:word:]*\\s*[:word:]*[-]*[:word:]*\\s*[:word:]*[-]*[:word:]*\\s*[:word:]*[-]*[:word:]*\\s*[:word:]*[-]*[:word:]*\\s*[:word:]*[-]*[:word:]*")
         locations <- grep(pattern, x, ignore.case = TRUE)
         locations.names <- grep(pattern, x, ignore.case = TRUE, value = T)
@@ -193,7 +188,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
     # PAGES
       # print("pages")
       locations <- NULL
-      if(nchar(metadata$page[i])>=3){
+      if(!is.na(nchar(metadata$page[i]))&nchar(metadata$page[i])>=3){
       pattern <- metadata$page[i]
       locations <- grep(pattern, x, ignore.case = TRUE)
       locations.names <- grep(pattern, x, ignore.case = TRUE, value = T)
@@ -218,7 +213,7 @@ delete_refs_n_heads <- function(folder, number=NULL){
         pages <- gsub("[A-z]","",pages)
         min <- as.numeric(gsub("-.*","",pages))
         max <- as.numeric(gsub(".*-","",pages))
-        if(min>max){ # REPAIR THIS IN THE METADATA
+        if(min>max){ # REPAIR THIS IN THE metadata
         max2 <- max
         max <- min
         min <- max2
@@ -283,11 +278,9 @@ delete_refs_n_heads <- function(folder, number=NULL){
     # AUTHORSNAMES - takes only first one
       # print("authors")
       locations <- NULL
-      if(is.null(unlist(metadata$author[i]))){metadata$author[i] <- NA}
-
-      if(!is.na(metadata$author[i])){
-      print(metadata$author[i][[1]]$family); print(i)
-      if(nchar(metadata$author[i][[1]]$family)>=3){
+      if(sum(c('given','family') %in% names(metadata$author[[i]]))==2){ # test for presence of 'given' + 'family'
+      print(metadata$author[i][[1]]$family); print(i) # print names and index
+      if(nchar(metadata$author[i][[1]]$family)>=3){ # text length of family name
         pattern <- paste(metadata$author[i][[1]]$family, collapse="|")
         locations <- grep(pattern, x, ignore.case = TRUE)
         locations.names <- grep(pattern, x, ignore.case = TRUE, value = T)
@@ -298,12 +291,16 @@ delete_refs_n_heads <- function(folder, number=NULL){
           collect.deleted <- c(collect.deleted, paste("(IDENTFIER AUTHORS) ", locations.names, sep=""))
         }
       }
+      }else{metadata$author[i] <- NA}
+
+
       }
+
+
 
     # Make table of collected running heads
     if(length(collect.deleted)!=0){ # only if running heeads were identified
       name <- stringr::str_extract(file.names[i], ".*[0-9]{4}") # DEPENDENCY ON FILE NAME!
-      # paste(metadata$author[i][[1]]$family[1], metadata$doc_year[1], sep=" ")
       running.heads <- cbind(name, collect.deleted, i) # problem if collect.deleted is empty
       running.heads <- data.frame(running.heads)
       names(running.heads) <- c("study","running.head", "loop.i")
@@ -356,6 +353,6 @@ delete_refs_n_heads <- function(folder, number=NULL){
     print(xtable::xtable(deleted.runningheads),type='html',comment=FALSE, file="./deleted_running_headers.html")
 
     # Message to user
-    cat("\n\n", n.docs, " texts/documents have been stripped of references/running heads in folder '", folder ,"' !\n\n", sep = "")
+    cat("\n\n", i, " texts/documents were processed in folder '", folder ,"' !\n\n", sep = "")
 
     }

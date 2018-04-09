@@ -2,26 +2,29 @@
 % Please edit documentation in R/extract_text.R
 \name{extract_text}
 \alias{extract_text}
-\title{Converts and stores PDFs in folder as .txt files.}
+\title{Extracts text from PDFs and stores in folder of choice.}
 \usage{
-extract_text(folder, number = NULL)
+extract_text(from, to, number = NULL, method = "pdftools",
+  path.pdftotext = NULL)
 }
 \arguments{
-\item{folder}{Name of folder within working directory in which the citing documents (PDFs) are located, e.g. "Beck 1995".}
+\item{from}{Folder with .pdf files.}
+
+\item{to}{Folder with .txt files.}
 
 \item{number}{Number of PDFs you want to apply the function to. Default is "all PDFs in folder".}
+
+\item{method}{Which method to use. Default is pdftotext.exe.}
 }
 \value{
-Converts and stores PDFs in folder as .txt files.
+Takes PDFs in folder "from" and extracts .txt files that are copied into folder "to".
 }
 \description{
-Converts and stores PDFs in folder as .txt files.
+Extracts text from PDFs and stores in folder of choice.
 }
 \examples{
 \dontrun{
- setwd("C:/Users/paul/Google Drive/Research/2016_Quality_of_citations/data")
  folder <- "Acemoglu 2001"
  extract_text(folder)
 }
 }
-

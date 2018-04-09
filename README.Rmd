@@ -383,15 +383,15 @@ extract_text(from = "C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysi
 
 
 # Collect metadata on citing documents and rename files accordingly
-Above we started with citation data from the Web of Science. There might be cases where we just have text documents or PDFs but we don't have any more information on them. The function ```get_metadata()``` analyzes the text documents in the folder specified by ```from = ``` and tries to identify them (relying on the DOIs the contain). If they can be identified they are renamed with the new information and the corresponding information is collected in an object. 
+Above we started with citation data from the Web of Science. There might be cases where we just have text documents or PDFs but we don't have any more information on them. The function ```get_metadata()``` analyzes the text documents in the folder specified by ```from = ``` and tries to identify them (relying on the DOIs the contain). Crossref does not like it if you scrape metada for too many docs at once. So ideally execute the function for batches of files be specifying ```start =``` and ```end =```.
 
 ```{r, echo=TRUE, eval=FALSE, message=FALSE, warning=FALSE}
 library(citationsr) # Load citationsr package
 get_metadata(from = "C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs_text",
-            file = "C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/metadata.RData",
+            file = "C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/metadata-1-500.RData",
             encoding = "ASCII",
-            number = 12) # Or take UTF8
-
+            start = 1,
+            end = 500) # Or take UTF8
 load("C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/metadata.RData")
 View(metadata)
 ```
@@ -548,6 +548,7 @@ topic_analysis(file = "C:/GoogleDrive/1-Research/2017_Quality_of_citations/analy
                   output = "C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/output/acemoglu_2001") # Specify output folder
 ```
 
+<br><br>
 
 ## Analyzing several dataframes with citation cases
 Just as we extracted the citation cases referring to several studies with a loop above we can also apply the two analysis functions within a loop.

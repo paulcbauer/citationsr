@@ -14,6 +14,8 @@ This readme serves to outline the methods applied in [Bauer et al. (2016)](http:
 
 **Disclaimer**: We currently don't have time to work on this project and **can't provide support**. But we hope to develop it further at a later stage.
 
+If you have questions please contact us at [mail@paulcbauer.eu](mail@paulcbauer.eu).
+
 
 
 

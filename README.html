@@ -159,8 +159,9 @@ $(document).ready(function () {
 
 <div id="citationsr" class="section level1 unnumbered">
 <h1>citationsr</h1>
-<p>The R package <code>citationsr</code> comprises functions that can be used to extract and analyze citation cases. When study A cites study B, it contains text fragments that refer to study B. We call study A a <em>citing document</em> and the text fragments it contains <em>citations cases</em>.</p>
+<p>The R package <code>citationsr</code> comprises functions that can be used to extract and analyze citation cases. When study A cites study B, it contains text fragments that refer to study B. We call study A a <em>citing document</em> and the text fragments it contains <em>citation cases</em>.</p>
 <p>This readme serves to outline the methods applied in <a href="http://dx.doi.org/10.2139/ssrn.2874549">Bauer et al. (2016)</a> with contributions from <a href="http://www.paulcbauer.eu/">Paul C. Bauer</a>, <a href="http://pablobarbera.com/">Pablo Barberà</a> and <a href="http://simonmunzert.github.io/">Simon Munzert</a>. The idea is to go beyond a simple and primitive analysis of impact as ‘times cited’. The code is licensed under an <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)</a> license.</p>
+<p>Disclaimer: We currently don’t have time to work on this project nor to provide proper support. But we hope to develop it further at a later stage.</p>
 </div>
 <div id="intro-setup" class="section level1">
 <h1><span class="header-section-number">1</span> Intro &amp; setup</h1>
@@ -469,13 +470,13 @@ extract_text(from = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/an
 </div>
 <div id="collect-metadata-on-citing-documents-and-rename-files-accordingly" class="section level1">
 <h1><span class="header-section-number">6</span> Collect metadata on citing documents and rename files accordingly</h1>
-<p>Above we started with citation data from the Web of Science. There might be cases where we just have text documents or PDFs but we don’t have any more information on them. The function <code>get_metadata()</code> analyzes the text documents in the folder specified by <code>from =</code> and tries to identify them (relying on the DOIs the contain). If they can be identified they are renamed with the new information and the corresponding information is collected in an object.</p>
+<p>Above we started with citation data from the Web of Science. There might be cases where we just have text documents or PDFs but we don’t have any more information on them. The function <code>get_metadata()</code> analyzes the text documents in the folder specified by <code>from =</code> and tries to identify them (relying on the DOIs the contain). Crossref does not like it if you scrape metada for too many docs at once. So ideally execute the function for batches of files be specifying <code>start =</code> and <code>end =</code>.</p>
 <pre class="r"><code>library(citationsr) # Load citationsr package
 get_metadata(from = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs_text&quot;,
-            file = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/metadata.RData&quot;,
+            file = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/metadata-1-500.RData&quot;,
             encoding = &quot;ASCII&quot;,
-            number = 12) # Or take UTF8
-
+            start = 1,
+            end = 500) # Or take UTF8
 load(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/metadata.RData&quot;)
 View(metadata)</code></pre>
 <ul>
@@ -598,6 +599,7 @@ dir.create(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/ou
 <pre class="r"><code>topic_analysis(file = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/AcemogluJohnsonRobinson_2001_citation_cases.csv&quot;, # File with citation cases
                   article = &quot;Acemoglu, Johnson &amp; Robinson (2001)&quot;, # Specify name of article
                   output = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/output/acemoglu_2001&quot;) # Specify output folder</code></pre>
+<p><br><br></p>
 </div>
 <div id="analyzing-several-dataframes-with-citation-cases" class="section level2">
 <h2><span class="header-section-number">8.3</span> Analyzing several dataframes with citation cases</h2>

@@ -19,7 +19,12 @@ This readme serves to outline the methods applied in [Bauer et al. (2016)](http:
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, tidy = FALSE)
+knitr::opts_chunk$set(
+	message = FALSE,
+	warning = FALSE,
+	include = FALSE,
+	tidy = FALSE
+)
 library(knitr)
 library(dplyr)
 library(kableExtra)

@@ -199,10 +199,6 @@ install_github(&quot;paulcbauer/citationsr&quot;)</code></pre>
 <div id="create-working-directory-subfolder" class="section level2">
 <h2><span class="header-section-number">2.3</span> Create working directory + subfolder</h2>
 <p>Create a working directory in which you store all the files linked to the analysis. We created a folder called <code>analysis</code> within which most of the analysis will take place.</p>
-<pre class="r"><code>dir.create(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis&quot;) # Create folder
-setwd(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis&quot;) # Set working directory
-# Create a folder in which you store the citation information
-dir.create(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/citations&quot;) # Create folder</code></pre>
 <p><br><br></p>
 </div>
 </div>
@@ -244,22 +240,6 @@ dir.create(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/ci
 <ul>
 <li>Use the code below to merge and store the citation records in one single data frame</li>
 </ul>
-<pre class="r"><code>files &lt;- dir(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/citations&quot;, pattern = &quot;.txt&quot;)
-citation_data &lt;- NULL
-for(i in files){ # loop over files and merge them
-  file.name &lt;- paste(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/citations/&quot;, i, sep=&quot;&quot;)  
-  print(i)
-  x &lt;- readLines(file.name)
-  x &lt;- stringr::str_replace_all(x, '&quot;', &quot;'&quot;)
-  writeLines(x, con = file.name)
-  citations &lt;- readr::read_delim(file.name, delim = &quot;\t&quot;)
-  print(nrow(citations))
-  citations$filename &lt;- i
-  citation_data &lt;- rbind(citation_data, citations)
-}
-save(citation_data, # save the dataframe with the citations
-     file = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/citation_data.RData&quot;)
-# View(citation_data) # Have a look at the data</code></pre>
 <p><br><br></p>
 </div>
 </div>
@@ -280,56 +260,6 @@ save(citation_data, # save the dataframe with the citations
 <div id="automated-approach-fulltext-package" class="section level2">
 <h2><span class="header-section-number">4.2</span> Automated approach: Fulltext package</h2>
 <p>The <code>fulltext</code> package and the contained function <code>ft_get()</code> by Scott Chamberlain should be able to scrape fulltexts of articles if you feed it a set of dois.</p>
-<pre class="r"><code># Packages
-  library(fulltext)
-  library(stringr)
-
-# Load DOIs
-  load(&quot;dois.RData&quot;)  
-
-# Use subset of DOIs
-  dois &lt;- dois[1:20]
-
-# GET THE LINKS  FOR DOIs
-  links &lt;- list() 
-
-  for(i in 1:length(dois)){ # loop over DOIs
-    
-    print(i)                # print counter
-    print(dois[i])          # print DOI
-    
-    x &lt;- try(ft_links(dois[i]), silent = TRUE) # continue even when error
-    
-    if(!str_detect(x, &quot;Error&quot;)){ # IF no error write link to list
-              links[[i]] &lt;- c(x[[1]]$data[[1]][[1]], x[[1]]$data[[1]][[2]]) # fill list element with links
-    }else{
-            links[[i]] &lt;- &quot;empty&quot;
-         } # IF error write &quot;empty&quot; to list
-    
-  }
-  names(links) &lt;- dois # name list elements with DOIs
-
-  
-  
-# GET THE FULLTEXTS FOR DOIs
-  texts &lt;- list() 
-  
-  for(i in 1:length(dois)){
-    
-    print(i)                # print counter
-    print(dois[i])          # print DOI
-    
-    x &lt;- try(ft_get(dois[i]), silent = TRUE)  # continue even when error
-    
-    if(!str_detect(x, &quot;Error&quot;)){  # when no error write link to list
-      
-              texts[[i]] &lt;- x[[1]]$data$data[[1]]
-              
-    }else{
-              texts[[i]] &lt;- &quot;empty&quot;
-      }  # when error write &quot;empty&quot; to list
-  }
-  names(texts) &lt;- dois</code></pre>
 <p><br><br></p>
 </div>
 <div id="automated-approach-paperpile" class="section level2">
@@ -337,20 +267,7 @@ save(citation_data, # save the dataframe with the citations
 <p>Paperpile is a commercial reference manager (3 Euros/month for academics) that works together with Google Drive. The nice thing is that it includes a very PDF scraper (as other reference managers as well). Once you upload DOIs for the studies for which you want to collect fulltexts, paperpile does a good job at downloading them to your GoogleDrive.</p>
 <p>To proceed we need two helper functions that are available in a package called <a href="https://github.com/paulcbauer/paperpiler">paperpiler</a>.</p>
 <ul>
-<li><code>paperpiler::gen_ris()</code> below takes a set of dois and generates a <code>*.ris</code> file that can be imported into paperpile.</li>
-</ul>
-<pre class="r"><code>install.packages(&quot;devtools&quot;)
-library(devtools)
-install_github(&quot;paulcbauer/paperpiler&quot;)
-
-library(paperpiler)
-dois &lt;- citation_data$DI # Store dois in object
-
-# gen_ris: creates a ris file named 'records.ris' in the working directory to fetch the fulltexts.
-gen_ris(dois = dois,
-        filename = &quot;records.ris&quot;)
-# More on this file format: https://en.wikipedia.org/wiki/RIS_(file_format)</code></pre>
-<ul>
+<li><p><code>paperpiler::gen_ris()</code> below takes a set of dois and generates a <code>*.ris</code> file that can be imported into paperpile.</p></li>
 <li><p>Once you have created the ris file called, e.g. <code>records.ris</code> you can import that into paperpile. See the steps below in which you import the file and the corresponding records into a folder called <code>impactanalysis</code>. You might also want to label all records in that folder with a particular label, e.g. <code>impactanalysis</code> to keep track of them. Importantly, Paperpile only downloads articles onto your google drive that are accessible through your university network.</p></li>
 <li><p>Choose “Upload Files” in the “Add Papers” menu.</p></li>
 </ul>
@@ -410,15 +327,8 @@ gen_ris(dois = dois,
 <p><br><br></p>
 <ul>
 <li>Once, you have pursued these steps all the PDFs will be stored in your Paperpile folder on your GoogleDrive. Now, we need to fetch those files and copy them to a folder in which you analyze them.</li>
-<li><code>paperpiler::fetch_docs()</code> relies on the dataframe <code>citation_data</code> that we generated from the web of knowledge and searches through your paperpile directory. I tries to identify files through their title and if that does not work through an author/year combination. It’s fuzzy so it may fetch more docs then necessary.</li>
-</ul>
-<pre class="r"><code>load(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/citation_data.RData&quot;)
-
-fetch_docs(from = &quot;C:/GoogleDrive/Paperpile&quot;, 
-           to = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs&quot;, 
-           citations = citation_data)</code></pre>
-<ul>
-<li>Make sure that the PDF documents are in the folder you specified in the “to” argument after you collected their fulltexts.</li>
+<li><p><code>paperpiler::fetch_docs()</code> relies on the dataframe <code>citation_data</code> that we generated from the web of knowledge and searches through your paperpile directory. I tries to identify files through their title and if that does not work through an author/year combination. It’s fuzzy so it may fetch more docs then necessary.</p></li>
+<li><p>Make sure that the PDF documents are in the folder you specified in the “to” argument after you collected their fulltexts.</p></li>
 </ul>
 <p><br><br></p>
 </div>
@@ -428,26 +338,10 @@ fetch_docs(from = &quot;C:/GoogleDrive/Paperpile&quot;,
 <div id="delete-duplicate-pdfs" class="section level2">
 <h2><span class="header-section-number">5.1</span> Delete duplicate PDFs</h2>
 <p>Paperpile allows you to store several versions of an articles. Normally, these are marked with “(1)”, “(2)” etc. in their file names. Use the code below to delete any duplicate files that you fetched from the Paperpile folder.</p>
-<pre class="r"><code>folder &lt;- &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs&quot;
-file.names &lt;- dir(paste(folder, sep = &quot;&quot;), pattern = &quot;\\(1\\)|\\(2\\)|\\(3\\)|\\(4\\)|\\(5\\)&quot;)
-file.paths &lt;- paste(paste(folder,&quot;/&quot;, sep = &quot;&quot;), file.names, sep=&quot;&quot;)
-    # renaming
-for(i in 1:length(file.paths)){file.remove(from = file.paths[i])}</code></pre>
 </div>
 <div id="optional-rename-pdf-docs-before-text-extraction" class="section level2">
 <h2><span class="header-section-number">5.2</span> Optional: Rename PDF docs before text extraction</h2>
 <p><strong>Skip this step</strong>. Sometimes it’s a good idea to rename the PDFs files before you analyze them. The function below simply searches for all PDF documents in the folder and renames them from <code>1.pdf</code> to <code>*.pdf</code>.</p>
-<pre class="r"><code># Indicate the folder in which you stored the docs.. in our case 'docs'
-  folder &lt;- &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs&quot;
-
-# Rename filenames for first extraction
-  file.names &lt;- dir(folder, pattern = &quot;.pdf|.PDF&quot;)
-  file.paths &lt;- paste(paste(folder,&quot;/&quot;, sep = &quot;&quot;), file.names, sep=&quot;&quot;)
-    # renaming
-  for(i in 1:length(file.paths)){
-      file.rename(from = file.paths[i], 
-                  to = paste(folder, &quot;/doc&quot;, i, &quot;.pdf&quot;, sep=&quot;&quot;))
-  }</code></pre>
 <p><br><br></p>
 </div>
 </div>
@@ -455,30 +349,14 @@ for(i in 1:length(file.paths)){file.remove(from = file.paths[i])}</code></pre>
 <h1><span class="header-section-number">6</span> Extract txt documents from pdf documents</h1>
 <p>Now, we need to extract text from those PDFs to analyze them. Here you can use the <code>extract_text()</code> function. The argument <code>from</code> specifies the folder in which the documents are located. <code>number</code> can be omitted or specified to limit the number of documents for which you want to extract text (e.g. for testing extraction for a few documents starting with the first).</p>
 <ul>
-<li>The function relies an an open-source PDF text extraction tool called “pdftotext.exe” from <a href="https://www.xpdfreader.com/download.html">XPDF</a>. Download the Xpdf tools for your system, extract the .zip file and copy <code>pdftotext.exe</code>. You have to indicate the path to <code>pdftotext.exe</code> in the <code>extract_text()</code> function.</li>
-</ul>
-<pre class="r"><code>library(citationsr) # Load citationsr package
-extract_text(from = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs&quot;,
-             to = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs_text&quot;,
-             number = NULL, 
-             method = &quot;pdftotext&quot;,
-             path.pdftotext = &quot;C:/Program Files/pdftotext.exe&quot;)</code></pre>
-<ul>
-<li>You can rerun this function. Before extraction it will automatically delete all <code>*.txt</code> that are present in the folder specified in <code>to  =</code>. If the folder does not exist it will create it.</li>
+<li><p>The function relies an an open-source PDF text extraction tool called “pdftotext.exe” from <a href="https://www.xpdfreader.com/download.html">XPDF</a>. Download the Xpdf tools for your system, extract the .zip file and copy <code>pdftotext.exe</code>. You have to indicate the path to <code>pdftotext.exe</code> in the <code>extract_text()</code> function.</p></li>
+<li><p>You can rerun this function. Before extraction it will automatically delete all <code>*.txt</code> that are present in the folder specified in <code>to  =</code>. If the folder does not exist it will create it.</p></li>
 </ul>
 <p><br><br></p>
 </div>
 <div id="collect-metadata-on-citing-documents-and-rename-files-accordingly" class="section level1">
 <h1><span class="header-section-number">7</span> Collect metadata on citing documents and rename files accordingly</h1>
 <p>Above we started with citation data from the Web of Science. There might be cases where we just have text documents or PDFs but we don’t have any more information on them. The function <code>get_metadata()</code> analyzes the text documents in the folder specified by <code>from =</code> and tries to identify them (relying on the DOIs the contain). Crossref does not like it if you scrape metada for too many docs at once. So ideally execute the function for batches of files be specifying <code>start =</code> and <code>end =</code>.</p>
-<pre class="r"><code>library(citationsr) # Load citationsr package
-get_metadata(from = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs_text&quot;,
-            file = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/metadata-1-500.RData&quot;,
-            encoding = &quot;ASCII&quot;,
-            start = 1,
-            end = 500) # Or take UTF8
-load(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/metadata.RData&quot;)
-View(metadata)</code></pre>
 <ul>
 <li>Importantly, identifying articles through their text is a hard problem and may fail for several reasons such as…
 <ul>
@@ -495,19 +373,6 @@ View(metadata)</code></pre>
 <div id="optional-modify-encoding-for-filenames" class="section level2">
 <h2><span class="header-section-number">8.1</span> Optional: Modify encoding for filenames</h2>
 <p>If now strange encoding appears in your files you can safely ignore this encoding issues. However, sometimes this may be necessary. We worked on both Windows PCs and Macs and sometimes ran into encoding issues.</p>
-<pre class="r"><code># Modify encoding for filenames
-  file.names &lt;- dir(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs_text&quot;, 
-                    pattern = &quot;.pdf|.txt&quot;)
-  file.paths &lt;- paste(paste(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs_text&quot;,&quot;/&quot;, sep = &quot;&quot;),
-                      file.names, sep=&quot;&quot;)
-  file.paths2 &lt;- stringr::str_replace(file.paths, &quot;“&quot;, &quot;&quot;)
-  file.paths2 &lt;- stringr::str_replace(file.paths2, &quot;'&quot;, '')
-  file.paths2 &lt;- iconv(file.paths2, &quot;UTF-8&quot;, &quot;ASCII&quot;, sub=&quot;&quot;)
-  # Modify file names
-  for(i in 1:length(file.paths)){
-    file.rename(from = file.paths[i], 
-                to = file.paths2[i])
-  }</code></pre>
 <p><br><br></p>
 </div>
 <div id="clean-text-files-before-extraction" class="section level2">
@@ -520,46 +385,13 @@ View(metadata)</code></pre>
 </ul></li>
 <li><code>clean_text()</code> replaces any dots that are not punctuation marks among other things. For instance, it converts abbrevations, e.g. “No.” to “NUMBER”. It also produces a text without linebreaks.</li>
 </ul>
-<pre class="r"><code>  load(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/metadata.RData&quot;)
-View(metadata)
-
-  delete_refs_n_heads(folder = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs_text&quot;,
-                      metadata = metadata,
-                      encoding = &quot;ASCII&quot;)
-  
-  clean_text(folder = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs_text&quot;,
-             encoding = &quot;ASCII&quot;)</code></pre>
 <p><br><br></p>
 </div>
 <div id="extract-citation-cases-1" class="section level2">
 <h2><span class="header-section-number">8.3</span> Extract citation cases</h2>
 <p>The <code>extract_citation_cases()</code> function cycles through files ending on <code>_processed.txt</code> in the <code>from</code> folder and extracts citation cases. It writes both html (for easy lookup) and csv (for analyses later) to the <code>to</code> folder that are named according to the study whose impact we study, e.g. <code>AcemogluJohnsonRobinson_2001_citation_cases.html</code> and <code>AcemogluJohnsonRobinson_2001_citation_cases.csv</code>.</p>
-<pre class="r"><code>extract_citation_cases(from = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs_text&quot;,
-                       to = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis&quot;,
-                       authorname = &quot;Acemoglu, Johnson, Robinson&quot;,
-                       studyyear = &quot;2001&quot;,
-                       encoding = &quot;ASCII&quot;)</code></pre>
 <p>Above we only looked at a single study. In our paper we investigate the impact of six studies. We stored the information on those six studies - such as authors and publication year - in a text file called <code>publicationdata.txt</code> and load this information for a starter.</p>
-<pre class="r"><code>  publicationdata &lt;- read.table(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/publicationdata.txt&quot;, 
-                                sep=&quot;;&quot;,
-                                header = T, 
-                                stringsAsFactors = F)</code></pre>
 <p>We loop over the info in <code>publicationdata.txt</code> and extract the citation cases below. For each of the six studies it produces html and csv files with the citation cases.</p>
-<pre class="r"><code>  for (i in 1:6){
-    
-# SPECIFY ARGUMENT FOR SINGLE FUNCTIONS
-    study.title &lt;- publicationdata[i,2]
-    authorname &lt;- publicationdata[i,3]
-    studyyear &lt;- publicationdata[i,4]
-
-
-# EXTRACT CITATION CASES
-  extract_citation_cases(from = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/docs_text&quot;,
-                         to = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis&quot;,
-                         authorname = authorname,
-                         studyyear = studyyear,
-                         encoding = &quot;ASCII&quot;)
-  }</code></pre>
 <p><br><br></p>
 </div>
 </div>
@@ -578,17 +410,12 @@ View(metadata)
 <ul>
 <li>Start by creating one or several output folder in which you store the results of the analysis. Below we do so for a single study.</li>
 </ul>
-<pre class="r"><code>dir.create(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/output&quot;)
-dir.create(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/output/acemoglu_2001&quot;)</code></pre>
 <p><br><br></p>
 <div id="simple-analyses" class="section level2">
 <h2><span class="header-section-number">9.1</span> Simple analyses</h2>
 <ul>
 <li>The <code>analyze_citations()</code> produces some simple analyses/graphs of the citation cases.</li>
 </ul>
-<pre class="r"><code>analyze_citations(file = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/AcemogluJohnsonRobinson_2001_citation_cases.csv&quot;, # File with citation cases
-                  article = &quot;Acemoglu, Johnson &amp; Robinson (2001)&quot;, # Specify name of article
-                  output = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/output/acemoglu_2001&quot;) # Specify output folder</code></pre>
 <p><br><br></p>
 </div>
 <div id="topic-analyses" class="section level2">
@@ -596,52 +423,11 @@ dir.create(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/ou
 <ul>
 <li>The <code>topic_analysis()</code> performs some topic analysis on the citation cases.</li>
 </ul>
-<pre class="r"><code>topic_analysis(file = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/AcemogluJohnsonRobinson_2001_citation_cases.csv&quot;, # File with citation cases
-                  article = &quot;Acemoglu, Johnson &amp; Robinson (2001)&quot;, # Specify name of article
-                  output = &quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/output/acemoglu_2001&quot;) # Specify output folder</code></pre>
 <p><br><br></p>
 </div>
 <div id="analyzing-several-dataframes-with-citation-cases" class="section level2">
 <h2><span class="header-section-number">9.3</span> Analyzing several dataframes with citation cases</h2>
 <p>Just as we extracted the citation cases referring to several studies with a loop above we can also apply the two analysis functions within a loop.</p>
-<pre class="r"><code>files &lt;- paste(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/&quot;,
-               c(&quot;AcemogluJohnsonRobinson_2001_citation_cases.csv&quot;,
-                 &quot;AudretschFeldman_1996_citation_cases.csv&quot;,
-                 &quot;BeckKatz_1995_citation_cases.csv&quot;,
-                 &quot;FearonLaitin_2003_citation_cases.csv&quot;,
-                 &quot;InglehartBaker_2000_citation_cases.csv&quot;,
-                 &quot;Uzzi_1996_citation_cases.csv&quot;),
-  sep = &quot;&quot;)
-
-articles &lt;- c(&quot;Acemoglu et al. 2001 &quot;,
-                 &quot;Audretsch and Feldman 1996 &quot;,
-                 &quot;Beck and Katz 1995 &quot;,
-                 &quot;Fearon and Laitin 2003 &quot;,
-                 &quot;Inglehart and Baker 2000 &quot;,
-                 &quot;Uzzi 1996 &quot;)
-outputs &lt;- c(&quot;acemoglu_2001&quot;,
-                 &quot;audretsch_1996&quot;,
-                 &quot;beck_1995&quot;,
-                 &quot;fearon_2003&quot;,
-                 &quot;inglehart_2000&quot;,
-                 &quot;uzzi_1996&quot;)
-folder &lt;- paste(&quot;C:/GoogleDrive/1-Research/2017_Quality_of_citations/analysis/output/&quot;,
-               outputs,
-  sep = &quot;&quot;)
-  
-for(i in 1:6){
-dir.create(folder[i])
-analyze_citations(file = files[i],
-                  article = articles[i],
-                  output = folder[i])
-}
-
-for(i in 1:6){
-dir.create(folder[i])
-topic_analysis(file = files[i],
-                  article = articles[i],
-                  output = folder[i])
-}</code></pre>
 </div>
 </div>
 <div id="references" class="section level1">

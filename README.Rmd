@@ -10,7 +10,7 @@ output:
 # citationsr
 The R package ```citationsr``` comprises functions that can be used to extract and analyze citation cases. When study A cites study B, it contains text fragments that refer to study B. We call study A a *citing document* and the text fragments it contains *citation cases*.
 
-This readme serves to outline the methods applied in [Bauer et al. (2016)](http://dx.doi.org/10.2139/ssrn.2874549) with contributions from [Paul C. Bauer](http://www.paulcbauer.eu/), [Pablo Barberà](http://pablobarbera.com/) and [Simon Munzert](http://simonmunzert.github.io/). The idea is to go beyond a simple and primitive analysis of impact as 'times cited'. The code is licensed under an [Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/) license.
+This readme serves to outline the methods applied in [Bauer et al. (2016)](http://dx.doi.org/10.2139/ssrn.2874549) with contributions from [Paul C. Bauer](http://www.paulcbauer.eu/), [Pablo Barberá](http://pablobarbera.com/) and [Simon Munzert](http://simonmunzert.github.io/). The idea is to go beyond a simple and primitive analysis of impact as 'times cited'. The code is licensed under an [Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/) license.
 
 **Disclaimer**: We currently don't have time to work on this project and **can't provide support**. But we hope to develop it further at a later stage.
 

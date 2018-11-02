@@ -1,9 +1,8 @@
 ---
 title: "citationsr"
 output:
-  html_document:
+  github_document:
     toc: true
-    number_sections: true
 ---
 
 
